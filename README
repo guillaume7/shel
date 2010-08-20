@@ -1,0 +1,19 @@
+The SHEL (SHallow-waters numerical modEL) is a finite volume, free-surface, variable bottom, shallow-waters equations numerical solver.
+
+The SHEL is coded in Matlab with a built-in graphical interface for loading, editing and saving of simulation parameters and forcings and also for running, visualizing and exporting images (eps, png) and movies (avi).
+
+The code is compact, efficient and extensible, meaning that developers can easily replace the core solver files with custom numerical schemes and can even contribute to the stack of available numerical schemes.
+
+The SHEL, by default, uses an Arakawa C grid type over a land-mask with a second-order accurate in time and space leapfrog and central differences schemes for the momentum equations and a first-order accurate upwind scheme for the tracer equation. Dirichelet, Neumann and Sommerfeld type conditions were implemented as boundary conditions. It is fairly easy to replace these numerical methods with others.
+
+The SHEL is fully documented and is open-source.
+
+If you use SHEL in your work please cite the scientific documentation as follows
+
+Riflet, G., 2010. SHEL, a Shallow-Water Numerical 
+Model: Scientific Documentation. Instituto Superior Técnico, 
+Universidade Técnica de Lisboa.
+
+Contact: guillaume.riflet at gmail.com
+Link: http://code.google.com/p/shel/
+Date: 2010-08-19
