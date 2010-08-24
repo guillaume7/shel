@@ -3,6 +3,10 @@
 #sidebar TableOfContents
 
  * [#Getting_started Getting started]
+ * [#Installation Installation]
+ * [#Loading_a_configuration Loading a configuration]
+ * [#Visualizing_a_configuration]
+ * [#Exporting_graphics_and_movies Exporting graphics and movies]
 
 = Getting started =
  * Download and unzip the latest matlab package available in the [http://code.google.com/p/shel/downloads/list downloads section] or get the latest version from the [http://code.google.com/p/shel/source/checkout subversion repository].
