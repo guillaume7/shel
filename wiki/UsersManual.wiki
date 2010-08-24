@@ -49,6 +49,12 @@ http://content.screencast.com/users/GRiflet/folders/Jing/media/52e8accd-25ef-4e0
 
 == The views panel ==
 http://content.screencast.com/users/GRiflet/folders/Jing/media/9140125f-7f6d-4d25-aece-639f6e308678/ViewsPanelGUIDescription.png
+=== Time ===
+=== Outputs ===
+=== Level panel ===
+=== Velocity panel ===
+=== Left property panel ===
+=== Right property panel ===
 
 = How to =
 == Load a configuration ==
