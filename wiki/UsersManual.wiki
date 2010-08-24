@@ -2,6 +2,8 @@
 #labels Phase-Deploy,Featured
 #sidebar TableOfContents
 
+<wiki:toc max_depth="3" />
+
  * [#Getting_started Getting started]
   * [#Pre-requisites Pre-requisites]
   * [#Software_access Software access]
