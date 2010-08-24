@@ -10,7 +10,7 @@
  * Change the parameters at will.
  * Select two or four-panel view and click the 'show' button.
  * Click the 'run' button to run the model (eventually enable the 'film' option').
- * To export graphics, select a format (eps, png or avi) and a view (all, level, velocity, left or right) from the dropdown menu, then give it a name in the textbox and click  the 'Print' button. If it is the current view only, make sure that the 'film' checkbox is unchecked.
+ * To export graphics: select a format (eps, png or avi) and a view (all, level, velocity, left or right) from the dropdown menu, then give it a name in the textbox and click  the 'Print' button. If it is the current view only, make sure that the 'film' checkbox is unchecked.
 
 = Installation =
 
