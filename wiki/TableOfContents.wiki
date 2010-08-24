@@ -5,4 +5,4 @@
  * [DevelopersManual Developer's guide]
  * [TechnicalGuide Technical guide]
 
-Contact: `guillaume.riflet at gmail.com`
+Contact: `guillaume.riflet@gmail.com`
