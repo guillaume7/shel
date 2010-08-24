@@ -1,5 +1,6 @@
 #summary SHEL User's Manual
 #labels Phase-Deploy
+#sidebar TableOfContents
 
 = Introduction =
 
