@@ -1,4 +1,4 @@
-#summary Technical guide
+#summary SHEL technical guide
 #sidebar TableOfContents
 
 Due to the mathematical nature of the content, the SHEL technical guide is provided as a [http://code.google.com/p/shel/downloads/detail?name=SHEL-scidoc.pdf pdf file] (made in latex) in the [http://code.google.com/p/shel/downloads/list downloads section].
