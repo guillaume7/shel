@@ -86,5 +86,9 @@ http://content.screencast.com/users/GRiflet/folders/Jing/media/33a92fb2-6a17-459
 Alternatively, it was seen, in the section _[#Export_graphics_and_movies how to export graphics and movies]_, how to save the configuration, in the _control panel_, along with the settings, in the _views panel_, all in the same folder than of the graphics.
 
 = Advanced How-To =
-== Create a generic bathymetry ==
 To be done...
+== Create a generic matricial variable ==
+== Create a generic bathymetry ==
+== Create a generic land-mask ==
+== Create a generic initial-condition ==
+== Create a generic tracer ==
