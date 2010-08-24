@@ -4,16 +4,6 @@
 
 <wiki:toc max_depth="3" />
 
- * [#Getting_started Getting started]
-  * [#Pre-requisites Pre-requisites]
-  * [#Software_access Software access]
-  * [#Others Others]
- * [#Quick_start Quick start]
- * [#Installation Installation]
- * [#Loading_a_configuration Loading a configuration]
- * [#Visualizing_a_configuration Visualizing a configuration]
- * [#Exporting_graphics_and_movies Exporting graphics and movies]
-
 = Getting started =
 ==Pre-requisites==
  * A recent version of Matlab must be installed in the machine meant to run the SHEL software. Currently, matlab version 2009b is being used as the development main machine for the SHEL software, but possibly older versions of matlab will work as well.
