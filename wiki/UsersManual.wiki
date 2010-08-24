@@ -3,9 +3,17 @@
 #sidebar TableOfContents
 
 = Getting started =
+ * Download and unzip the latest matlab package available in the downloads section or get the latest version from the subversion repository.
+ * Open the Matlab environment and set the working folder where the m-files were unpacked.
+ * Type 'launch' and and press enter at the matlab prompt.
+ * Select a mat-file in the 'initial-conditions' folder and open it.
+ * Change the parameters at will.
+ * Select two or four-panel view and click the 'show' button.
+ * Click the 'run' button to run the model (eventually enable the 'film' option').
+ * To export graphics, select a format (eps, png or avi) and a view (all, level, velocity, left or right) from the dropdown menu, then give it a name in the textbox and click  the 'Print' button. If it is the current view only, make sure that the 'film' checkbox is unchecked.
+
 = Installation =
 
- * Download the latest matlab package available in the downloads section or get the latest version from the subversion repository.
 
 = Loading a configuration =
 
