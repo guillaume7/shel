@@ -144,4 +144,9 @@ disp(sprintf('Elapsed time: %0.5f s\nTime per iteration: %0.5f s\n', cput, cput/
 if tracer
     disp(sprintf('Made %0.3d tracer iterations on a total of %0.3d iterations', ltr, l));
 end
+%--------------------------------------------------------------------------
+%SHEL SHallow-water numerical modEL
+%Copyright (C) 2006,2009,2010. Guillaume Riflet, Instituto Superior Técnico
+%da Universidade Técnica de Lisboa.
+%--------------------------------------------------------------------------
     
