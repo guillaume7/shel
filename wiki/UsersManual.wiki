@@ -3,7 +3,7 @@
 #sidebar TableOfContents
 
 = Getting started =
- * Download and unzip the latest matlab package available in the downloads section or get the latest version from the subversion repository.
+ * Download and unzip the latest matlab package available in the [http://code.google.com/p/shel/downloads/list downloads section] or get the latest version from the [http://code.google.com/p/shel/source/checkout subversion repository].
  * Open the Matlab environment and set the working folder where the m-files were unpacked.
  * Type 'launch' and and press enter at the matlab prompt.
  * Select a mat-file in the 'initial-conditions' folder and open it.
