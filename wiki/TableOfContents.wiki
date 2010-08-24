@@ -1,4 +1,4 @@
 #summary Table Of Contents of the wiki
 
- * [UsersManual User's Manual]
- * [DevelopersManual Developer's Manual]
+ * [UsersManual User's guide]
+ * [DevelopersManual Developer's guide]
