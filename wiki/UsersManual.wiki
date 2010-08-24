@@ -84,3 +84,7 @@ To save a new configuration (from the _control panel_):
 http://content.screencast.com/users/GRiflet/folders/Jing/media/33a92fb2-6a17-4597-9b37-ec46d89629c6/controlpanel-saveconf.png
 
 Alternatively, it was seen, in the section _[#Export_graphics_and_movies how to export graphics and movies]_, how to save the configuration, in the _control panel_, along with the settings, in the _views panel_, all in the same folder than of the graphics.
+
+= Advanced HowTo =
+== Create a generic bathymetry ==
+To be done...
