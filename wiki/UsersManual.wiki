@@ -42,7 +42,12 @@ http://content.screencast.com/users/GRiflet/folders/Jing/media/c5628f48-5c1a-478
 = Visualizing a configuration =
  * To visualize a loaded configuration, select one of the _two_ or the _four_ radio-button (enabling the two-panel or the four-panel view), then click on button _show_.
 http://content.screencast.com/users/GRiflet/folders/Jing/media/be7de457-a970-4a61-b3de-4972e898a7bc/controlpanel-show.png
-
+ * In the view panels, the user can run the model, select other views (if on the four-view panel), select the scale, reset the model to the initial instant and export the results in
+image files or avi movie file.
+ * The two-panel view:
+http://content.screencast.com/users/GRiflet/folders/Jing/media/e1b7bf2a-86ad-485d-8f80-a181daaac449/visualization-2panel.png
+ * The four-panel view:
+http://content.screencast.com/users/GRiflet/folders/Jing/media/75f813a4-0e4d-43d1-a929-d732a978c87d/2010-08-24_1607.png
 
 = Exporting graphics and movies =
 
