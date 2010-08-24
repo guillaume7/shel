@@ -55,6 +55,7 @@ http://content.screencast.com/users/GRiflet/folders/Jing/media/9140125f-7f6d-4d2
 === Velocity panel ===
 === Left property panel ===
 === Right property panel ===
+=== Properties list ===
 
 = How to =
 == Load a configuration ==
