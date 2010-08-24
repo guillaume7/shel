@@ -1,6 +1,5 @@
 #summary Table Of Contents of the wiki
 
- * [http://code.google.com/p/shel/ Home]
  * [UsersManual User's guide]
  * [DevelopersManual Developer's guide]
  * [TechnicalGuide Technical guide]
