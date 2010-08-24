@@ -2,14 +2,14 @@
 #labels Phase-Deploy,Featured
 #sidebar TableOfContents
 
-= Introduction =
+= Installation =
 
-Soon to be written
+* Download the latest matlab package available in the downloads section or get the latest version from the subversion repository.
 
+= Loading a configuration =
 
-= Details =
+= Visualizing a configuration =
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+= Exporting graphics and movies =
+
+= Editing and saving a new configuration =
