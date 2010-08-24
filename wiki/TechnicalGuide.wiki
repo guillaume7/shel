@@ -1,0 +1,3 @@
+#summary Technical guide
+
+Due to the mathematical nature of the content, the SHEL technical guide is provided as a [pdf file] (made in latex) in the [http://code.google.com/p/shel/downloads/list downloads section].
