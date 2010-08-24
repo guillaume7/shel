@@ -73,3 +73,13 @@ http://content.screencast.com/users/GRiflet/folders/Jing/media/14f3b79d-d6a9-4aa
 http://content.screencast.com/users/GRiflet/folders/Jing/media/584480c8-07b8-4cb5-8af6-0afafa326b69/viewpanels-resultsfolder.png
 
 == Edit and save a new configuration ==
+To save a new configuration (from the _control panel_):
+ # Edit the parameters in the _control panel_ GUI.
+ # Eventually (advanced users only), use the matlab debug tool to manually edit the bathymetry matrix and the initial conditions matrices.
+ # Click the _save_ button in the _control panel_.
+ # From the new dialog box, select the folder _initial-conditions_.
+ # In the textbox, insert a name for the new configuration.
+ # Click the _save_ button of the dialog box.
+http://content.screencast.com/users/GRiflet/folders/Jing/media/33a92fb2-6a17-4597-9b37-ec46d89629c6/controlpanel-saveconf.png
+
+Alternatively, it was seen, in the section [#Export graphics and movies How to export graphics and movies], how to save the configuration, in the _control panel_, along with the settings, in the _views panel_, all in the same folder than of the graphics.
