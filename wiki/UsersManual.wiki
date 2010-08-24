@@ -4,6 +4,7 @@
 
  * [#Getting_started Getting started]
   * [#Pre-requisites Pre-requisites]
+  * [#Software_access Software access]
  * [#Quick_start Quick start]
  * [#Installation Installation]
  * [#Loading_a_configuration Loading a configuration]
