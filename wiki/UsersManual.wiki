@@ -1,4 +1,4 @@
-#summary SHEL User's Manual
+#summary SHEL User's guide
 #labels Phase-Deploy
 #sidebar TableOfContents
 
