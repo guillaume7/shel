@@ -39,9 +39,13 @@
  * Simply unpack the SHEL software package in the work-folder of choice.
  * Open the Matlab environment.
  * Set the path to the work folder where the SHEL software was installed.
- * Type _launch_ from the command line and press _enter_
+ * Type _launch_ from the command line and press _enter_. The control panel will show up.
 
 = Loading a configuration =
+ * From the control panel click the _load_ button, or from the matlab command line prompt, type _launch_ and press _enter_.
+http://content.screencast.com/users/GRiflet/folders/Jing/media/e9e2e6bf-0535-4238-aeeb-d116ce7fd1f3/controlpanel2d-loadbutton.png
+ * Then choose a saved configuration file (with a .mat extension). By default, a few configuration samples come built-in with the SHEL software package in the _initial conditions_ folder.
+http://content.screencast.com/users/GRiflet/folders/Jing/media/c5628f48-5c1a-478b-bbce-b561983040a2/controlpanel_openfromload.png
 
 = Visualizing a configuration =
 
