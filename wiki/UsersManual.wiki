@@ -51,17 +51,20 @@ http://content.screencast.com/users/GRiflet/folders/Jing/media/be7de457-a970-4a6
 http://content.screencast.com/users/GRiflet/folders/Jing/media/3d6c1b34-bdb5-423f-be0c-90391b2dba8d/viewpanels-run.png
 
 = Exporting graphics and movies =
- * To help users to produce paper-standard captions, it is possible to export results in both vectorial and raster formats, respectively *eps* and *png*. It is also possible to export in *avi* movie format.
+To help users to produce paper-standard captions, it is possible to export results in both vectorial and raster formats, respectively *eps* and *png*. It is also possible to export in *avi* movie format.
  # Insert a name near the _print_ button textbox. It will create a new folder in the _image-results_ work folder, with that name, where it will place all subsequent images and movies.
  # Select which variables to display from the drop down menus, _left property_ and _right property_ (in the four-panel view only).
  # Set the scale of each view with the respective _scale slider_.
  # Rotate and adjust the zooming of the camera, for each view, by hitting the _rotate 3D_ icon in the top _menubar_.
  # Select which view and which format to print from the dropdown menu, near the _reset_ button. Each view of the two(_level_, _velocity_), or four (_left_, _right_), available views is selectable. Alternatively, the whole views are selectable (_all_). The available output formats are *png* (raster), *eps* (vectorial) or *avi* (movie).
+http://content.screencast.com/users/GRiflet/folders/Jing/media/3e661745-ed14-4ac1-ad56-0e0fa4a1bf25/viewpanels-export1.png
  # Optionally, if the _film_ checkbox is checked then a simulation will be continued and will last for the whole _time duration_, set in the _control panel_, and each _output dt_ will be exported in the chosen media format. Note that for *avi*, the _film_ checkbox will automatically be set and should not be unchecked during the frame scraping. If the _film_ checkbox is unchecked, then only what is currently displayed on the view panels will be exported.
  # To export the graphics click on the _print_ button then wait while the process takes place. It may take some time depending on the format (*png* are the slowest), the type of view and if the _film_ checkbox is set.
+http://content.screencast.com/users/GRiflet/folders/Jing/media/14f3b79d-d6a9-4aab-87fd-ce1602275992/viewpanels-export2.png
  # After the process of exporting the graphics took place, the newly saved graphics are found in the _image-results_ folder, in the sub-folder with the same name given in the textbox near the _print_ button.
  # Remember: 
   # because it is very important for the user to reproduce the same results (and the same graphics) at a later stage, both the _control panel_ configuration is saved, along with the _view panels_ settings, in a mat-file with the same name and in the same sub-folder. This allows the user to re-open the exact same configuration, and view settings, during another matlab session. 
   # Additionally, the one-dimensional integrated diagnostics time-series (integrated energy, vorticity, etc...) are also kept in a mat-file with the same name, added with the suffix _global_. This allows the user to re-plot the time-series, later, accordingly to the editorial standards of a given journal.
+http://content.screencast.com/users/GRiflet/folders/Jing/media/584480c8-07b8-4cb5-8af6-0afafa326b69/viewpanels-resultsfolder.png
 
 = Editing and saving a new configuration =
