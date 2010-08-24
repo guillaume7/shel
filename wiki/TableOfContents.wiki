@@ -3,5 +3,5 @@
  * [http://code.google.com/p/shel/ Home]
  * [UsersManual User's guide]
  * [DevelopersManual Developer's guide]
- * [http://code.google.com/p/shel/downloads/list Technical guide]
+ * [http://code.google.com/p/shel/downloads/detail?name=SHEL-scidoc.pdf Technical guide]
  * [http://code.google.com/p/shel/downloads/list Downloads]
