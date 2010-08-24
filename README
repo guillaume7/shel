@@ -1,3 +1,4 @@
+%%% WHAT? %%%
 The SHEL (SHallow-waters numerical modEL) is a finite volume, free-surface, variable bottom, shallow-waters equations numerical solver.
 
 The SHEL is coded in Matlab with a built-in graphical interface for loading, editing and saving of simulation parameters and forcings and also for running, visualizing and exporting images (eps, png) and movies (avi).
@@ -10,10 +11,17 @@ The SHEL is fully documented and is open-source.
 
 If you use SHEL in your work please cite the scientific documentation as follows
 
+%% HOW? %%%%
+1 - Open Matlab
+2 - Set the workfolder to the folder containing the SHEL m-files.
+3 - type 'launch' and press enter
+
+%%% CITE %%%
 Riflet, G., 2010. SHEL, a Shallow-Water Numerical 
 Model: Scientific Documentation. Instituto Superior Técnico, 
 Universidade Técnica de Lisboa.
 
+%%% WHO? %%%
 Contact: guillaume.riflet at gmail.com
 Link: http://code.google.com/p/shel/
 Date: 2010-08-19
