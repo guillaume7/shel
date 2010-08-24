@@ -1,0 +1,7 @@
+#summary Templates description of SHEL built-in configuration files.
+
+=Bump description=
+
+=Step-bump description=
+
+=Taylor column description =
