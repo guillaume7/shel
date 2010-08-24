@@ -50,10 +50,23 @@ http://content.screencast.com/users/GRiflet/folders/Jing/media/52e8accd-25ef-4e0
  * *rho water*: Defines the water density. Enabled if the _use wind_ condition is checked.
  * *viscosity*: Defines the water turbulent horizontal viscosity. If set to zero, then the  mathematical model solved is equivalent to the Euler equations solution.
  * *gravity*: Earth local vertical gravitational acceleration.
- * *latitude (f)* : Earth latitude of the model domain. It has a correspondence with a rotation rate derived from the Earth's rotation rate. See the technical guide in the [http://code.google.com/p/shel/downloads/list downloads section] for more details.
+ * *latitude (f)* : Earth latitude of the model domain. It has a correspondence with a rotation rate derived from the Earth's rotation rate. See the _technical guide_ in the [http://code.google.com/p/shel/downloads/list downloads section] for more details.
+ * *bottom rugosity* : Rugosity of the bottom. Will yield the bottom stress value. More details in the _technical guide_ in the [http://code.google.com/p/shel/downloads/list downloads section].
+ * *uwind*, *vwind* : u and v components (along the x-axis and the y-axis respectively) of the wind velocity. Are required to compute the wind stress.
+ * *Karman constant*: Adimensional constant required to compute the bottom stress. See the _technical guide_ in the [http://code.google.com/p/shel/downloads/list downloads section].
 
 === Grid parameters ===
+ * *time duration* : Duration of the simulation.
+ * *output dt* : Time interval between each graphical output, in the _views panel_.
+ * *dt*: Time-step of the momentum numerical scheme.
+ * *dx*, *dy*: Space-steps of the regular orthogonal grid, along the x-axis and the y-axis respectively.
+
 === Boundary conditions ===
+ * *u-closed*, *v-closed*: when either of these options is checked, the respective sidewalls are considered impermeable, meaning null-flux, and free water elevation. When both these options are checked, the system is similar to a closed domain (closed bathtub) with no open-boundaries.
+ * *level*: selects the type of open-boundary condition for the water elevation (ie when the sidewalls are not closed). Two types are available, _Dirichelet_ (or clamped boundary condition) and _Sommerfeld_ (or radiative boundary condition). See the _technical guide_ in the [http://code.google.com/p/shel/downloads/list downloads section] for more details.
+ * *normal*: selects the type of open-boundary condition for the normal velocity to the sidewall (ie when the sidewalls are not closed). Three types are available, _Dirichelet_ (or clamped boundary condition), _Neumann_ (or zero-gradient boundary condition) and _Flather_ (or radiative boundary condition). See the _technical guide_ in the [http://code.google.com/p/shel/downloads/list downloads section] for more details.
+ * *tangential*: selects the type of open-boundary condition for the normal velocity to the sidewall (ie when the sidewalls are not closed). Two types are available, _Dirichelet_ (or clamped boundary condition) and _Sommerfeld_ (or radiative boundary condition). See the _technical guide_ in the [http://code.google.com/p/shel/downloads/list downloads section] for more details.
+
 === Initial conditions ===
 === Panels ===
 === Bathymetry ===
