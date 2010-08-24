@@ -1,6 +1,6 @@
 #summary Table Of Contents of the wiki
 
  * [UsersManual User's guide]
+  * [TemplatesDescription Templates description]
  * [DevelopersManual Developer's guide]
  * [TechnicalGuide Technical guide]
- * [TemplatesDescription Templates description]
