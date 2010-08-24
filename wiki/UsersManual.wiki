@@ -41,9 +41,17 @@ http://content.screencast.com/users/GRiflet/folders/Jing/media/52e8accd-25ef-4e0
 === Physical processes ===
  * *use Coriolis*: activates the Coriolis acceleration term in the momentum equations ie makes the reference frame a rotating reference with the same angular velocity than what is felt at Earths's latitude, given in the _latitude_ parameter, in the _Physics parameters_ panel.
  * *use wind*: activates the wind stress term in the momentum equations. The wind stress is calculated from the wind speed field, given in the _uwind_ and _vwind_ parameters in the _Physics parameters_ panel.
- * *use pressure force*: activates the pressure force due to the elevation gradient. Its mathematical description is provided in the technical guide, available in the [Downloads download section].
+ * *use pressure force*: activates the pressure force due to the elevation gradient. Its mathematical description is provided in the _technical guide_, available in the [http://code.google.com/p/shel/downloads/list download section].
+ * *use bottom drag*: activates the bottom stress, parameterized by the _bottom rugosity_, given in the _physics parameters_ panel.
+ * *no-slip*: enforce a no-slip condition, in which the tangential velocity at the lateral walls of the domain is set to zero. This condition re-designs in fact the fluxes masks.
 
 === Physics parameters ===
+ * *rho air*: Defines the air density. Enabled if the _use wind_ condition is checked.
+ * *rho water*: Defines the water density. Enabled if the _use wind_ condition is checked.
+ * *viscosity*: Defines the water turbulent horizontal viscosity. If set to zero, then the  mathematical model solved is equivalent to the Euler equations solution.
+ * *gravity*: Earth local vertical gravitational acceleration.
+ * *latitude (f)* : Earth latitude of the model domain. It has a correspondence with a rotation rate derived from the Earth's rotation rate. See the technical guide in the [http://code.google.com/p/shel/downloads/list downloads section] for more details.
+
 === Grid parameters ===
 === Boundary conditions ===
 === Initial conditions ===
