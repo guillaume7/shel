@@ -2,7 +2,7 @@
 #labels Phase-Deploy,Featured
 #sidebar TableOfContents
 
- * [Getting started]
+ * [#Getting_started Getting started]
 
 = Getting started =
  * Download and unzip the latest matlab package available in the [http://code.google.com/p/shel/downloads/list downloads section] or get the latest version from the [http://code.google.com/p/shel/source/checkout subversion repository].
