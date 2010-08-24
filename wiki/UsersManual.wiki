@@ -2,9 +2,10 @@
 #labels Phase-Deploy,Featured
 #sidebar TableOfContents
 
+= Getting started =
 = Installation =
 
-* Download the latest matlab package available in the downloads section or get the latest version from the subversion repository.
+ * Download the latest matlab package available in the downloads section or get the latest version from the subversion repository.
 
 = Loading a configuration =
 
