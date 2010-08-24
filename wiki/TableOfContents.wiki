@@ -3,3 +3,4 @@
  * [UsersManual User's guide]
  * [DevelopersManual Developer's guide]
  * [TechnicalGuide Technical guide]
+ * [TemplatesDescription Templates description]
