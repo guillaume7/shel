@@ -34,9 +34,15 @@
  * Type _launch_ from the command line and press _enter_. The control panel will show up.
 
 = GUI description =
+
 == The control panel ==
 http://content.screencast.com/users/GRiflet/folders/Jing/media/52e8accd-25ef-4e0b-b017-d50f2afcd681/ControlPanelGUIDescrition.png
+
 === Physical processes ===
+ * *use Coriolis*: activates the Coriolis acceleration term in the momentum equations ie makes the reference frame a rotating reference with the same angular velocity than what is felt at Earths's latitude, given in the _latitude_ parameter, in the _Physics parameters_ panel.
+ * *use wind*: activates the wind stress term in the momentum equations. The wind stress is calculated from the wind speed field, given in the _uwind_ and _vwind_ parameters in the _Physics parameters_ panel.
+ * *use pressure force*: activates the pressure force due to the elevation gradient. Its mathematical description is provided in the technical guide, available in the [Downloads download section].
+
 === Physics parameters ===
 === Grid parameters ===
 === Boundary conditions ===
