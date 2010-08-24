@@ -1,3 +1,19 @@
+%--------------------------------------------------------------------------
+%     This file is part of SHEL SHallow-water numerical modEL
+% 
+%     SHEL is free software: you can redistribute it and/or modify
+%     it under the terms of the GNU General Public License as published by
+%     the Free Software Foundation, either version 3 of the License, or
+%     (at your option) any later version.
+% 
+%     Foobar is distributed in the hope that it will be useful,
+%     but WITHOUT ANY WARRANTY; without even the implied warranty of
+%     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%     GNU General Public License for more details.
+% 
+%     You should have received a copy of the GNU General Public License
+%     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+%--------------------------------------------------------------------------
 function varargout = visualize_v4(varargin)
 % VISUALIZE_V4 M-file for visualize_v4.fig
 %      VISUALIZE_V4, by itself, creates a new VISUALIZE_V4 or raises the existing
@@ -483,3 +499,10 @@ function setview(Hn, prop)
         case {2,9,10,11,12,13,14,15,16,17,18,19,20,21} % 3D
             view(Hn,3);
     end
+
+%--------------------------------------------------------------------------
+%SHEL SHallow-water numerical modEL
+%Copyright (C) 2006,2009,2010. Guillaume Riflet, Instituto Superior Técnico
+%da Universidade Técnica de Lisboa.
+%--------------------------------------------------------------------------
+    

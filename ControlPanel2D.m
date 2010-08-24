@@ -1,3 +1,19 @@
+%--------------------------------------------------------------------------
+%     This file is part of SHEL SHallow-water numerical modEL
+% 
+%     SHEL is free software: you can redistribute it and/or modify
+%     it under the terms of the GNU General Public License as published by
+%     the Free Software Foundation, either version 3 of the License, or
+%     (at your option) any later version.
+% 
+%     Foobar is distributed in the hope that it will be useful,
+%     but WITHOUT ANY WARRANTY; without even the implied warranty of
+%     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%     GNU General Public License for more details.
+% 
+%     You should have received a copy of the GNU General Public License
+%     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+%--------------------------------------------------------------------------
 function varargout = ControlPanel2D(varargin)
 % CONTROLPANEL2D M-file for ControlPanel2D.fig
 %      CONTROLPANEL2D, by itself, creates a new CONTROLPANEL2D or raises the existing
@@ -22,7 +38,7 @@ function varargout = ControlPanel2D(varargin)
 
 % Edit the above text to modify the response to help ControlPanel2D
 
-% Last Modified by GUIDE v2.5 29-Jul-2010 20:18:44
+% Last Modified by GUIDE v2.5 24-Aug-2010 11:13:24
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -1241,7 +1257,7 @@ global tc_isla;
 global tc_taylor;
 
 %bathymetry
-global loadbathymetry;
+
 global bathymetryfile;
 global step;
 global d0;
@@ -2002,4 +2018,14 @@ function de_activate_obc(handles, bool)
         set(handles.popupmenuUOB,'Enable', bool)
         set(handles.popupmenuVOB,'Enable', bool)
 
-    
+% --- Executes on button press in aboutbutton.
+function aboutbutton_Callback(hObject, eventdata, handles)
+% hObject    handle to aboutbutton (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+    about;
+%--------------------------------------------------------------------------
+%SHEL SHallow-water numerical modEL
+%Copyright (C) 2006,2009,2010. Guillaume Riflet, Instituto Superior Técnico
+%da Universidade Técnica de Lisboa.
+%--------------------------------------------------------------------------

@@ -1,3 +1,19 @@
+%--------------------------------------------------------------------------
+%     This file is part of SHEL SHallow-water numerical modEL
+% 
+%     SHEL is free software: you can redistribute it and/or modify
+%     it under the terms of the GNU General Public License as published by
+%     the Free Software Foundation, either version 3 of the License, or
+%     (at your option) any later version.
+% 
+%     Foobar is distributed in the hope that it will be useful,
+%     but WITHOUT ANY WARRANTY; without even the implied warranty of
+%     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%     GNU General Public License for more details.
+% 
+%     You should have received a copy of the GNU General Public License
+%     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+%--------------------------------------------------------------------------
 function [eta_new, H_new, u_new, v_new] = computeOB_U( ...
     eta_new, eta_old, H_new, H_old, d,...
     u_new, mask_u, ...
@@ -66,3 +82,9 @@ if radiatetan
         ) ... 
         ./ ( H_new(1:M-1:M,2:N) + H_new(1:M-1:M,1:N-1) ); 
 end 
+
+%--------------------------------------------------------------------------
+%SHEL SHallow-water numerical modEL
+%Copyright (C) 2006,2009,2010. Guillaume Riflet, Instituto Superior Técnico
+%da Universidade Técnica de Lisboa.
+%--------------------------------------------------------------------------

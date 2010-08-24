@@ -1,3 +1,19 @@
+%--------------------------------------------------------------------------
+%     This file is part of SHEL SHallow-water numerical modEL
+% 
+%     SHEL is free software: you can redistribute it and/or modify
+%     it under the terms of the GNU General Public License as published by
+%     the Free Software Foundation, either version 3 of the License, or
+%     (at your option) any later version.
+% 
+%     Foobar is distributed in the hope that it will be useful,
+%     but WITHOUT ANY WARRANTY; without even the implied warranty of
+%     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%     GNU General Public License for more details.
+% 
+%     You should have received a copy of the GNU General Public License
+%     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+%--------------------------------------------------------------------------
 function ComputeModel(handles)
 %function runmodel_all
 
@@ -125,5 +141,7 @@ end
 %% Display simulation statistics and performance
 cput = toc;
 disp(sprintf('Elapsed time: %0.5f s\nTime per iteration: %0.5f s\n', cput, cput/L));
-disp(sprintf('Made %0.3d tracer iterations on a total of %0.3d iterations', ltr, l));
+if tracer
+    disp(sprintf('Made %0.3d tracer iterations on a total of %0.3d iterations', ltr, l));
+end
     
