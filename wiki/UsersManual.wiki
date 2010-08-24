@@ -35,7 +35,7 @@
 
 = GUI description =
 == The control panel ==
-== The views panels ==
+== The views panel ==
 
 = How to =
 == Load a configuration ==
