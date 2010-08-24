@@ -33,24 +33,29 @@
  * Set the path to the work folder where the SHEL software was installed.
  * Type _launch_ from the command line and press _enter_. The control panel will show up.
 
-= Loading a configuration =
+= GUI description =
+== The control panel ==
+== The views panels ==
+
+= How to =
+== Load a configuration ==
  * From the control panel click the _load_ button, or from the matlab command line prompt, type _launch_ and press _enter_. It will load the _control panel_.
 http://content.screencast.com/users/GRiflet/folders/Jing/media/e9e2e6bf-0535-4238-aeeb-d116ce7fd1f3/controlpanel2d-loadbutton.png
  * Then choose a saved configuration file (with a .mat extension). By default, a few configuration samples come built-in with the SHEL software package in the _initial conditions_ folder. Click on _open_.
 http://content.screencast.com/users/GRiflet/folders/Jing/media/c5628f48-5c1a-478b-bbce-b561983040a2/controlpanel_openfromload.png
 
-= Visualizing a configuration =
+== Visualize a configuration ==
  * To visualize a loaded configuration, select one of the _two_ or the _four_ radio-button (enabling the two-panel or the four-panel view), then click on button _show_.
 http://content.screencast.com/users/GRiflet/folders/Jing/media/be7de457-a970-4a61-b3de-4972e898a7bc/controlpanel-show.png
  * In the _view panels_, the user can run the model, select other views (if on the four-view panel), select the scale, reset the model to the initial instant and export the results in image files or avi movie file.
 
-= Running the model =
+== Run the model ==
  * Click on the _reset_ button at any time to reload the initial instant of the loaded configuration.
  * Click on the _run_ button to compute all the time instants (intervalled by the _dt_ parameter set in the _dt_ textbox in the _control panel_). If the _film_ checkbox is checked, then every _output dt_ (a parameter set in the _output dt_ textbox, in the _control panel_), the simulation results will be printed onscreen in the two-panel or the four-panel views. Graphical output may slow down considerably the simulation and depends on the machine hardware (which gpu, which cpu, ...). Thus, to speed up the simulation duration, simply uncheck the _film_ checkbox at any time.
  * The simulation will last a simulated duration equal to the value set in the _time duration_ textbox, in the _control panel_. Then, it will graphically display the last computed instant in the _view panels_, whether the _film_ checkbox is or is not checked.
 http://content.screencast.com/users/GRiflet/folders/Jing/media/3d6c1b34-bdb5-423f-be0c-90391b2dba8d/viewpanels-run.png
 
-= Exporting graphics and movies =
+== Export graphics and movies ==
 To help users to produce paper-standard captions, it is possible to export results in both vectorial and raster formats, respectively *eps* and *png*. It is also possible to export in *avi* movie format.
  # Insert a name near the _print_ button textbox. It will create a new folder in the _image-results_ work folder, with that name, where it will place all subsequent images and movies.
  # Select which variables to display from the drop down menus, _left property_ and _right property_ (in the four-panel view only).
@@ -67,4 +72,4 @@ http://content.screencast.com/users/GRiflet/folders/Jing/media/14f3b79d-d6a9-4aa
   # Additionally, the one-dimensional integrated diagnostics time-series (integrated energy, vorticity, etc...) are also kept in a mat-file with the same name, added with the suffix _global_. This allows the user to re-plot the time-series, later, accordingly to the editorial standards of a given journal.
 http://content.screencast.com/users/GRiflet/folders/Jing/media/584480c8-07b8-4cb5-8af6-0afafa326b69/viewpanels-resultsfolder.png
 
-= Editing and saving a new configuration =
+== Edit and save a new configuration ==
