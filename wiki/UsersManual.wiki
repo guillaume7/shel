@@ -5,6 +5,7 @@
  * [#Getting_started Getting started]
   * [#Pre-requisites Pre-requisites]
   * [#Software_access Software access]
+  * [#Others Others]
  * [#Quick_start Quick start]
  * [#Installation Installation]
  * [#Loading_a_configuration Loading a configuration]
@@ -18,7 +19,10 @@
 
 ==Software access==
  * The SHEL software package (composed of the source code and some matlab data files) is available in the [http://code.google.com/p/shel/downloads/list downloads section] or get the latest version from the [http://code.google.com/p/shel/source/checkout subversion repository].
+ * To become an active developer and submit changes to the SHEL project please contact the project owner and a developer account will be provided.
  * Unpack the SHEL software package in a convenient work folder. A few tens of megabytes available should be enough.
+
+==Others==
  * A [TechnicalGuide technical documentation] comes along with the software package in a separate download. It is recommended to download it as well.
 
 = Quick-start =
@@ -32,6 +36,10 @@
  * To export graphics: select a format (eps, png or avi) and a view (all, level, velocity, left or right) from the dropdown menu, then give it a name in the textbox and click  the 'Print' button. If it is the current view only, make sure that the 'film' checkbox is unchecked.
 
 = Installation =
+ * Simply unpack the SHEL software package in the work-folder of choice.
+ * Open the Matlab environment.
+ * Set the path to the work folder where the SHEL software was installed.
+ * Type _launch_ from the command line and press _enter_
 
 = Loading a configuration =
 
