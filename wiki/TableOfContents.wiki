@@ -4,3 +4,5 @@
   * [TemplatesDescription Templates description]
  * [DevelopersManual Developer's guide]
  * [TechnicalGuide Technical guide]
+
+Contact: guillaume.riflet at gmail.com
