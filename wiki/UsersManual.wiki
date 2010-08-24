@@ -1,5 +1,5 @@
 #summary SHEL User's guide
-#labels Phase-Deploy
+#labels Phase-Deploy,Featured
 #sidebar TableOfContents
 
 = Introduction =
