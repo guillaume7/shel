@@ -2,7 +2,7 @@
 #labels Phase-Deploy,Featured
 #sidebar TableOfContents
 
-<wiki:toc max_depth="3" />
+<wiki:toc max_depth="2" />
 
 = Getting started =
 ==Pre-requisites==
@@ -36,6 +36,17 @@
 = GUI description =
 == The control panel ==
 http://content.screencast.com/users/GRiflet/folders/Jing/media/52e8accd-25ef-4e0b-b017-d50f2afcd681/ControlPanelGUIDescrition.png
+=== Physical processes ===
+=== Physics parameters ===
+=== Grid parameters ===
+=== Boundary conditions ===
+=== Initial conditions ===
+=== Panels ===
+=== Bathymetry ===
+=== Tracer ===
+=== Numerical stability ===
+=== Caracteristic numbers ===
+
 == The views panel ==
 http://content.screencast.com/users/GRiflet/folders/Jing/media/9140125f-7f6d-4d25-aece-639f6e308678/ViewsPanelGUIDescription.png
 
