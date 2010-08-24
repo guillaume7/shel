@@ -3,12 +3,23 @@
 #sidebar TableOfContents
 
  * [#Getting_started Getting started]
+ * [#Quick_start Quick start]
  * [#Installation Installation]
  * [#Loading_a_configuration Loading a configuration]
  * [#Visualizing_a_configuration Visualizing a configuration]
  * [#Exporting_graphics_and_movies Exporting graphics and movies]
 
 = Getting started =
+==Pre-requisites==
+ * A recent version of Matlab must be installed in the machine meant to run the SHEL software. Currently, matlab version 2009b is being used as the development main machine for the SHEL software, but possibly older versions of matlab will work as well.
+ * A Pentium 4 with 1 GB of RAM, or more, and at least 100 MB of available disk space.
+
+==Software access==
+ * The SHEL software package (composed of the source code and some matlab data files) is available in the [http://code.google.com/p/shel/downloads/list downloads section] or get the latest version from the [http://code.google.com/p/shel/source/checkout subversion repository].
+ * Unpack the SHEL software package in a convenient work folder. A few tens of megabytes available should be enough.
+ * A [TechnicalGuide technical documentation] comes along with the software package in a separate download. It is recommended to download it as well.
+
+= Quick-start =
  * Download and unzip the latest matlab package available in the [http://code.google.com/p/shel/downloads/list downloads section] or get the latest version from the [http://code.google.com/p/shel/source/checkout subversion repository].
  * Open the Matlab environment and set the working folder where the m-files were unpacked.
  * Type 'launch' and and press enter at the matlab prompt.
@@ -19,7 +30,6 @@
  * To export graphics: select a format (eps, png or avi) and a view (all, level, velocity, left or right) from the dropdown menu, then give it a name in the textbox and click  the 'Print' button. If it is the current view only, make sure that the 'film' checkbox is unchecked.
 
 = Installation =
-
 
 = Loading a configuration =
 
