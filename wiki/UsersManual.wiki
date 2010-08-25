@@ -227,5 +227,5 @@ To be done...
 == initial-condition ==
 == tracer ==
 
-= To learn more =
-Please, contact the author: `guillaume.riflet at gmail.com`.
+= To learn more about SHEL =
+Either explore the GUI, either contact the author: `guillaume.riflet at gmail.com`.
