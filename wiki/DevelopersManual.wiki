@@ -1,6 +1,7 @@
 #summary SHEL Developer's guide
 #labels Phase-Implementation
 #sidebar TableOfContents
+<wiki:toc max_depth="3" />
 
 =Design philosophy=
 Here are some development guidelines:
