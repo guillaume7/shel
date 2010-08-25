@@ -1,5 +1,4 @@
 #summary SHEL Developer's guide
-#labels Phase-Implementation
 #sidebar TableOfContents
 <wiki:toc max_depth="3" />
 ----
@@ -62,6 +61,39 @@ The SHEL is about 2D layers of water properties, be it elevation, u-component of
   * variables: relative vorticity (curl).
 
 Bear in mind that it is often required to convert a variable from one grid type to another. However, converting one variable from one grid type to another (say, from the W-cell to the T-cell), requires an interpolation algorithm. In the SHEL code, the simplest linear interpolation algorithm are used. They perform an average with two or four grid points, depending on the source and target grids of the interpolation.
+
+*Below is the interpolation algorithm from the W-cells grid to the T-cells grid:
+{{{
+%%File: ComputeDiagnostics.m
+function tgrid = interpolFtoT(fgrid, mask, M, N)
+%% function tgrid = interpolFtoT(fgrid, mask, M, N)
+tgrid = .25 * mask .* ( ...
+              fgrid(1:M,1:N) ...
+            + fgrid(2:M+1,1:N) ...
+            + fgrid(2:M+1,2:N+1) ...
+            + fgrid(1:M,2:N+1) ...
+            );
+}}}
+
+*Below is the interpolation algorithm from the V-cells grid to the U-cells grid and from the T-cells grid to the U-cells grid:
+{{{
+%%File ComputeSpaceU_CS.m
+function av = fouraverage_u(v, M, N) 
+%% function av = fouraverage_u(v, mask, M, N)
+
+    av =  .25 * ( ... 
+            v(2:M,1:N) + ... 
+            v(2:M,2:N+1) + ... 
+            v(1:M-1,1:N) + ... 
+            v(1:M-1,2:N+1) ... 
+           ); 
+         
+function av = twoaverage_u( H, M, N)
+    av = .5 * ( ...
+            H(2:M,2:N-1) + H(1:M-1,2:N-1) ...
+         );
+        
+}}}
 
 Please refer to the _technical guide_ in the [http://code.google.com/p/shel/downloads/list downloads section] for more details.
  
