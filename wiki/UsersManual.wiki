@@ -137,7 +137,7 @@ Each property of the  _property list_ will assume one of the following types of 
  * *cross-section plot*: plot of a cross-section of the domain.
  * *contour map*: 2D contour map, rendered with a legend of the contour lines, by default.
 
-==== Properties list ====
+=== Properties list ===
 This is the exhaustive list of the available properties to render in the sub-panels of the _views panel_.
  * *bathymetry* : is a _color map_ that shows the bathymetric depth (stored in the _`d`_ variable).
  * *eta* : is a _3D surface_ that shows the water elevation (stored in the _`eta`_ variable).
