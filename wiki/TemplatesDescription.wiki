@@ -74,5 +74,6 @@ _taylor geoIC.mat_ file.
 
 ==Variants==
 ===Null Taylor column==
+<wiki:video url="http://www.youtube.com/watch?v=ltTsbICcQEc" />
  * _taylor null IC.mat_ file.
  * _Taylor col_ is left unchecked. This means that the bathymetry file _taylor column flow.mat_ will load, beyond the bathymetry, also the initial velocity field, _`u`_ and _`v`_, and the initial water elevation, _`eta`_. In this configuration, the initial water elevation is null everywhere and the velocity field is null everywhere, except at the open-boundaries, where it has a constant velocity along the x-axis (non-null u-component).
