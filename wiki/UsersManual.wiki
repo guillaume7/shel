@@ -120,7 +120,7 @@ Displays the current time of the simulation in seconds.
  * *print button*: Will export the current view(s) in the chosen format (selected via the _dropdown menu_) and store them within the _images-results_ folder (in the sub-folder defined in the _textbox_). If the _avi_ format is chosen (or if the _film checkbox_ is activated) then it will run a simulation (like the _run button_ does) and it will export every frame output in the view(s).
 
 === View sub-panel ===
- * *z-scale*: slider that sets _n_, the power of ten of the maximum and minimum value of the z-axis scale, for the 3D views. [-10^n^ 10^n^] for each sub-panel. Present in all sub-panels, except in the _velocity_ sub-panel.
+ * *z-scale*: slider that sets _n_, the power of ten of the maximum and minimum value of the z-axis scale, for the 3D views. (-10^n^ 10^n^) for each sub-panel. Present in all sub-panels, except in the _velocity_ sub-panel.
  * *dropdown menu*: Dropdown menu that selects a property from the _property list_ to view. Present in the _left property_ and _right property_ sub-panels only.
 
 === Views ===
