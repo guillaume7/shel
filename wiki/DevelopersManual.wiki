@@ -296,13 +296,13 @@ global v_new; %v component of velocity at instant t+dt.
 global mask_v; %flux mask of the v-component of velocity.
 
 %Z-cells
-global curl_w; %The curl of velocity (v_x - u_y)
-global potvorticity_w; %Rossby's potential vorticity
-global shearrate_w; % shear rate. (v_x + u_y) %Check Arakawa 1966
+global curl_w; %The curl of velocity (v_x - u_y).
+global potvorticity_w; %Rossbys potential vorticity.
+global shearrate_w; % shear rate. (v_x + u_y) %Check Arakawa 1966.
 global sqshearrate_w; % the square of the shear rate.
-global enstrophy_w; % enstrophy (0.5 * curl * curl)
+global enstrophy_w; % enstrophy (0.5 * curl * curl).
 global okuboweiss_w; % the okubo-weiss scalar (sqstrain - enstrophy) 
-                    %(Check Arakawa1966 and Weiss1981)
+                    %(Check Arakawa1966 and Weiss1981).
 
 %time-dependent global properties (domain integrated)
 global volume; %global volume.
