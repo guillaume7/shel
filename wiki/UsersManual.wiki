@@ -104,8 +104,8 @@ http://content.screencast.com/users/GRiflet/folders/Jing/media/52e8accd-25ef-4e0
   * *Show*: Opens the _views panel_.
 
 <wiki:comment>
-=== Numerical stability ===
-=== Caracteristic numbers ===
+ === Numerical stability ===
+ === Caracteristic numbers ===
 </wiki:comment>
 
 == The views panel ==
@@ -223,13 +223,13 @@ http://content.screencast.com/users/GRiflet/folders/Jing/media/33a92fb2-6a17-459
 Alternatively, it was seen, in the section _[#Export_graphics_and_movies how to export graphics and movies]_, how to save the configuration, in the _control panel_, along with the settings, in the _views panel_, all in the same folder than of the graphics.
 
 <wiki:comment>
-= Advanced: How to create a generic ...=
+ = Advanced: How to create a generic ...=
 To be done...
-== matricial variable ==
-== bathymetry ==
-== land-mask ==
-== initial-condition ==
-== tracer ==
+ == matricial variable ==
+ == bathymetry ==
+ == land-mask ==
+ == initial-condition ==
+ == tracer ==
 </wiki:comment>
 
 = To learn more about SHEL =
