@@ -20,6 +20,50 @@ This is mostly a wish-list of futur improvements in the design and structure of 
  * *Allow users to choose from different numerical schemes from dropdown menus.* Make it easy from the developers side to integrate new numerical schemes in the SHEL.
  * *See if the code is faster by avoiding to use the `global` directive*, while keeping in mind the same global variables philosophy. Perhaps by pushing structures in the function calls...
 ----
+=The Arakawa C staggered grids matricial design=
+The SHEL is about 2D layers of water properties, be it elevation, u-component of velocity, v-component of velocity, energy or enstrophy. Thus, most critical variables will be stored in matrices of specific sizes, representing a specific mesh, which is regular, orthogonal, cartesian and ... staggered. This mesh is well known in numerical modeling literature as the staggered Arakawa C grid. There four types of orthogonal, rectangular, regularly spaced grids: the *T-cells*, the *U-cells*, the *V-cells* and the *W-cells*. They are sketched as follows:
+
+{{{
+%    --j y
+%   |           --- V ---           V ------- V         U -- T -- U
+%   i          |         |          |         |         |         |
+%   x          U    T    U          T    U    T         |    V    |
+%              |         |          |         |         |         |
+%               --- V ---           V ------- V         U -- T -- U
+%                 T-cell               U-cell              V-cell
+%                  M x N               M+1 x N             M x N+1
+%       T(eta, H, tr, d, f, mask,   U(u, mask_u         V(v, mask_v
+%           x, y, wind and bottom      x_u, y_u)           x_v, y_v)
+%            stress, curl(v,u,0))
+%
+%    --j y
+%   |           --- U ---  
+%   i          |         | 
+%   x          V    W    V 
+%              |         | 
+%               --- U ---  
+%                 T-cell
+%                M+1 x N+1
+%       W( curl(u,v,0) )
+%        (deformation rate = curl(-u,v,0)
+}}}
+
+ * *T-cells*: 
+  * size: MxN. 
+  * Variables: water elevation, bathymetry depth, water column depth, land mask.
+ * *U-cells*: 
+  * size (M+1)xN. 
+  * variables: u-component of velocity, flux mask along u-axis.
+ * *V-cells*:
+  * size Mx(N+1). 
+  * variables: v-component of velocity, flux mask along v-axis.
+ * *W-cells*: 
+  * size (M+1)x(N+1).
+  * variables: relative vorticity (curl).
+
+Please refer to the _technical guide_ in the [http://code.google.com/p/shel/downloads/list downloads section] for more details.
+ 
+----
 =Resources listing=
 Here's an exhaustive description of the SHEL inner resources, such as folders, files, functions and global variables.
 
@@ -51,6 +95,7 @@ Here's an exhaustive description of the SHEL inner resources, such as folders, f
 ==Global variables==
 
 ===loadable and save-able===
+Excerpt taken from the `controlpanel2D.m` file:
 {{{
 %Physical processes
 global coriolis; %use coriolis force? Logical.
@@ -145,6 +190,28 @@ global movie; %Is it the avi format we want to export? Logical.
 global frame; %frame counter of the graphical exports. integer.
 }}}
 
-===Matricial===
+===Initializable global matrices===
+Excerpts taken from `initialconditions.m`
+{{{
+%function initialconditions
+global time;
+global timetr;
+
+%function makecoordinates
+global x;
+global y;
+
+global x_u;
+global y_u;
+
+global x_v;
+global y_v;
+
+global x_w;
+global y_w;
+
+%function fillfields
+
+}}}
 
 ==Functions==
