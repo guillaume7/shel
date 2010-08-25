@@ -21,7 +21,7 @@ This is mostly a wish-list of futur improvements in the design and structure of 
  * *See if the code is faster by avoiding to use the `global` directive*, while keeping in mind the same global variables philosophy. Perhaps by pushing structures in the function calls...
 ----
 =The Arakawa C staggered grids matricial design=
-The SHEL is about 2D layers of water properties, be it elevation, u-component of velocity, v-component of velocity, energy or enstrophy. Thus, most critical variables will be stored in matrices of specific sizes, representing a specific mesh, which is regular, orthogonal, cartesian and ... staggered. This mesh is well known in numerical modeling literature as the staggered Arakawa C grid. There four types of orthogonal, rectangular, regularly spaced grids: the *T-cells*, the *U-cells*, the *V-cells* and the *W-cells*. They are sketched as follows:
+The SHEL is about 2D layers of water properties, be it elevation, u-component of velocity, v-component of velocity, energy or enstrophy. Thus, most critical variables will be stored in matrices of specific sizes, representing a specific mesh, which is regular, orthogonal, cartesian and ... staggered. This mesh is well known in numerical modeling literature as the staggered Arakawa C grid. There are four types of orthogonal, rectangular, regularly spaced grids: the *T-cells*, the *U-cells*, the *V-cells* and the *W-cells*. Each are natural discretized representations of the computed variables. For example the u-component of velocity are best represented in the U-cells, however, the water elevation is best represented in a T-cell. They are sketched as follows:
 
 {{{
 %    --j y
@@ -60,6 +60,8 @@ The SHEL is about 2D layers of water properties, be it elevation, u-component of
  * *W-cells*: 
   * size (M+1)x(N+1).
   * variables: relative vorticity (curl).
+
+Bear in mind that it is often required to convert a variable from one grid type to another. However, converting one variable from one grid type to another (say, from the W-cell to the T-cell), requires an interpolation algorithm. In the SHEL code, the simplest linear interpolation algorithm are used. They perform an average with two or four grid points, depending on the source and target grids of the interpolation.
 
 Please refer to the _technical guide_ in the [http://code.google.com/p/shel/downloads/list downloads section] for more details.
  
