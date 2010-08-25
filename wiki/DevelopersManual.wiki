@@ -105,7 +105,6 @@ Here's an exhaustive description of the SHEL inner resources, such as folders, f
  * `bathymetries`: contains files containing bathymetry (`d`), level (`eta`) and velocity (`u`, `v`) variables stored in the matlab data file format (.mat).
 
 ==Files==
-===matlab scripts===
  * `launch.m`: fires up the _control panel_ and its _resetbutton_ callback.
  * `controlpanel2D.m`: codes the full _control panel_ interface.
   * `About.m`: Displays the GPL license agreement.
