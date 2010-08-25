@@ -1,6 +1,36 @@
 #summary Templates description of SHEL built-in configuration files.
 
 =Bump description=
+_bump.mat_ file
+
+==Control panel parameters==
+ * uses the _pressure force_ only.
+ * zero viscosity.
+ * 10 m constant depth.
+ * 30 x 30 grid size.
+ * 20 m x 20 m spatial increment.
+ * 0.1 s time-step, 100 s simulation duration and 3 s output interval.
+ * Gaussian bump (refer to the _technical guide_ in the [http://code.google.com/p/shel/downloads/list downloads section] for more details) with its center at the domain origin (centre). It has a height of 1 cm and a width of 60 m along both x and y-axis.
+ * Boundaries: _level_ is set to Sommerfeld, _normal_ is set to _Flather_  and _tangent_ is set to _Dirichelet (IC)_.
+
+== Variants ==
+===closed bump===
+ * _closedbump.mat_ file.
+ * Boundaries: _u closed_ and _v closed_ are set.
+
+===geostrophic bump===
+The geostrophic bump uses the Coriolis force also.
+ * _geobump.mat_ file.
+ * uses the _coriolis force_ also at a _latitude (f)_ of 43 degrees North.
+ * spatial-stepping and gaussian width are multiplied by 50 000, making a 100 km x 100 km cell size and a gaussian width of 300 km.
+ * time step is of 400 s, total simulation duration is 400000 s and output intervals is 2000.
+
+There is another geostrophic bump configuration for a slightly larger domain:
+ * _geobump2.mat_ file.
+ * 37 x 37 grid cells.
+ * 20 km x 20 km cell size.
+ * 60 km x 60 km gaussian width.
+ * time-step of 500 s, with a simulation duration of 100000s and an output interval of 1000 s.
 
 =Step-bump description=
 
