@@ -51,6 +51,100 @@ Here's an exhaustive description of the SHEL inner resources, such as folders, f
 ==Global variables==
 
 ===loadable and save-able===
+{{{
+global rho0;
+global rho_air;
+global Nu;
+global g;
+global f;
+global lb;
+global karman;
+global uwind;
+global vwind;
+global M;
+global N;
+global L;
+global outputL; %number of iterations for output
+global outputdt;
+global dx;
+global dy;
+global dt;
+global duration;
+global gama; %gama coefficient for Asselin-Robert filter
+global coriolis; %use coriolis force?
+global bottom; %use bottom stress?
+global wind; %use wind stress?
+global pressure; %use pressure gradient force?
+global noslip; %use no-slip?
+
+%T-cells
+global eta0;
+
+%print to file
+global jpeg;
+global myfile;
+global frame;
+global bmp;
+global film;
+global printG;
+global optprint;
+
+%CLim coef A: [-1eA 1eA]
+global CLimEta; % m [-10. 2.]
+global CLimV; % m/s [0. 100.]
+global CLimLeft; % J [-10. 10.]
+global CLimRight; % J [-10. 10.]
+
+%Testcases
+global tc_bump;
+global tc_geostrophic;
+global tc_isla;
+global tc_taylor;
+
+%bathymetry
+global loadbathymetry;
+global bathymetryfile;
+global step;
+global d0;
+global d0_step;
+
+%boundary conditions
+global u_closed;
+global v_closed;
+global flather;
+global radiatelevel;
+global radiatetan;
+global neumann;
+
+%bump
+global bump_x0;
+global bump_y0;
+global bump_sx;
+global bump_sy;
+global bump_d0;
+
+%island
+global isla_x0;
+global isla_y0;
+global isla_R;
+
+%tracer
+global tracer;
+global K;
+global TrXo;
+global TrYo;
+global TrR;
+global Treshold;
+
+%Panels outputs & properties
+global npanels;
+global leftprop;
+global rightprop;
+
+%The current bathymetry
+global d;
+
+}}}
 
 ===Matricial===
 
