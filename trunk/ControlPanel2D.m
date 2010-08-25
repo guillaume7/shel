@@ -1257,7 +1257,7 @@ global tc_isla;
 global tc_taylor;
 
 %bathymetry
-
+global loadbathymetry;
 global bathymetryfile;
 global step;
 global d0;
