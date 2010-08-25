@@ -93,4 +93,4 @@ _taylor geoIC.mat_ file.
 
 ----
 =Proposing more templates=
-To submit and contribute with new templates, please contact the author: `guillaume.riflet at gmail.com`.
+To submit or contribute with new templates, please contact the author: `guillaume.riflet at gmail.com`.
