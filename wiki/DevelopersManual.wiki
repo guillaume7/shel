@@ -17,6 +17,7 @@ This is mostly a wish-list of futur improvements in the design and structure of 
  * Load a preview snapshot of saved configurations, added of a short description by the creator.
  * Find a way to centralize, distribute and promote SHEL configuration files.
  * Allow users to choose from different numerical schemes from dropdown menus. Make it easy from the developers side to integrate new numerical schemes in the SHEL.
+ * See if the code is faster by avoiding to use the `global` directive, while keeping in mind the same global variables philosophy. Perhaps by pushing structures in the function calls...
 
 =Resources listing=
 Here's an exhaustive description of the SHEL inner resources, such as folders, files, functions and global variables.
