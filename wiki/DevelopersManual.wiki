@@ -52,98 +52,96 @@ Here's an exhaustive description of the SHEL inner resources, such as folders, f
 
 ===loadable and save-able===
 {{{
-global rho0;
-global rho_air;
-global Nu;
-global g;
-global f;
-global lb;
-global karman;
-global uwind;
-global vwind;
-global M;
-global N;
-global L;
-global outputL; %number of iterations for output
-global outputdt;
-global dx;
-global dy;
-global dt;
-global duration;
-global gama; %gama coefficient for Asselin-Robert filter
-global coriolis; %use coriolis force?
-global bottom; %use bottom stress?
-global wind; %use wind stress?
-global pressure; %use pressure gradient force?
-global noslip; %use no-slip?
+%Physical processes
+global coriolis; %use coriolis force? Logical.
+global bottom; %use bottom stress? Logical.
+global wind; %use wind stress? Logical.
+global pressure; %use pressure gradient force? Logical.
+global noslip; %use no-slip? Logical.
 
-%T-cells
-global eta0;
+%Physics parameters
+global rho_air; %air density. Real.
+global rho0; %water density. Real.
+global Nu; %water turbulent horizontal viscosity. Real.
+global g; %gravitational pull. Real.
+global f; %Coriolis frequency. Real.
+global lb; %Bottom rugosity length. Real.
+global uwind; %x-axis wind speed component. Real.
+global vwind; %y-axis wind speed component. Real.
+global karman; %Von Karman constant. Real.
 
-%print to file
-global jpeg;
-global myfile;
-global frame;
-global bmp;
-global film;
-global printG;
-global optprint;
+%Grid parameters
+global duration; %time duration. Real
+global outputL; %number of iterations for output. Hidden. Integer.
+global outputdt; %time interval between graphical outputs. Real.
+global dt; %time step. Real.
+global dx; %x-axis grid step. Real.
+global dy; %y-axis grid step. Real.
 
-%CLim coef A: [-1eA 1eA]
-global CLimEta; % m [-10. 2.]
-global CLimV; % m/s [0. 100.]
-global CLimLeft; % J [-10. 10.]
-global CLimRight; % J [-10. 10.]
+global gama; %gama coefficient for Asselin-Robert filter. Hidden. Real.
 
-%Testcases
-global tc_bump;
-global tc_geostrophic;
-global tc_isla;
-global tc_taylor;
+%Bathymetry
+global d0; %Constant depth. Real.
+global M; % x-axis grid size. Integer.
+global N; % y-axis grid size. Integer
+global L; % Characteristic length. Real.
+ %Bathymetry file
+global loadbathymetry; %bathymetry test. Logical.
+global bathymetryfile; %bathymetry file. String.
+global d; %The current bathymetry. Matrix.
+global eta0; % Initial water elevation. Matrix.
+ %step bottom
+global step; %Step test. Logical.
+global d0_step; %Step depth. Real.
+ %island
+global tc_isla; %Use island? Logical.
+global isla_x0; %island x-position. Real.
+global isla_y0; %island y-position. Real.
+global isla_R; %island radius. Real.
 
-%bathymetry
-global loadbathymetry;
-global bathymetryfile;
-global step;
-global d0;
-global d0_step;
-
-%boundary conditions
-global u_closed;
-global v_closed;
-global flather;
-global radiatelevel;
-global radiatetan;
-global neumann;
-
-%bump
-global bump_x0;
-global bump_y0;
-global bump_sx;
-global bump_sy;
-global bump_d0;
-
-%island
-global isla_x0;
-global isla_y0;
-global isla_R;
+%Initial conditions
+global tc_taylor; %Use taylor column initialization? Logical.
+global tc_geostrophic; %user geostrophic initial fields? Useless. Logical.
+ %bump
+global tc_bump; %Use gaussian elevation? Logical.
+global bump_x0; %gaussian center x-position. Real.
+global bump_y0; %gaussian center y-position. Real.
+global bump_sx; %gaussian width along x-axis. Real.
+global bump_sy; %gaussian width along y-axis. Real.
+global bump_d0; %gaussian max height. Real.
 
 %tracer
-global tracer;
-global K;
-global TrXo;
-global TrYo;
-global TrR;
-global Treshold;
+global tracer; %Use tracer? Logical.
+global K; %tracer horizontal turbulent diffusivity.
+global TrXo; %tracer center x-position. Real.
+global TrYo; %tracer center y-position. Real.
+global TrR; %tracer radius. Real.
+global Treshold; %tracer min concentration, above which integration is 
+                 %made in diagnostics. Real.
+
+%boundary conditions
+global radiatelevel; %Use level radiation? Logical. 
+global flather; %Use flather radiation? Logical.
+global neumann; %Use neumann condition? Logical.
+global radiatetan; %Use radiation for tangential velocity? Logical.
+global u_closed; %Close the x-axis boundary? Logical.
+global v_closed; %Close the y-axis boundary? Logical.
 
 %Panels outputs & properties
-global npanels;
-global leftprop;
-global rightprop;
-
-%The current bathymetry
-global d;
-
+global npanels; %Two or four panels? Integer.
+global leftprop;  %Property number from property list. For the left panel. Integer.
+global rightprop; %Property number from property list. For the right panel. Integer.
+ %CLim coef A: [-1eA 1eA]
+global CLimEta; % m [-10. 2.] Water level Z-scale limits. Real vector.
+global CLimV; % m/s [0. 100.] velocity Z-scale limits. Real vector.
+global CLimLeft; % J [-10. 10.] left property z-scale limits. Real vector.
+global CLimRight; % J [-10. 10.] right property z-scale limits. Real vector.
+ %print to file
+global film; %Do we animate the simulation and render it on screen? Logical.
+global printG; %Do we export the screen rendering to a file? Logical.
+global myfile; %filename to build sub-folder and image filenames. String.
+global optprint; %Which export format and which property? Integer.
+global frame; %frame counter of the graphical exports. integer.
 }}}
 
 ===Matricial===
