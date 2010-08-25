@@ -1,6 +1,7 @@
 #summary Templates description of SHEL built-in configuration files.
 
 =Bump description=
+<wiki:video url="http://www.youtube.com/watch?v=Ibt12ftTAwM" />
 _bump.mat_ file
 
 ==Control panel parameters==
@@ -17,10 +18,12 @@ _bump.mat_ file
 The following variants have the same characteristics than the _bump_ case except when indicated.
 
 ===closed bump===
+<wiki:video url="http://www.youtube.com/watch?v=pxkpbE-XTaI" />
  * _closedbump.mat_ file.
  * Boundaries: _u closed_ and _v closed_ are set.
 
 ===geostrophic bump===
+<wiki:video url="http://www.youtube.com/watch?v=3fK1mvRjR9M" />
 The geostrophic bump uses the Coriolis force also.
  * _geobump.mat_ file.
  * uses the _coriolis force_ also at a _latitude (f)_ of 43 degrees North.
@@ -35,6 +38,7 @@ There is another geostrophic bump configuration for a slightly larger domain:
  * time-step of 500 s, with a simulation duration of 100000s and an output interval of 1000 s.
 
 =Step-bump description=
+<wiki:video url="http://www.youtube.com/watch?v=lcvYr-M_sk0" />
 _stepbump.mat_ file
 
 ==Control panel parameters==
@@ -56,6 +60,7 @@ The following variants have the same characteristics than the _step-bump_ case e
  * Boundaries: _u closed_ and _v closed_ are set.
 
 ===Geostrophic step-bump===
+<wiki:video url="http://www.youtube.com/watch?v=reqIHQgXCq0" />
  * _geostepbump.mat_ file.
  * uses the _coriolis force_ also at a _latitude (f)_ of 43.98 degrees North.
 
