@@ -14,8 +14,9 @@
  * To become an active developer and submit changes to the SHEL project please contact the project owner and a developer account will be provided.
  * Unpack the SHEL software package in a convenient work folder. A few tens of megabytes available should be enough.
 
-==Others==
+==Documentation==
  * A [TechnicalGuide technical documentation] comes along with the software package in a separate download. It is recommended to download it as well.
+ * This wiki.
 
 = Quick-start =
  * Download and unzip the latest matlab package available in the [http://code.google.com/p/shel/downloads/list downloads section] or get the latest version from the [http://code.google.com/p/shel/source/checkout subversion repository].
@@ -102,8 +103,10 @@ http://content.screencast.com/users/GRiflet/folders/Jing/media/52e8accd-25ef-4e0
   * *4*: Selects the _four-views_ panel. Besides the views from the two-views panel, it adds a _left-property_ view and a _right-property_ view.
   * *Show*: Opens the _views panel_.
 
+<wiki:comment>
 === Numerical stability ===
 === Caracteristic numbers ===
+</wiki:comment>
 
 == The views panel ==
 http://content.screencast.com/users/GRiflet/folders/Jing/media/9140125f-7f6d-4d25-aece-639f6e308678/ViewsPanelGUIDescription.png
@@ -219,6 +222,7 @@ http://content.screencast.com/users/GRiflet/folders/Jing/media/33a92fb2-6a17-459
 
 Alternatively, it was seen, in the section _[#Export_graphics_and_movies how to export graphics and movies]_, how to save the configuration, in the _control panel_, along with the settings, in the _views panel_, all in the same folder than of the graphics.
 
+<wiki:comment>
 = Advanced: How to create a generic ...=
 To be done...
 == matricial variable ==
@@ -226,6 +230,7 @@ To be done...
 == land-mask ==
 == initial-condition ==
 == tracer ==
+</wiki:comment>
 
 = To learn more about SHEL =
 Either explore the GUI, either contact the author: `guillaume.riflet at gmail.com`.
