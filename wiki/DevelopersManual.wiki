@@ -189,7 +189,7 @@ global bump_sx; '%gaussian width along x-axis. Real.'
 global bump_sy; '%gaussian width along y-axis. Real.'
 global bump_d0; '%gaussian max height. Real.'
 
-'%tracer
+'%tracer'
 global tracer; '%Use tracer? Logical.'
 global K; '%tracer horizontal turbulent diffusivity. Real.'
 global TrXo; '%tracer center x-position. Real.'
