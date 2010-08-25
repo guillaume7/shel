@@ -2,7 +2,7 @@
 #labels Phase-Implementation
 #sidebar TableOfContents
 <wiki:toc max_depth="3" />
-
+----
 =Design philosophy=
 Here are some development guidelines:
  * *Devise coherent global variables that have a specific role in numerical modeling of fluid mechanics.* For example, `eta` is the water elevation, `d` is bathymetry depth and `H` is the water depth (sum of `eta` and `d`). These global variables can be invoked in any part of the code and, thus, their list must be constantly updated and synchronized between this wiki and the code.
@@ -19,7 +19,7 @@ This is mostly a wish-list of futur improvements in the design and structure of 
  * *Find a way to* centralize, *distribute* and promote *SHEL configuration files*.
  * *Allow users to choose from different numerical schemes from dropdown menus.* Make it easy from the developers side to integrate new numerical schemes in the SHEL.
  * *See if the code is faster by avoiding to use the `global` directive*, while keeping in mind the same global variables philosophy. Perhaps by pushing structures in the function calls...
-
+----
 =Resources listing=
 Here's an exhaustive description of the SHEL inner resources, such as folders, files, functions and global variables.
 
