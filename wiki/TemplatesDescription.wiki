@@ -2,6 +2,7 @@
 
 =Bump description=
 <wiki:video url="http://www.youtube.com/watch?v=Ibt12ftTAwM" />
+
 _bump.mat_ file
 
 ==Control panel parameters==
@@ -19,11 +20,13 @@ The following variants have the same characteristics than the _bump_ case except
 
 ===closed bump===
 <wiki:video url="http://www.youtube.com/watch?v=pxkpbE-XTaI" />
+
  * _closedbump.mat_ file.
  * Boundaries: _u closed_ and _v closed_ are set.
 
 ===geostrophic bump===
 <wiki:video url="http://www.youtube.com/watch?v=3fK1mvRjR9M" />
+
 The geostrophic bump uses the Coriolis force also.
  * _geobump.mat_ file.
  * uses the _coriolis force_ also at a _latitude (f)_ of 43 degrees North.
@@ -39,6 +42,7 @@ There is another geostrophic bump configuration for a slightly larger domain:
 
 =Step-bump description=
 <wiki:video url="http://www.youtube.com/watch?v=lcvYr-M_sk0" />
+
 _stepbump.mat_ file
 
 ==Control panel parameters==
@@ -61,6 +65,7 @@ The following variants have the same characteristics than the _step-bump_ case e
 
 ===Geostrophic step-bump===
 <wiki:video url="http://www.youtube.com/watch?v=reqIHQgXCq0" />
+
  * _geostepbump.mat_ file.
  * uses the _coriolis force_ also at a _latitude (f)_ of 43.98 degrees North.
 
@@ -80,5 +85,6 @@ _taylor geoIC.mat_ file.
 ==Variants==
 ===Null Taylor column==
 <wiki:video url="http://www.youtube.com/watch?v=ltTsbICcQEc" />
+
  * _taylor null IC.mat_ file.
  * _Taylor col_ is left unchecked. This means that the bathymetry file _taylor column flow.mat_ will load, beyond the bathymetry, also the initial velocity field, _`u`_ and _`v`_, and the initial water elevation, _`eta`_. In this configuration, the initial water elevation is null everywhere and the velocity field is null everywhere, except at the open-boundaries, where it has a constant velocity along the x-axis (non-null u-component).
