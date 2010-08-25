@@ -83,7 +83,6 @@ function plotproperty(prop,CLim,Hn)
 % 32 - Okubo-Weiss (contours)
 % 33 - Tracer
 
-
     global M;
     global N;
     global bump_d0;
