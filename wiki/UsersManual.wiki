@@ -116,16 +116,62 @@ Displays the current time of the simulation in seconds.
  * *film checkbox*: check to refresh the views during a running simulation or during a print to avi or to png or eps.
  * *run button*: runs a simulation for the duration set in the _time duration_ textbox, in the _control panel_.
  * *textbox*: must be edited to define the name of the sub-folder, containing the images and video results, under the _image-results_ folder.
- * *dropdown menu*: selects the output format (*avi*, *png* and *eps) and the views to export (all the _views panel_, the _level view_, the _velocity view_, the _left property view_ and the _right property view_). The _film checkbox_ wil automatically be checked when selecting _avi_ format, and shouldn't be changed while the _avi_ format is chosen.
+ * *dropdown menu*: selects the output format (*avi*, *png* and *eps*) and the views to export (all the _views panel_, the _level view_, the _velocity view_, the _left property view_ and the _right property view_). The _film checkbox_ wil automatically be checked when selecting _avi_ format, and shouldn't be changed while the _avi_ format is chosen.
  * *print button*: Will export the current view(s) in the chosen format (selected via the _dropdown menu_) and store them within the _images-results_ folder (in the sub-folder defined in the _textbox_). If the _avi_ format is chosen (or if the _film checkbox_ is activated) then it will run a simulation (like the _run button_ does) and it will export every frame output in the view(s).
 
-=== Level panel ===
- * *z-scale*: slider that sets _n_, the power of ten of the maximum and minimum value of the z-axis scale, for the 3D views. [-10^n^ 10^n^].
+=== View sub-panel ===
+ * *z-scale*: slider that sets _n_, the power of ten of the maximum and minimum value of the z-axis scale, for the 3D views. [-10^n^ 10^n^] for each sub-panel. Present in all sub-panels, except in the _velocity_ sub-panel.
+ * *dropdown menu*: Dropdown menu that selects a property from the _property list_ to view. Present in the _left property_ and _right property_ sub-panels only.
 
-=== Velocity panel ===
-=== Left property panel ===
-=== Right property panel ===
-=== Properties list ===
+=== Views ===
+ * *level*: Top-left sub-panel. Displays the water level property (_eta_) only, in 3D view.
+ * *velocity*: Top-right sub-panel. Displays the vector field of the water flow _(Hu, Hv)_, in a 2D vector plot.
+ * *Left property*, *Right property*: Bottom-left and bottom-right sub-panels, respectively. Can display any property from the _property list_.
+
+=== Properties view-types ===
+Each property of the  _property list_ will assume one of the following types of views:
+ * *vector plot*: Vector plot of a 2D vector field.
+ * *3D surface*: 3D surface, rendered with a colorbar, by default.
+ * *color map*: 2D color map, rendered with a colorbar, by default.
+ * *time-plot*: Time-serie plot.
+ * *cross-section plot*: plot of a cross-section of the domain.
+ * *contour map*: 2D contour map, rendered with a legend of the contour lines, by default.
+
+==== Properties list ====
+This is the exhaustive list of the available properties to render in the sub-panels of the _views panel_.
+ * *bathymetry* : is a _color map_ that shows the bathymetric depth (stored in the _`d`_ variable).
+ * *eta* : is a _3D surface_ that shows the water elevation (stored in the _`eta`_ variable).
+ * *(u, v)* : is a _vector plot_ that shows the water velocity (stored in the _`u_t`_ and _`v_t`_ variables).
+ * *(hu, hv)* : is a _vector plot_ that shows the water flow (based on the product of the water depth, _`H`_, times the _`u_t`_ and _`v_t`_ variables).
+ * *land mask* : is a _color map_ that shows the land mask (stored in the _`mask`_ variable).
+ * *U mask* : is a _color map_ that shows the land mask (stored in the _`mask_u`_ variable).
+ * *V mask* : is a _color map_ that shows the land mask (stored in the _`mask_v`_ variable).
+ * *W mask* : is a _color map_ that shows the land mask (stored in the _`mask_z`_ variable).
+ * *u* : is a _3D surface_ that shows the water elevation (stored in the _`u_T`_ variable).
+ * *v* : is a _3D surface_ that shows the water elevation (stored in the _`v_t`_ variable).
+ * *velocity modulus* : is a _3D surface_ that shows the water elevation (computed with the _`u`_ and _`v`_ variables).
+ * *ke* : is a _3D surface_ that shows the water elevation (stored in the _`ke`_ variable).
+ * *pe* : is a _3D surface_ that shows the water elevation (stored in the _`pe`_ variable).
+ * *e* : is a _3D surface_ that shows the water elevation (sum of _`ke`_ and _`pe`_ variables).
+ * *eke* : is a _3D surface_ that shows the water elevation (stored in the _`eke`_ variable).
+ * *curl* : is a _3D surface_ that shows the water elevation (stored in the _`curl_t`_ variable).
+ * *enstrophy* : is a _3D surface_ that shows the water elevation (stored in the _`enstrophy_t`_ variable).
+ * *squared shear* : is a _3D surface_ that shows the water elevation (stored in the _`sqshearrate_t`_ variable).
+ * *squared strech* : is a _3D surface_ that shows the water elevation (stored in the _`sqstrechrate_t`_ variable).
+ * *squared strain* : is a _3D surface_ that shows the water elevation (stored in the _`sqstrain_t`_ variable).
+ * *Okubo-Weiss* : is a _3D surface_ that shows the water elevation (stored in the _`okuboweiss_t`_ variable).
+ * *global volume* : is a _time plot_ that shows the perturbation volume of the domain (stored in the variable _`volume`_).
+ * *global momentum* : is a _time plot_ that shows the domain integrated u and v component of the velocity field (stored in the variables _`iMomentumU`_ and _`iMomentumV`_).
+ * *global e-ke-pe-eke* : is a _time plot_ that shows the domain integrated energy (stored in the variables _`iKe`_, _`iPe`_ and _`iEke`_).
+ * *global vorticity* : is a _time plot_ that shows domain integrated relative vorticity (stored in the variable _`iVort`_).
+ * *global enstrophy* : is a _time plot_ that shows domain integrated relative enstrophy (stored in the variable _`iEnst`_).
+ * *global squared shear* : is a _time plot_ that shows the domain integrated squared shear (stored in the variable _`iSqShear`_).
+ * *global squared strech* :  is a _time plot_ that shows the domain integrated squared strech (stored in the variable _`iSqStrech`_).
+ * *global squared strain* : is a _time plot_ that shows the domain integrated squared strain (stored in the variable _`iSqStrain`_).
+ * *global Okubo-Weiss* : is a _time plot_ that shows the domain integrated squared strain, enstrophy and Okubo-Weiss scalar (stored in the variables _`iSqStrain`_, _`-iEnst`_ and _`iOWeiss`_).
+ * *Section X-Axis WaterLevel* : is a _cross-section plot_ along the x-axis that shows the water elevation profile contour (stored in the variable _`eta`_).
+ * *Okubo-Weiss (contour)* : is a _contour map_ of the Okubo-Weiss scalar, where positive values are represented by dashed contour lines, and negative values are represented by a solid contour line. Zero values are represented by a thicker solid contour line.
+ * *Tracer* :  is a _color map_ that shows the tracer concentration (stored in the _`Tr`_ variable).
 
 = How to =
 == Load a configuration ==
