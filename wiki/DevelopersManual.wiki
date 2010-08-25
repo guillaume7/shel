@@ -141,6 +141,7 @@ global film; %Do we animate the simulation and render it on screen? Logical.
 global printG; %Do we export the screen rendering to a file? Logical.
 global myfile; %filename to build sub-folder and image filenames. String.
 global optprint; %Which export format and which property? Integer.
+global movie; %Is it the avi format we want to export? Logical.
 global frame; %frame counter of the graphical exports. integer.
 }}}
 
