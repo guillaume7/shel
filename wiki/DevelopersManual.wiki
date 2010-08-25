@@ -132,7 +132,7 @@ Here's an exhaustive description of the SHEL inner resources, such as folders, f
 Excerpt taken from the `controlpanel2D.m` file:
 {{{
 %Physical processes
-global coriolis; %use coriolis force? Logical.
+global coriolis; '%use coriolis force? Logical.'
 global bottom; %use bottom stress? Logical.
 global wind; %use wind stress? Logical.
 global pressure; %use pressure gradient force? Logical.
