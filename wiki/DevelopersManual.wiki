@@ -31,22 +31,22 @@ Here's an exhaustive description of the SHEL inner resources, such as folders, f
 
 ==Files==
 ===matlab scripts===
- * `launch.m`: contains the script that fires up the _control panel_ and its _resetbutton_ callback.
- * `controlpanel2D.m`: Contains the matlab code for the full _control panel_ interface.
+ * `launch.m`: fires up the _control panel_ and its _resetbutton_ callback.
+ * `controlpanel2D.m`: codes the full _control panel_ interface.
   * `About.m`:
-  * `visualize_v2.m`: Contains the matlab code the full _two-views panel_ interface.
-  * `visualize_v4.m`: Contains the matlab code the full _four-views panel_ interface.
-   * `initialconditions.m`:
-   * `ComputeModel.m`:
-    # `ComputeLeapfrog.m`:
-     * `ComputeContinuity.m`:
-     * `ComputeSpaceU_CS.m`:
-     * `ComputeTimeU_FT.m`:
-     * `computeOB_U.m`:
-    # `ComputeDiagnostics.m`:
-    # `ComputeTracer_FT.m`:
-    # `plotmodel.m`:
-    # `printit.m`:
+  * `visualize_v2.m`: codes the full _two-views panel_ interface.
+  * `visualize_v4.m`: codes the full _four-views panel_ interface.
+   * `initialconditions.m`: codes the initial conditions for the global matricial variables.
+   * `ComputeModel.m`: codes the main loop in time of a SHEL simulation.
+    # `ComputeLeapfrog.m`: codes the momentum and water level after a single iteration in time.
+     * `ComputeContinuity.m`: codes the water level increment during a single time-iteration.
+     * `ComputeSpaceU_CS.m`: codes the momentum increments during a single time-iteration-
+     * `ComputeTimeU_FT.m`: codes the new momentum after the single time-iteration for the inner-domain.
+     * `computeOB_U.m`: codes open-boundary conditions.
+    # `ComputeDiagnostics.m`: codes the computation of the diagnostic quantities.
+    # `ComputeTracer_FT.m`: codes the tracer after a single time-iteration.
+    # `plotmodel.m`: codes the views graphical rendering.
+    # `printit.m`: codes the exporting to png, eps or avi formats.
 
 ===configuration data===
 
