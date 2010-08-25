@@ -68,7 +68,7 @@ http://content.screencast.com/users/GRiflet/folders/Jing/media/52e8accd-25ef-4e0
  * *tangential*: selects the type of open-boundary condition for the normal velocity to the sidewall (ie when the sidewalls are not closed). Two types are available, _Dirichelet_ (or clamped boundary condition) and _Sommerfeld_ (or radiative boundary condition). See the _technical guide_ in the [http://code.google.com/p/shel/downloads/list downloads section] for more details.
 
 === Initial conditions ===
- * *Bump* : generates a gaussian bump in the water elevation, as an initial condition.
+ * *Bump* : generates a gaussian bump in the water elevation, as an initial condition. See the _technical guide_ in the [http://code.google.com/p/shel/downloads/list downloads section] for the formula of the gaussian elevation.
   * *Lx/2 - x0*, *Ly/2 - y0*: are the distances, in cartesian coordinates (along the x-axis and y-axis), in meters, from the center of the domain to the center of the gaussian bump.
   * *Sx*, *Sy*: are the width of the gaussian bump basis, along the x-axis and along the y-axis.
   * *h*: is the maximum height (in meters) of the gaussian bump elevation.
@@ -107,9 +107,21 @@ http://content.screencast.com/users/GRiflet/folders/Jing/media/52e8accd-25ef-4e0
 
 == The views panel ==
 http://content.screencast.com/users/GRiflet/folders/Jing/media/9140125f-7f6d-4d25-aece-639f6e308678/ViewsPanelGUIDescription.png
+
 === Time ===
+Displays the current time of the simulation in seconds.
+
 === Outputs ===
+ * *reset button*: resets the time to 0 and restores the initial conditions of the current configuration.
+ * *film checkbox*: check to refresh the views during a running simulation or during a print to avi or to png or eps.
+ * *run button*: runs a simulation for the duration set in the _time duration_ textbox, in the _control panel_.
+ * *textbox*: must be edited to define the name of the sub-folder, containing the images and video results, under the _image-results_ folder.
+ * *dropdown menu*: selects the output format (*avi*, *png* and *eps) and the views to export (all the _views panel_, the _level view_, the _velocity view_, the _left property view_ and the _right property view_). The _film checkbox_ wil automatically be checked when selecting _avi_ format, and shouldn't be changed while the _avi_ format is chosen.
+ * *print button*: Will export the current view(s) in the chosen format (selected via the _dropdown menu_) and store them within the _images-results_ folder (in the sub-folder defined in the _textbox_). If the _avi_ format is chosen (or if the _film checkbox_ is activated) then it will run a simulation (like the _run button_ does) and it will export every frame output in the view(s).
+
 === Level panel ===
+ * *z-scale*: slider that sets _n_, the power of ten of the maximum and minimum value of the z-axis scale, for the 3D views. [-10^n^ 10^n^].
+
 === Velocity panel ===
 === Left property panel ===
 === Right property panel ===
