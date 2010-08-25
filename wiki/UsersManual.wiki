@@ -169,8 +169,8 @@ This is the exhaustive list of the available properties to render in the sub-pan
  * *global squared strech* :  is a _time plot_ that shows the domain integrated squared strech (stored in the variable _`iSqStrech`_).
  * *global squared strain* : is a _time plot_ that shows the domain integrated squared strain (stored in the variable _`iSqStrain`_).
  * *global Okubo-Weiss* : is a _time plot_ that shows the domain integrated squared strain, enstrophy and Okubo-Weiss scalar (stored in the variables _`iSqStrain`_, _`-iEnst`_ and _`iOWeiss`_).
- * *Section X-Axis WaterLevel* : is a _cross-section plot_ along the x-axis that shows the water elevation profile contour (stored in the variable _`eta`_).
- * *Okubo-Weiss (contour)* : is a _contour map_ of the Okubo-Weiss scalar, where positive values are represented by dashed contour lines, and negative values are represented by a solid contour line. Zero values are represented by a thicker solid contour line.
+ * *Section X-Axis WaterLevel*: is a _cross-section plot_ along the x-axis that shows the water elevation profile contour (stored in the variable _`eta`_).
+ * *Okubo-Weiss (contour)*: is a _contour map_ of the Okubo-Weiss scalar, where positive values are represented by dashed contour lines, and negative values are represented by a solid contour line. Zero values are represented by a thicker solid contour line.
  * *Tracer* :  is a _color map_ that shows the tracer concentration (stored in the _`Tr`_ variable).
 
 = How to =
