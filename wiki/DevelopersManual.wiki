@@ -354,5 +354,5 @@ global iEke; '% turbulent kinetic energy.'
 }}}
 
 ----
-=To learn more=
+=To learn more about SHEL development=
 Please, contact the author `guillaume.riflet at gmail.com`.
