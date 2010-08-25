@@ -36,15 +36,15 @@ Here's an exhaustive description of the SHEL inner resources, such as folders, f
   * `visualize_v2.m`: Contains the matlab code the full _two-views panel_ interface.
   * `visualize_v4.m`: Contains the matlab code the full _four-views panel_ interface.
    * `ComputeModel.m`:
-    * `ComputeLeapfrog.m`:
+    # `ComputeLeapfrog.m`:
      * `ComputeContinuity.m`:
      * `ComputeSpaceU_CS.m`:
      * `ComputeTimeU_FT.m`:
      * `computeOB_U.m`:
-    * `ComputeDiagnostics.m`:
-    * `ComputeTracer_FT.m`:
-    * `plotmodel.m`:
-    * `printit.m`:
+    # `ComputeDiagnostics.m`:
+    # `ComputeTracer_FT.m`:
+    # `plotmodel.m`:
+    # `printit.m`:
 
 ===configuration data===
 
