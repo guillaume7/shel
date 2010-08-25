@@ -1,4 +1,5 @@
 #summary Templates description of SHEL built-in configuration files.
+#labels Featured
 
 =Bump description=
 <wiki:video url="http://www.youtube.com/watch?v=Ibt12ftTAwM" />
