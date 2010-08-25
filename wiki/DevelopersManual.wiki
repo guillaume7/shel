@@ -108,7 +108,7 @@ Here's an exhaustive description of the SHEL inner resources, such as folders, f
 ===matlab scripts===
  * `launch.m`: fires up the _control panel_ and its _resetbutton_ callback.
  * `controlpanel2D.m`: codes the full _control panel_ interface.
-  * `About.m`:
+  * `About.m`: Displays the GPL license agreement.
   * `visualize_v2.m`: codes the full _two-views panel_ interface.
   * `visualize_v4.m`: codes the full _four-views panel_ interface.
    * `initialconditions.m`: codes the initial conditions for the global matricial variables.
@@ -122,6 +122,37 @@ Here's an exhaustive description of the SHEL inner resources, such as folders, f
     # `ComputeTracer_FT.m`: codes the tracer after a single time-iteration.
     # `plotmodel.m`: codes the views graphical rendering.
     # `printit.m`: codes the exporting to png, eps or avi formats.
+
+==Functions==
+This list of function is yet unexhaustive. Only the main functions of the SHEL numerical modeling core are described. The interface functions from the Matlab GUI are _not_ described.
+ * `launch`: fires up the _control panel_ and its _resetbutton_ callback.
+ * `controlpanel2D`: GUI interface of the _control panel_.
+  * `About`:
+  * `visualize_v2`: GUI interface of the _two-views panel_.
+  * `visualize_v4`: GUI interface of the _four-views panel_.
+   * `initialconditions`:
+    # `updatetime`:
+    # `makecoordinates`:
+    # `fillfields`:
+   * `ComputeModel`:
+    # `ComputeLeapfrog`:
+     * `ComputeContinuity`:
+     * `ComputeSpaceU_CS`:
+     * `ComputeTimeU_FT`:
+     * `computeOB_U`:
+    # `ComputeDiagnostics(l)`:
+     * `computeCurl_w`:
+     * `computeShearRate_w`:
+     * `computePotentialVorticity_w`:
+     * `tgrid = interpolFtoT(fgrid, mask, M, N)`:
+    # `ComputeTracer_FT(Tr, K)`:
+     * `RHSt = ComputeSpaceT_UP_U(H, u, mask_u, Tr, K_L, dx_L)`:
+     * `RHSt = ComputeFaceFluxT_UP(Hm, TrUp, TrUm, TrDif, dx_L, K_L)`:
+    # `plotmodel(handles)`:
+     * `plotproperty(prop,CLim,Hn)`:
+      # `SetXY(Hn)`:
+      # `SetZ(CLim, label, Hn, az, el)`:
+    # `printit(frame_L, handles, choice)`:
 
 ==Global variables==
 
@@ -316,5 +347,3 @@ global iMomentumU; '%the u-component of momentum. '
 global iMomentumV;' %the v-component of momentum.'
 global iEke; '% turbulent kinetic energy.'
 }}}
-
-==Functions==
