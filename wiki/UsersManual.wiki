@@ -4,6 +4,7 @@
 
 <wiki:toc max_depth="3" />
 
+----
 = Getting started =
 ==Pre-requisites==
  * A recent version of Matlab must be installed in the machine meant to run the SHEL software. Currently, matlab version 2009b is being used as the development main machine for the SHEL software, but possibly older versions of matlab will work as well.
@@ -18,6 +19,8 @@
  * A [TechnicalGuide technical documentation] comes along with the software package in a separate download. It is recommended to download it as well.
  * This wiki.
 
+
+----
 = Quick-start =
  * Download and unzip the latest matlab package available in the [http://code.google.com/p/shel/downloads/list downloads section] or get the latest version from the [http://code.google.com/p/shel/source/checkout subversion repository].
  * Open the Matlab environment and set the working folder where the m-files were unpacked.
@@ -28,12 +31,16 @@
  * Click the 'run' button to run the model (eventually enable the 'film' option').
  * To export graphics: select a format (eps, png or avi) and a view (all, level, velocity, left or right) from the dropdown menu, then give it a name in the textbox and click  the 'Print' button. If it is the current view only, make sure that the 'film' checkbox is unchecked.
 
+
+----
 = Installation =
  * Simply unpack the SHEL software package in the work-folder of choice.
  * Open the Matlab environment.
  * Set the path to the work folder where the SHEL software was installed.
  * Type _launch_ from the command line and press _enter_. The control panel will show up.
 
+
+----
 = GUI description =
 
 == The control panel ==
@@ -176,6 +183,8 @@ This is the exhaustive list of the available properties to render in the sub-pan
  # *Okubo-Weiss (contour)*: is a _contour map_ of the Okubo-Weiss scalar, where positive values are represented by dashed contour lines, and negative values are represented by a solid contour line. Zero values are represented by a thicker solid contour line.
  # *Tracer* :  is a _color map_ that shows the tracer concentration (stored in the _`Tr`_ variable).
 
+
+----
 = How to =
 == Load a configuration ==
  * From the control panel click the _load_ button, or from the matlab command line prompt, type _launch_ and press _enter_. It will load the _control panel_.
@@ -232,5 +241,7 @@ To be done...
  == tracer ==
 </wiki:comment>
 
+
+----
 = To learn more about SHEL =
 Either explore the GUI, either contact the author: `guillaume.riflet at gmail.com`.
