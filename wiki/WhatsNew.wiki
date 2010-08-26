@@ -2,11 +2,11 @@
 
 <wiki:toc />
 ----
-=20100826=
+=2010-08-26=
  * Created the [WhatsNew what's new] wiki entry.
 
 ----
-=20100825=
+=2010-08-25=
  * The SHEL project hosted on the googlecode page was built in roughly 3 days. 
  * On day 1, the technical guide was built, taken from a whole chapter from my phd thesis. Also, the googlecode page was created on the first day and only featured the technical guide to download. 
  * On day 2, I uploaded the code, added a GPL license, created a downloadble software package and created the first wiki entries. I also started the [UsersManual user's guide].
