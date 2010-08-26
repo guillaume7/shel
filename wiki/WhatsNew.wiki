@@ -10,7 +10,7 @@
  * The SHEL project hosted on the googlecode page was built in roughly 3 days. 
  * On day 1, the technical guide was built, taken from a whole chapter from my phd thesis. Also, the googlecode page was created on the first day and only featured the technical guide to download. 
  * On day 2, I uploaded the code, added a GPL license, created a downloadble software package and created the first wiki entries. I also started the [UsersManual user's guide].
- * On day 3, I finished the first version of the [UsersManual user's guide], wrote the [TemplatesDescription template's descriptions], wrote the first version of the [DevelopersGuide developer's guide] and also included youtube videos on the [TemplatesDescription template's descriptions]. Finally, I annotated the youtube videos with a link to the googlecode page of the SHEL project.
+ * On day 3, I finished the first version of the [UsersManual user's guide], wrote the [TemplatesDescription template's descriptions], wrote the first version of the [DevelopersManual developer's guide] and also included youtube videos on the [TemplatesDescription template's descriptions]. Finally, I annotated the youtube videos with a link to the googlecode page of the SHEL project.
 
 
 ----
