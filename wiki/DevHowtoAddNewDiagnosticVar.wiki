@@ -4,11 +4,38 @@ _Often, the user needs to compute a new diagnostic quantity, one that is not ava
 
 In this tutorial, a dummy property, called `dummy1`, will be created.
 
- # *Determine which is the best suited [DevelopersManual#The_Arakawa_C_staggered_grids_matricial_design grid type]*: All properties are, eventually, interpolated on a [DevelopersManual#The_Arakawa_C_staggered_grids_matricial_design T-cell], for graphical rendering purposes. However this does not mean they are all computed on T-cells. This is the first important design step. Is this quantity naturally computed on T, U, V or W-cell grid? For example, the `curl` is a quantity naturally computed on the W-cell (see the [TechnicalGuide technical guide] for more details on the which grid cells are computed the properties). Thus, the global variable `curl_w` was [http://code.google.com/p/shel/source/browse/trunk/ComputeDiagnostics.m#233 computed on a W-cell and was later interpolated on a T-cell], to the global variable `curl_t`.
+ # *Determine which is the best suited [DevelopersManual#The_Arakawa_C_staggered_grids_matricial_design grid type]*: All properties are, eventually, interpolated on a [DevelopersManual#The_Arakawa_C_staggered_grids_matricial_design T-cell], for graphical rendering purposes. However this does not mean they are all computed on T-cells. This is the first important design step. Is this quantity naturally computed on T, U, V or W-cell grid? For example, the `curl` is a quantity naturally computed on the W-cell (see the [TechnicalGuide technical guide] for more details on the which grid cells are computed the properties). Thus, the global variable `curl_w` was [http://code.google.com/p/shel/source/browse/trunk/ComputeDiagnostics.m#233 computed on a W-cell and was later interpolated on a T-cell], to the global variable `curl_t`. *In this case, `dummy1` is computed on a W-cell.*
  # *Create the diagnostic variable*
-  * Edit the [http://code.google.com/p/shel/source/browse/trunk/computeDiagnostics.m computeDiagnostics.m] file: 
+  * Edit the [http://code.google.com/p/shel/source/browse/trunk/computeDiagnostics.m computeDiagnostics.m] file: Create the function that computes the `dummy_w` global variable, at the end, right before the `interpolFtoT` function.
 {{{
-% wtf?
+'%%%% New code begins here %%%%
+function computeDummy1
+  global u;
+  global v;
+  global dummy1_w; '%W-cell global variable'
+  global dummy1_t; '%T-cell global variable'
+  global mask; '%T-cell land mask'
+
+  '%Algorithm of dummy1'
+  dummy1_w(2:M,2:N) = u(1:M-1,2:N) + u(2:M,2:N) + v(2:M,1:N-1) + v(2:M,2:N);
+
+  '%Interpolation of dummy1 to a T-cell'
+  dummy1_t = interpolFtoT(dummy_w, mask, M, N)
+'%%%% New code ends here %%%%
+
+function tgrid = interpolFtoT(fgrid, mask, M, N)
+%% function tgrid = interpolFtoT(fgrid, mask, M, N)
+tgrid = .25 * mask .* ( ...
+              fgrid(1:M,1:N) ...
+            + fgrid(2:M+1,1:N) ...
+            + fgrid(2:M+1,2:N+1) ...
+            + fgrid(1:M,2:N+1) ...
+            );
+%--------------------------------------------------------------------------
+%SHEL SHallow-water numerical modEL
+%Copyright (C) 2006,2009,2010. Guillaume Riflet, Instituto Superior Técnico
+%da Universidade Técnica de Lisboa.
+%--------------------------------------------------------------------------% wtf?
 }}}
   * Edit the [http://code.google.com/p/shel/source/browse/trunk/initialconditions.m initialconditions.m] file:
  # *Create the new property in the property list*
