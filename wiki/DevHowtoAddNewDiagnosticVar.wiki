@@ -39,16 +39,12 @@ global dummy1_w; '% always comment what this quantity is!'
 
 Allocate memory for the new global variable `dummy1_t`, [http://code.google.com/p/shel/source/browse/trunk/initialconditions.m#442 at the end of the T-cells allocation]:
 {{{
-'%Z field%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%'
-...
 sqdivergence_t = zeros(M,N);
 dummy1_t = zeros(M,N);
 }}}
 
 and allocate memory for the new global variable `dummy1_w`, [http://code.google.com/p/shel/source/browse/trunk/initialconditions.m#416 at the end of the W-cells allocation (Z-cells)]:
 {{{
-'%Z field%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%'
-...
 okuboweiss_w = zeros(M+1,N+1);
 dummy1_w = zeros(M+1,N+1);
 }}}
