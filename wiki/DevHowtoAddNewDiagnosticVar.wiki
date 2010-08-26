@@ -9,7 +9,7 @@ In this tutorial, a dummy property, called `dummy1`, will be created.
   * Edit the [http://code.google.com/p/shel/source/browse/trunk/computeDiagnostics.m computeDiagnostics.m] file: Create the function that computes the `dummy_w` global variable, at the end, right before the `interpolFtoT` function.
 {{{
 '%%%% New code begins here %%%%'
-function computeDummy1
+function computeDummy1_w
   global u;
   global v;
   global dummy1_w; '%W-cell global variable'
@@ -36,6 +36,25 @@ tgrid = .25 * mask .* ( ...
 %Copyright (C) 2006,2009,2010. Guillaume Riflet, Instituto Superior Técnico
 %da Universidade Técnica de Lisboa.
 %--------------------------------------------------------------------------'
+}}}
+Right after creating the function, call it from the main function in the computeDiagnostic.m file, right before the interpolation of U and V to T-cells and the 1D variables computation:
+{{{
+'%%%%Begin new code here%%%%%
+'%dummy1'
+computeDummy1_w;
+'%%%%End new code%%%%%%%%%%%%
+
+'%%interpolate from U and V to T cells'
+u_t = .5 * ( u(1:M,:) + u(2:M+1,:) );
+v_t = .5 * ( v(:,1:N) + v(:,2:N+1) );
+
+Hnoland = H;
+Hnoland(find(H < -1)) = 0.;
+
+'%Volume
+%volume(l) = dA * sum(sum(Hnoland)); %m3
+%Perturbed volume'
+volume(l) = dA * sum(sum(eta .* mask)); %m3
 }}}
   * Edit the [http://code.google.com/p/shel/source/browse/trunk/initialconditions.m initialconditions.m] file:
  # *Create the new property in the property list*
