@@ -1,12 +1,13 @@
 #summary What's new?
 
 <wiki:toc />
+
 ----
 =2010-08-26 G.R.=
  * Created the [WhatsNew what's new] wiki entry.
  * Created the wiki entry [DevHowtoAddNewDiagnosticVar How to add a new property?].
  * Added the Diagnostic quantities section in the [TechnicalGuide technical guide].
-
+ * Improved poor graphics in the [TechnicalGuide technical guide]. The mesh figures now look much better.
 ----
 =2010-08-25 G.R.=
  * The SHEL project hosted on the googlecode page was built in roughly 3 days. 
