@@ -177,4 +177,4 @@ And that's it!
 
 =Now that it's done=
 
-Users can now render the 3D surface of the `dummy1` property. In order to integrate completely the new property in the official SHEL project, please submit it to the author: `guillaume.riflet at gmail.com`.
+Users can now render the 3D surface of the `dummy1` property. In order to integrate completely the new property in the official SHEL project, please ask the project manager to make you a SHEL developer: `guillaume.riflet at gmail.com`.
