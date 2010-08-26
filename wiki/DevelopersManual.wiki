@@ -105,22 +105,22 @@ Here's an exhaustive description of the SHEL inner resources, such as folders, f
  * `bathymetries`: contains files containing bathymetry (`d`), level (`eta`) and velocity (`u`, `v`) variables stored in the matlab data file format (.mat).
 
 ==Files==
- * [http://code.google.com/p/shel/source/browse/trunk/launch.m `launch.m`]: fires up the _control panel_ and its _resetbutton_ callback.
- * [http://code.google.com/p/shel/source/browse/trunk/controlpanel2D.m `controlpanel2D.m`]: codes the full _control panel_ interface.
-  * [http://code.google.com/p/shel/source/browse/trunk/about.m `About.m`]: Displays the GPL license agreement.
-  * [http://code.google.com/p/shel/source/browse/trunk/visualize_v2.m `visualize_v2.m`]: codes the full _two-views panel_ interface.
-  * [http://code.google.com/p/shel/source/browse/trunk/visualize_v4.m `visualize_v4.m`]: codes the full _four-views panel_ interface.
-   * [http://code.google.com/p/shel/source/browse/trunk/initialconditions.m `initialconditions.m`]: codes the initial conditions for the global matricial variables.
+ * [http://code.google.com/p/shel/source/browse/trunk/launch.m launch.m]: fires up the _control panel_ and its _resetbutton_ callback.
+ * [http://code.google.com/p/shel/source/browse/trunk/ControlPanel2D.m ControlPanel2D]: codes the full _control panel_ interface.
+  * [http://code.google.com/p/shel/source/browse/trunk/about.m About.m]: Displays the GPL license agreement.
+  * [http://code.google.com/p/shel/source/browse/trunk/visualize_v2.m visualize_v2.m]: codes the full _two-views panel_ interface.
+  * [http://code.google.com/p/shel/source/browse/trunk/visualize_v4.m visualize_v4.m]: codes the full _four-views panel_ interface.
+   * [http://code.google.com/p/shel/source/browse/trunk/initialconditions.m initialconditions.m]: codes the initial conditions for the global matricial variables.
    * [http://code.google.com/p/shel/source/browse/trunk/ComputeModel.m `ComputeModel.m`]: codes the main loop in time of a SHEL simulation.
-    # [http://code.google.com/p/shel/source/browse/trunk/ComputeLeapfrog.m `ComputeLeapfrog.m`]: codes the momentum and water level after a single iteration in time.
-     * [http://code.google.com/p/shel/source/browse/trunk/ComputeContinuity.m `ComputeContinuity.m`]: codes the water level increment during a single time-iteration.
-     * [http://code.google.com/p/shel/source/browse/trunk/ComputeSpaceU_CS.m `ComputeSpaceU_CS.m`]: codes the momentum increments during a single time-iteration-
-     * [http://code.google.com/p/shel/source/browse/trunk/ComputeTimeU_FT.m `ComputeTimeU_FT.m`]: codes the new momentum after the single time-iteration for the inner-domain.
-     * [http://code.google.com/p/shel/source/browse/trunk/computeOB_U.m `computeOB_U.m`]: codes open-boundary conditions.
-    # [http://code.google.com/p/shel/source/browse/trunk/ComputeDiagnostics.m `ComputeDiagnostics.m`]: codes the computation of the diagnostic quantities.
-    # [http://code.google.com/p/shel/source/browse/trunk/ComputeTracer_FT.m `ComputeTracer_FT.m`]: codes the tracer after a single time-iteration.
-    # [http://code.google.com/p/shel/source/browse/trunk/plotmodel.m `plotmodel.m`]: codes the views graphical rendering.
-    # [http://code.google.com/p/shel/source/browse/trunk/printit.m `printit.m`]: codes the exporting to png, eps or avi formats.
+    # [http://code.google.com/p/shel/source/browse/trunk/ComputeLeapfrog.m ComputeLeapfrog.m]: codes the momentum and water level after a single iteration in time.
+     * [http://code.google.com/p/shel/source/browse/trunk/ComputeContinuity.m ComputeContinuity.m]: codes the water level increment during a single time-iteration.
+     * [http://code.google.com/p/shel/source/browse/trunk/ComputeSpaceU_CS.m ComputeSpaceU_CS.m]: codes the momentum increments during a single time-iteration-
+     * [http://code.google.com/p/shel/source/browse/trunk/ComputeTimeU_FT.m ComputeTimeU_FT.m]: codes the new momentum after the single time-iteration for the inner-domain.
+     * [http://code.google.com/p/shel/source/browse/trunk/computeOB_U.m computeOB_U.m]: codes open-boundary conditions.
+    # [http://code.google.com/p/shel/source/browse/trunk/ComputeDiagnostics.m ComputeDiagnostics.m]: codes the computation of the diagnostic quantities.
+    # [http://code.google.com/p/shel/source/browse/trunk/ComputeTracer_FT.m ComputeTracer_FT.m]: codes the tracer after a single time-iteration.
+    # [http://code.google.com/p/shel/source/browse/trunk/plotmodel.m plotmodel.m]: codes the views graphical rendering.
+    # [http://code.google.com/p/shel/source/browse/trunk/printit.m printit.m]: codes the exporting to png, eps or avi formats.
 
 ==Functions==
 This list of function is yet unexhaustive. Only the main functions of the SHEL numerical modeling core are described. The interface functions from the Matlab GUI are _not_ described.
