@@ -1,5 +1,7 @@
 #summary Developer How-To: Add a new diagnostic variable in the property list
 
+<wiki:toc />
+
 =Intro=
 _Often, the user needs to compute a new diagnostic quantity, one that is not available on the current [UsersManual#Property_list _property list_]. Hence, this tutorial serves to guide the user to become a developer, and to help him create new diagnostic quantities in the SHEL. The developer is also encouraged to submit new quantities to this googlecode project._
 
