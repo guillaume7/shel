@@ -150,7 +150,7 @@ Summon the missing global variables, [http://code.google.com/p/shel/source/brows
     global masknan;
 }}}
 
-Inject the new _case_ in the _switch_:
+Inject the new _case_ in the [http://code.google.com/p/shel/source/browse/trunk/plotmodel.m#145 _switch_]:
 {{{
             case 21 '% Scalar of Okubo-Weiss (1/s2)'
                 surf(Hn,x(2:M-1,2:N-1),y(2:M-1,2:N-1), masknan(2:M-1,2:N-1) .* okuboweiss_t(2:M-1,2:N-1));
@@ -174,3 +174,7 @@ Inject the new _case_ in the _switch_:
 }}}
 
 And that's it!
+
+=Now that it's done=
+
+Users can now render the 3D surface of the `dummy1` property. In order to integrate completely the new property in the official SHEL project, please submit it to the author: `guillaume.riflet at gmail.com`.
