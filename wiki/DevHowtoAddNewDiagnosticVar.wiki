@@ -1,12 +1,23 @@
 #summary Developer How-To: Add a new diagnostic variable in the property list
 
+=Intro=
 _Often, the user needs to compute a new diagnostic quantity, one that is not available on the current [UsersManual#Property_list _property list_]. Hence, this tutorial serves to guide the user to become a developer, and to help him create new diagnostic quantities in the SHEL. The developer is also encouraged to submit new quantities to this googlecode project._
 
 In this tutorial, a dummy property, called `dummy1`, will be created.
 
- # *Determine which is the best suited [DevelopersManual#The_Arakawa_C_staggered_grids_matricial_design grid type]*: All properties are, eventually, interpolated on a [DevelopersManual#The_Arakawa_C_staggered_grids_matricial_design T-cell], for graphical rendering purposes. However this does not mean they are all computed on T-cells. This is the first important design step. Is this quantity naturally computed on T, U, V or W-cell grid? For example, the `curl` is a quantity naturally computed on the W-cell (see the [TechnicalGuide technical guide] for more details on the which grid cells are computed the properties). Thus, the global variable `curl_w` was [http://code.google.com/p/shel/source/browse/trunk/ComputeDiagnostics.m#233 computed on a W-cell and was later interpolated on a T-cell], to the global variable `curl_t`. *In this case, `dummy1` is computed on a W-cell.*
- # *Create the diagnostic variable*
-  * Edit the [http://code.google.com/p/shel/source/browse/trunk/computeDiagnostics.m computeDiagnostics.m] file: Create the function that computes the `dummy_w` global variable, at the end, right before the `interpolFtoT` function.
+=Which grid type?=
+*Determine which is the best suited [DevelopersManual#The_Arakawa_C_staggered_grids_matricial_design grid type]*. 
+
+All properties are, eventually, interpolated on a [DevelopersManual#The_Arakawa_C_staggered_grids_matricial_design T-cell], for graphical rendering purposes. However this does not mean they are all computed on T-cells. This is the first important design step. Is this quantity naturally computed on T, U, V or W-cell grid? 
+
+For example, the `curl` is a quantity naturally computed on the W-cell (see the [TechnicalGuide technical guide] for more details on the which grid cells are computed the properties). Thus, the global variable `curl_w` was [http://code.google.com/p/shel/source/browse/trunk/ComputeDiagnostics.m#233 computed on a W-cell and was later interpolated on a T-cell], to the global variable `curl_t`. 
+
+*In this case, `dummy1` is computed on a W-cell.*
+
+=Create the diagnostic variable=
+
+Edit the [http://code.google.com/p/shel/source/browse/trunk/computeDiagnostics.m computeDiagnostics.m] file: Create the function that computes the `dummy_w` global variable, at the end, right before the `interpolFtoT` function.
+
 {{{
 '%%%% New code begins here %%%%'
 function computeDummy1_w
@@ -37,7 +48,9 @@ tgrid = .25 * mask .* ( ...
 %da Universidade Técnica de Lisboa.
 %--------------------------------------------------------------------------'
 }}}
+
 Right after creating the function, call it from the main function in the computeDiagnostic.m file, right before the interpolation of U and V to T-cells and the 1D variables computation:
+
 {{{
 '%%%%Begin new code here%%%%%
 '%dummy1'
@@ -56,7 +69,9 @@ Hnoland(find(H < -1)) = 0.;
 %Perturbed volume'
 volume(l) = dA * sum(sum(eta .* mask)); %m3
 }}}
-  * Edit the [http://code.google.com/p/shel/source/browse/trunk/initialconditions.m initialconditions.m] file:
- # *Create the new property in the property list*
+
+Edit the [http://code.google.com/p/shel/source/browse/trunk/initialconditions.m initialconditions.m] file:
+
+=Update the _property list_=
   * Edit the visualize_v2 and visualize_v4 GUI:
   * Edit the [http://code.google.com/p/shel/source/browse/trunk/plotmodel.m plotmodel.m] file:
