@@ -18,11 +18,44 @@ For example, the `curl` is a quantity naturally computed on the W-cell (see the 
 
 =Create the diagnostic variable=
 
-==[http://code.google.com/p/shel/source/browse/trunk/initialconditions.m initialconditions.m]==
+Edit the following files.
 
-==[http://code.google.com/p/shel/source/browse/trunk/computeDiagnostics.m computeDiagnostics.m]== 
+==initialconditions.m==
 
-Create the function that computes the `dummy_w` global variable, at the end, [http://code.google.com/p/shel/source/browse/trunk/ComputeDiagnostics.m#383 right before the `interpolFtoT` function].
+Create the global variable `dummy1_t`, at [http://code.google.com/p/shel/source/browse/trunk/initialconditions.m#196 the end of the diagnostic quantities in the T-cells code zone],
+{{{
+global sqdivergence_t; '%the square of the horizontal divergence.'
+global okuboweiss_t; '% the okubo-weiss scalar (sqstrain - enstrophy) '
+                    '%(Check Arakawa1966 and Weiss1981)'
+global dummy1_t; '% always comment what this quantity is!'
+}}}
+
+and create the global variable `dummy1_w`. [http://code.google.com/p/shel/source/browse/trunk/initialconditions.m#232 at the end of the W-cells (or Z-cells )code zone],
+{{{
+global okuboweiss_w; '% the okubo-weiss scalar (sqstrain - enstrophy)' 
+                    '%(Check Arakawa1966 and Weiss1981)'
+global dummy1_w; '% always comment what this quantity is!'
+}}}
+
+Allocate memory for the new global variable `dummy1_t`, [http://code.google.com/p/shel/source/browse/trunk/initialconditions.m#442 at the end of the T-cells allocation]:
+{{{
+'%Z field%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%'
+...
+sqdivergence_t = zeros(M,N);
+dummy1_t = zeros(M,N);
+}}}
+
+and allocate memory for the new global variable `dummy1_w`, [http://code.google.com/p/shel/source/browse/trunk/initialconditions.m#416 at the end of the W-cells allocation (Z-cells)]:
+{{{
+'%Z field%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%'
+...
+okuboweiss_w = zeros(M+1,N+1);
+dummy1_w = zeros(M+1,N+1);
+}}}
+
+==computeDiagnostics.m== 
+
+Create the function that computes the `dummy1_w` global variable, at the end, [http://code.google.com/p/shel/source/browse/trunk/ComputeDiagnostics.m#383 right before the `interpolFtoT` function].
 
 {{{
 '%%%% New code begins here %%%%'
