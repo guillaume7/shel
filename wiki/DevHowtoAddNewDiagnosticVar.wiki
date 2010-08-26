@@ -18,7 +18,11 @@ For example, the `curl` is a quantity naturally computed on the W-cell (see the 
 
 =Create the diagnostic variable=
 
-Edit the [http://code.google.com/p/shel/source/browse/trunk/computeDiagnostics.m computeDiagnostics.m] file: Create the function that computes the `dummy_w` global variable, at the end, [http://code.google.com/p/shel/source/browse/trunk/ComputeDiagnostics.m#383 right before the `interpolFtoT` function].
+==Edit the [http://code.google.com/p/shel/source/browse/trunk/initialconditions.m initialconditions.m] file==
+
+==Edit the [http://code.google.com/p/shel/source/browse/trunk/computeDiagnostics.m computeDiagnostics.m] file== 
+
+Create the function that computes the `dummy_w` global variable, at the end, [http://code.google.com/p/shel/source/browse/trunk/ComputeDiagnostics.m#383 right before the `interpolFtoT` function].
 
 {{{
 '%%%% New code begins here %%%%'
@@ -72,8 +76,6 @@ Hnoland(find(H < -1)) = 0.;
 volume(l) = dA * sum(sum(eta .* mask)); %m3
 }}}
 
-Edit the [http://code.google.com/p/shel/source/browse/trunk/initialconditions.m initialconditions.m] file:
-
 =Update the _property list_=
-  * Edit the visualize_v2 and visualize_v4 GUI:
-  * Edit the [http://code.google.com/p/shel/source/browse/trunk/plotmodel.m plotmodel.m] file:
+==Edit the visualize_v2 and visualize_v4 GUI==
+==Edit the [http://code.google.com/p/shel/source/browse/trunk/plotmodel.m plotmodel.m] file==
