@@ -4,6 +4,7 @@
 ----
 =2010-08-26 G.R.=
  * Created the [WhatsNew what's new] wiki entry.
+ * Created the [DevHowtoAddNewDiagnosticVar developer howto, How to add a new property?]
 
 ----
 =2010-08-25 G.R.=
