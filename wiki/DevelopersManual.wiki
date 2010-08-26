@@ -161,7 +161,7 @@ This list of function is yet unexhaustive. Only the main functions of the SHEL n
 ==Global variables==
 
 ===loadable and save-able===
-Excerpt taken from the `controlpanel2D.m` file:
+Excerpt taken from the [http://code.google.com/p/shel/source/browse/trunk/ControlPanel2D.m ControlPanel2D.m] file:
 {{{
 '%Physical processes'
 global coriolis; '%use coriolis force? Logical.'
@@ -258,7 +258,7 @@ global frame; '%frame counter of the graphical exports. integer.'
 
 ===Initializable global matrices===
 _Please refer to the [TechnicalGuide technical guide] for the mathematical formulation and the numerical algorithms for the computation of prognostic and diagnostic variables. In particular, the diagnostic variables computation is coded in the [http://code.google.com/p/shel/source/browse/trunk/ComputeDiagnostics.m `computeDiagnostics.m` file]._
-Excerpts taken from `initialconditions.m`.
+Excerpts taken from [http://code.google.com/p/shel/source/browse/trunk/initialconditions.m initialconditions.m].
 {{{
 '%function initialconditions'
 global time; '% time variable. Real.'
