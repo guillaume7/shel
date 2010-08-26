@@ -44,6 +44,7 @@ There is another geostrophic bump configuration for a slightly larger domain:
  * 60 km x 60 km gaussian width.
  * time-step of 500 s, with a simulation duration of 100000s and an output interval of 1000 s.
 
+----
 =Step-bump description=
 <wiki:video url="http://www.youtube.com/watch?v=lcvYr-M_sk0" />
 
@@ -73,6 +74,7 @@ The following variants have the same characteristics than the _step-bump_ case e
  * _geostepbump.mat_ file.
  * uses the _coriolis force_ also at a _latitude (f)_ of 43.98 degrees North.
 
+----
 =Taylor column description =
 _taylor geoIC.mat_ file.
 
