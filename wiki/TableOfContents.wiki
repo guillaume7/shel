@@ -4,6 +4,7 @@
  * [UsersManual User's guide]
   * [TemplatesDescription Templates description]
  * [DevelopersManual Developer's guide]
+  * [DevHowtoAddNewDiagnosticVar How to add a new property]
  * [TechnicalGuide Technical guide]
 
 Questions: `guillaume.riflet at gmail.com`
