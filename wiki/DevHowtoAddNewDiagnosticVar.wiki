@@ -8,7 +8,7 @@ In this tutorial, a dummy property, called `dummy1`, will be created.
  # *Create the diagnostic variable*
   * Edit the [http://code.google.com/p/shel/source/browse/trunk/computeDiagnostics.m computeDiagnostics.m] file: Create the function that computes the `dummy_w` global variable, at the end, right before the `interpolFtoT` function.
 {{{
-'%%%% New code begins here %%%%
+'%%%% New code begins here %%%%'
 function computeDummy1
   global u;
   global v;
@@ -21,7 +21,7 @@ function computeDummy1
 
   '%Interpolation of dummy1 to a T-cell'
   dummy1_t = interpolFtoT(dummy_w, mask, M, N)
-'%%%% New code ends here %%%%
+'%%%% New code ends here %%%%'
 
 function tgrid = interpolFtoT(fgrid, mask, M, N)
 %% function tgrid = interpolFtoT(fgrid, mask, M, N)
