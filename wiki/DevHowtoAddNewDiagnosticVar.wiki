@@ -122,4 +122,55 @@ Then edit both dropdown menus in the  left and the right-property sub-panels: ed
 http://content.screencast.com/users/GRiflet/folders/Jing/media/226ec21c-3438-40a8-946b-c17467fecf34/AddPropertyInPropertyList.png
 
 =Choose the rendering=
+For the last part of this tutorial, there will be the need to choose and implement the rendering type of the `dummy1` property.
+
+So far, there are six types of rendering modes:
+ # 3D surface
+ # color map
+ # 2D vector field plot
+ # contour plot
+ # time-series plot
+ # Cross-section plot
+
+*In this case, the `dummy1` property will be rendered using the _3D surface_ mode.*
+
 ==plotmodel.m==
+
+Edit the commented enumerated property list, [http://code.google.com/p/shel/source/browse/trunk/plotmodel.m#72 here]:
+{{{
+'% 21 - Okubo-Weiss (W)'
+'% 22 - Dummy1 (W)'
+'% 23 - global volume'
+}}}
+
+Summon the missing global variables, [http://code.google.com/p/shel/source/browse/trunk/plotmodel.m#86 here]:
+{{{
+    global enstrophy_t;
+    global dummy1_t;
+    global masknan;
+}}}
+
+Inject the new _case_ in the _switch_:
+{{{
+            case 21 '% Scalar of Okubo-Weiss (1/s2)'
+                surf(Hn,x(2:M-1,2:N-1),y(2:M-1,2:N-1), masknan(2:M-1,2:N-1) .* okuboweiss_t(2:M-1,2:N-1));
+                '%title(Hn,'Okubo-Weiss');'
+                SetXY(Hn);
+                SetZ(CLim,'Okubo-Weiss,  \itW\rm (s^{-2})',Hn,az,el);
+
+            case 22 '% Dummy1 (put here the physics dimensions)'
+                surf(Hn,x(2:M-1,2:N-1),y(2:M-1,2:N-1), masknan(2:M-1,2:N-1) .* dummy1_t(2:M-1,2:N-1));
+                title(Hn,'Dummy1');
+                SetXY(Hn);
+                SetZ(CLim,'Dummy1,  \itW\rm (physics dimension in latex notation)',Hn,az,el);
+
+            case 23 '%global volume variation(m3)'
+                plot(Hn,vtime, volume);
+' %               axis(Hn,[min(vtime) max(vtime) min(volume)*.999999 max(volume)*1.000001]);'
+                xlabel(Hn,'Time,  \itt\rm (s)', 'FontSize', fontsize);
+                ylabel(Hn,'Volume,  \itV\rm (m^3)', 'FontSize', fontsize);
+                title(Hn,'Volume deviation', 'FontSize', titfontsize);
+                set(Hn, 'FontSize', fontsize);
+}}}
+
+And that's it!
