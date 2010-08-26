@@ -41,17 +41,17 @@ global N;
 global x0;
 global y0;
 
-global x;
-global y;
+global x; %x-component of the T-grid coordinates. Real matrix.
+global y; %y-component of the T-grid coordinates. Real matrix.
 
-global x_u;
-global y_u;
+global x_u; %x-component of the U-grid coordinates. Real matrix.
+global y_u; %y-component of the U-grid coordinates. Real matrix.
 
-global x_v;
-global y_v;
+global x_v; %x-component of the V-grid coordinates. Real matrix.
+global y_v; %y-component of the V-grid coordinates. Real matrix.
 
-global x_w;
-global y_w;
+global x_w; %x-component of the W-grid coordinates. Real matrix.
+global y_w; %y-component of the W-grid coordinates. Real matrix.
 
 global loadbathymetry;
 global bathymetryfile;
@@ -176,81 +176,83 @@ global M;
 global N;
 global d0;
 global d0_step
-
-%T-cells
-global Tr;
-global eta0;
-global eta_old;
-global eta;
-global eta_new;
-global H_old;
-global H;
-global H_new;
-global d;
-global mask;
-global masknan;
-global u_t;
-global v_t;
-global ke;
-global pe;
-%Eddy kinetic energy
-global eke;
-global gradux;
-global graduy;
-global gradvx;
-global gradvy;
-
 global dx;
 global dy;
 
+%T-cells
+global Tr; % tracer concentration.
+global eta0; % initial water elevation.
+global eta_old; %water elevation at instant t-dt.
+global eta; %water elevation at instant t.
+global eta_new; %water elevation at instant t+dt.
+global H_old; %water column height at instant t-dt.
+global H; %water column height at instant t.
+global H_new; %water column height at instant t+dt.
+global d; %bathymetry depth. constant in time.
+global mask; %land mask.
+global masknan; %not-a-number mask.
+global u_t; %u component of velocity.
+global v_t; %v component of velocity.
+ %Diagnostic quantities
+global ke; %kinetic energy.
+global pe; %potential energy.
+global eke; %turbulent kinetic energy.
+global gradux; %u gradient along the x-coordinate.
+global graduy; %u gradient along the y-coordinate.
+global gradvx; %v gradient along the x-coordinate.
+global gradvy; %v gradient along the y-coordinate.
+global curl_t; % (v_x - u_y) The curl of velocity
+global potvorticity_t; % the potential vorticity
+global strechrate_t; % strech rate. (u_x - v_y) %Check Arakawa 1966
+global shearrate_t; % shear rate. (v_x + u_y) %Check Arakawa 1966
+global sqstrechrate_t; %the square of the strech rate.
+global sqshearrate_t; %the square of the shear rate.
+global enstrophy_t; % enstrophy (0.5 * curl * curl)
+global sqstrain_t; % the square of the strain rate. 
+                % 0.5 * ( shear * shear + strech * strech )
+global divergence_t; %the horizontal divergence.
+global sqdivergence_t; %the square of the horizontal divergence.
+global okuboweiss_t; % the okubo-weiss scalar (sqstrain - enstrophy) 
+                    %(Check Arakawa1966 and Weiss1981)
+
 %U-cells
-global u_a;
-global u_old;
-global u;
-global u_new;
-global mask_u;
+global u_a; %time averaged u component of velocity.
+global u_old; %u component of velocity at instant t-dt.
+global u; %u component of velocity at instant t.
+global u_new; %u component of velocity at instant t+dt.
+global mask_u; %flux mask of the u-component of velocity.
 
 %V-cells
-global v_a;
-global v_old;
-global v;
-global v_new;
-global mask_v;
+global v_a; %time averaged v component of velocity.
+global v_old; %v component of velocity at instant t-dt.
+global v; %v component of velocity at instant t.
+global v_new; %v component of velocity at instant t+dt.
+global mask_v; %flux mask of the v-component of velocity.
 
 %Z-cells
 global curl_w; %The curl of velocity (v_x - u_y)
-global curl_t; % (v_x - u_y) The curl of velocity
 global potvorticity_w; %Rossby's potential vorticity
-global potvorticity_t;
-global strechrate_t; % (u_x - v_y) %Check Arakawa 1966
-global shearrate_w;
-global shearrate_t; % (v_x + u_y) %Check Arakawa 1966
-global sqshearrate_w;
-global sqshearrate_t;
-global sqstrechrate_t;
-global enstrophy_w;
-global enstrophy_t; % (0.5 * curl * curl)
-global sqstrain_t; % 0.5 * ( shear * shear + strech * strech )
-global divergence_t;
-global sqdivergence_t;
-global okuboweiss_w;
-global okuboweiss_t; % (sqstrain - enstrophy) (Check Arakawa1966 and Weiss1981)
+global shearrate_w; % shear rate. (v_x + u_y) %Check Arakawa 1966
+global sqshearrate_w; % the square of the shear rate.
+global enstrophy_w; % enstrophy (0.5 * curl * curl)
+global okuboweiss_w; % the okubo-weiss scalar (sqstrain - enstrophy) 
+                    %(Check Arakawa1966 and Weiss1981)
 
-%time-dependent global properties
+%time-dependent global properties (domain integrated)
 global L;
-global volume;
-global iKe;
-global iPe;
-global vtime;
-global iVort;
-global iEnst;
-global iSqStrech;
-global iSqShear;
-global iSqStrain;
-global iOWeiss;
-global iMomentumU;
-global iMomentumV;
-global iEke;
+global volume; %global volume.
+global iKe; % kinetic energy.
+global iPe; % potential energy.
+global vtime; % time vector.
+global iVort; % relative vorticity.
+global iEnst; % enstrophy.
+global iSqStrech; %square of the strech rate.
+global iSqShear; %square of the shear rate.
+global iSqStrain; %square of the strain rate.
+global iOWeiss; %okubo-weiss parameter.
+global iMomentumU; %the u-component of momentum. 
+global iMomentumV; %the v-component of momentum.
+global iEke; % turbulent kinetic energy.
 
 global loadbathymetry;
 global bathymetryfile;
