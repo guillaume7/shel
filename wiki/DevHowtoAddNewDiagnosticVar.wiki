@@ -105,6 +105,21 @@ Hnoland(find(H < -1)) = 0.;
 volume(l) = dA * sum(sum(eta .* mask)); %m3
 }}}
 
-=Update the _property list_=
-==visualize_v2 and visualize_v4 GUI==
-==[http://code.google.com/p/shel/source/browse/trunk/plotmodel.m plotmodel.m]==
+=Update the property list=
+The idea is to add the `dummy1` property in the property list of the visualize_v4 _four-views panel_
+http://content.screencast.com/users/GRiflet/folders/Jing/media/ef4d9113-81eb-4eb1-b6da-805a3bbe1fbc/propertylist.png
+
+The first thing to do, it to get a sense of where would fit the new variable in the list. The most accessible place is not necessarily the last place. If the property is matricial diagnostic quantity, then the variable should go right before the `global volume` property, at the end of the other diagnostic properties. If the property is a domain integrated, time-evolving property, then it should go at the end of global properties, right after `global Okubo-Weiss` and before `Section X-axis`.
+
+*In this case, the `dummy1` property will be inserted at the end of the diagnostic matricial properties, right before the `global volume` property.*
+
+==visualize_v4 GUI==
+Call the guide from the matlab prompt, to edit the visualize_v4 panel:
+{{{
+ matlab promtp >> guide visualize_v4
+}}}
+Then edit both dropdown menus in the  left and the right-property sub-panels: edit the string and inject the property name in the right place in the list. Then save everything.
+http://content.screencast.com/users/GRiflet/folders/Jing/media/226ec21c-3438-40a8-946b-c17467fecf34/AddPropertyInPropertyList.png
+
+=Choose the rendering=
+==plotmodel.m==
