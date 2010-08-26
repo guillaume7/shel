@@ -52,10 +52,10 @@ tgrid = .25 * mask .* ( ...
 Right after creating the function, call it from the main function in the computeDiagnostic.m file, right before the interpolation of U and V to T-cells and the 1D variables computation:
 
 {{{
-'%%%%Begin new code here%%%%%
+'%%%%Begin new code here%%%%%'
 '%dummy1'
 computeDummy1_w;
-'%%%%End new code%%%%%%%%%%%%
+'%%%%End new code%%%%%%%%%%%%'
 
 '%%interpolate from U and V to T cells'
 u_t = .5 * ( u(1:M,:) + u(2:M+1,:) );
