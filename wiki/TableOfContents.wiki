@@ -1,6 +1,6 @@
 #summary Table Of Contents of the wiki
 
- * [What's New]
+ * [WhatsNew What's New]
  * [UsersManual User's guide]
   * [TemplatesDescription Templates description]
  * [DevelopersManual Developer's guide]
