@@ -4,7 +4,8 @@
 ----
 =2010-08-26 G.R.=
  * Created the [WhatsNew what's new] wiki entry.
- * Created the wiki entry [DevHowtoAddNewDiagnosticVar How to add a new property?]
+ * Created the wiki entry [DevHowtoAddNewDiagnosticVar How to add a new property?].
+ * Added the Diagnostic quantities section in the [TechnicalGuide technical guide].
 
 ----
 =2010-08-25 G.R.=
