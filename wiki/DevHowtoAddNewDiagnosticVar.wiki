@@ -2,10 +2,10 @@
 
 <wiki:toc />
 
-=Intro=
-_Often, the user needs to compute a new diagnostic quantity, one that is not available on the current [UsersManual#Property_list _property list_]. Hence, this tutorial serves to guide the user to become a developer, and to help him create new diagnostic quantities in the SHEL. The developer is also encouraged to submit new quantities to this googlecode project._
+=Motivation=
+Often, the user needs to compute a new diagnostic quantity, one that is not available on the current [UsersManual#Property_list _property list_]. Hence, this tutorial serves to guide the user to become a developer, and to help him create new diagnostic quantities in the SHEL. The developer is also encouraged to submit new quantities to this googlecode project.
 
-In this tutorial, a dummy property, called `dummy1`, will be created.
+*In this tutorial, a dummy property, called `dummy1`, will be created.*
 
 =Which grid type?=
 *Determine which is the best suited [DevelopersManual#The_Arakawa_C_staggered_grids_matricial_design grid type]*. 
