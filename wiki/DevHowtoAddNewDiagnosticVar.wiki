@@ -6,8 +6,8 @@ In this tutorial, a dummy property, called `dummy1`, will be created.
 
  # *Determine which is the best suited grid type*: All properties are, eventually, interpolated on a T-cell, for graphical rendering purposes. However this does not mean they are all computed on T-cells. This is the first important design step. Is this quantity naturally computed on T, U, V or W-cell grid? For example, the `curl` is a quantity naturally computed on the W-cell (see the [TechnicalGuide technical guide] for more details on the which grid cells are computed the properties). Thus, the global variable `curl_w` was [http://code.google.com/p/shel/source/browse/trunk/ComputeDiagnostics.m#233 computed on a W-cell and was later interpolated on a T-cell], to the global variable `curl_t`.
  # *Create the diagnostic variable*
-  * Edit the [http://code.google.com/p/shel/source/browse/trunk/computeDiagnostics.m computeDiagnostics.m] file
-  * Edit the [http://code.google.com/p/shel/source/browse/trunk/initialconditions.m initialconditions.m] file
- # Create the new property in the property list
-  * Edit the visualize_v2 and visualize_v4 GUI
-  * Edit the [http://code.google.com/p/shel/source/browse/trunk/plotmodel.m plotmodel.m] file
+  * *Edit the [http://code.google.com/p/shel/source/browse/trunk/computeDiagnostics.m computeDiagnostics.m] file*:
+  * *Edit the [http://code.google.com/p/shel/source/browse/trunk/initialconditions.m initialconditions.m] file*
+ # *Create the new property in the property list*
+  * *Edit the visualize_v2 and visualize_v4 GUI*
+  * *Edit the [http://code.google.com/p/shel/source/browse/trunk/plotmodel.m plotmodel.m] file*
