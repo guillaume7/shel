@@ -3,7 +3,7 @@
 <wiki:toc max_level="1" />
 
 =Motivation=
-Often, the user needs to compute a new diagnostic quantity, one that is not available on the current [UsersManual#Property_list _property list_]. Hence, this tutorial serves to guide the user to become a developer, and to help him create new diagnostic quantities in the SHEL. The developer is also encouraged to submit new quantities to this googlecode project.
+Often, the user needs to compute a new diagnostic quantity, one that is not available on the current [UsersManual#Property_list property list]. Hence, this tutorial serves to guide the user to become a developer, and to help him create new diagnostic quantities in the SHEL. The developer is also encouraged to submit new quantities to this googlecode project.
 
 *In this tutorial, a dummy property, called `dummy1`, will be created.*
 
@@ -150,7 +150,7 @@ Summon the missing global variables, [http://code.google.com/p/shel/source/brows
     global masknan;
 }}}
 
-Inject the new _case_ in the [http://code.google.com/p/shel/source/browse/trunk/plotmodel.m#145 _switch_]:
+Inject the new _case_ in the [http://code.google.com/p/shel/source/browse/trunk/plotmodel.m#145 switch]:
 {{{
             case 21 '% Scalar of Okubo-Weiss (1/s2)'
                 surf(Hn,x(2:M-1,2:N-1),y(2:M-1,2:N-1), masknan(2:M-1,2:N-1) .* okuboweiss_t(2:M-1,2:N-1));
