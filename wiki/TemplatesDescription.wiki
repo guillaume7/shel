@@ -2,7 +2,7 @@
 #labels Featured
 <wiki:toc max_depth="1" />
 
-The templates described here are provided in the source-code and in the software package available to download in the [http://code.google.com/p/shel/downloads/list downloads section].
+The templates described here are provided in the google subversion repository and in the software package available to download in the [http://code.google.com/p/shel/downloads/list downloads section].
 ----
 =Bump description=
 <wiki:video url="http://www.youtube.com/watch?v=Ibt12ftTAwM" />
