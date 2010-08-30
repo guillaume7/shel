@@ -1,7 +1,9 @@
 #summary What's new?
 
 <wiki:toc />
-
+----
+=2010-08-30 G.R.=
+ * Updated the Technical Guide. Now contains the passive tracer equation, numerical scheme. Also features robust mathematical fundaments for fluid physics. Still misses the full listing of numerical schemes of the diagnostic variables. Could use a logical transition from the mathematical fundaments to the actual shallow-waters equations. In a future edition...
 ----
 =2010-08-26 G.R.=
  * Created the [WhatsNew what's new] wiki entry.
