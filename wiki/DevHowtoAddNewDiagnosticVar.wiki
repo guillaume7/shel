@@ -1,4 +1,5 @@
 #summary Developer How-To: Add a new diagnostic variable in the property list
+#sidebar TableOfContents
 
 <wiki:toc max_level="1" />
 
