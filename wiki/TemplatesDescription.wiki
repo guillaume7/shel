@@ -1,5 +1,7 @@
 #summary Templates description of SHEL built-in configuration files.
 #labels Featured
+#sidebar TableOfContents
+
 <wiki:toc max_depth="1" />
 
 The templates described here are provided in the google subversion repository and in the software package available to download in the [http://code.google.com/p/shel/downloads/list downloads section].
