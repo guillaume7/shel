@@ -1,4 +1,5 @@
 #summary What's new?
+#sidebar TableOfContents
 
 <wiki:toc />
 ----
