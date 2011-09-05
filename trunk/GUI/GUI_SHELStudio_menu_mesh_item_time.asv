@@ -1,0 +1,180 @@
+function varargout = GUI_SHELStudio_menu_mesh_item_time(varargin)
+% GUI_SHELSTUDIO_MENU_MESH_ITEM_TIME MATLAB code for GUI_SHELStudio_menu_mesh_item_time.fig
+%      GUI_SHELSTUDIO_MENU_MESH_ITEM_TIME, by itself, creates a new GUI_SHELSTUDIO_MENU_MESH_ITEM_TIME or raises the existing
+%      singleton*.
+%
+%      H = GUI_SHELSTUDIO_MENU_MESH_ITEM_TIME returns the handle to a new GUI_SHELSTUDIO_MENU_MESH_ITEM_TIME or the handle to
+%      the existing singleton*.
+%
+%      GUI_SHELSTUDIO_MENU_MESH_ITEM_TIME('CALLBACK',hObject,eventData,handles,...) calls the local
+%      function named CALLBACK in GUI_SHELSTUDIO_MENU_MESH_ITEM_TIME.M with the given input arguments.
+%
+%      GUI_SHELSTUDIO_MENU_MESH_ITEM_TIME('Property','Value',...) creates a new GUI_SHELSTUDIO_MENU_MESH_ITEM_TIME or raises the
+%      existing singleton*.  Starting from the left, property value pairs are
+%      applied to the GUI before GUI_SHELStudio_menu_mesh_item_time_OpeningFcn gets called.  An
+%      unrecognized property name or invalid value makes property application
+%      stop.  All inputs are passed to GUI_SHELStudio_menu_mesh_item_time_OpeningFcn via varargin.
+%
+%      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
+%      instance to run (singleton)".
+%
+% See also: GUIDE, GUIDATA, GUIHANDLES
+
+% Edit the above text to modify the response to help GUI_SHELStudio_menu_mesh_item_time
+
+% Last Modified by GUIDE v2.5 16-May-2011 16:46:24
+
+% Begin initialization code - DO NOT EDIT
+gui_Singleton = 1;
+gui_State = struct('gui_Name',       mfilename, ...
+                   'gui_Singleton',  gui_Singleton, ...
+                   'gui_OpeningFcn', @GUI_SHELStudio_menu_mesh_item_time_OpeningFcn, ...
+                   'gui_OutputFcn',  @GUI_SHELStudio_menu_mesh_item_time_OutputFcn, ...
+                   'gui_LayoutFcn',  [] , ...
+                   'gui_Callback',   []);
+if nargin && ischar(varargin{1})
+    gui_State.gui_Callback = str2func(varargin{1});
+end
+
+if nargout
+    [varargout{1:nargout}] = gui_mainfcn(gui_State, varargin{:});
+else
+    gui_mainfcn(gui_State, varargin{:});
+end
+% End initialization code - DO NOT EDIT
+
+
+% --- Executes just before GUI_SHELStudio_menu_mesh_item_time is made visible.
+function GUI_SHELStudio_menu_mesh_item_time_OpeningFcn(hObject, eventdata, handles, varargin)
+% This function has no output args, see OutputFcn.
+% hObject    handle to figure
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+% varargin   command line arguments to GUI_SHELStudio_menu_mesh_item_time (see VARARGIN)
+
+% Choose default command line output for GUI_SHELStudio_menu_mesh_item_time
+handles.output = hObject;
+
+% Update handles structure
+guidata(hObject, handles);
+
+% UIWAIT makes GUI_SHELStudio_menu_mesh_item_time wait for user response (see UIRESUME)
+% uiwait(handles.figure1);
+
+
+% --- Outputs from this function are returned to the command line.
+function varargout = GUI_SHELStudio_menu_mesh_item_time_OutputFcn(hObject, eventdata, handles) 
+% varargout  cell array for returning output args (see VARARGOUT);
+% hObject    handle to figure
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Get default command line output from handles structure
+varargout{1} = handles.output;
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% update stability
+function updatestability(handles)
+%function updatestability(handles)
+%GR : updates the stability status
+
+    global dt;
+    global dy;
+    global dx;
+    global d0;
+    global d0_step;
+    global g;
+    global Nu;
+    global tracer;
+    global K;
+
+    cfl_U = CFL(dt,dx,dy,max(d0,d0_step),g,Nu);
+    
+    if tracer
+        cfl_T = CFL_T(dt,dx,dy,max(d0,d0_step),g,K);
+        set(handles.textTrAC, 'String', num2str( cfl_T(1), '%0.3g'));
+        set(handles.textTrB, 'String', num2str( cfl_T(2), '%0.3g'));
+        set(handles.textTrUmax, 'String', num2str( cfl_T(3), '%0.3g'));
+    end
+    
+    if cfl_U(1)
+        strin = 'Ok';
+    else
+        strin = 'CFL criterion violation';
+    end
+     
+    %GR : sets the numerical status
+    set(handles.statustext, 'String', strin);
+        
+    %GR : Sets the CFL number
+    set(handles.couranttext, 'String', num2str(cfl_U(2),'%0.3g'));
+    set(handles.peclettext, 'String', num2str(cfl_U(3),'%0.3g'));
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% --- Executes on button press in menu_mesh_item_time_pushbutton_ok.
+function menu_mesh_item_time_pushbutton_ok_Callback(hObject, eventdata, handles)
+% hObject    handle to menu_mesh_item_time_pushbutton_ok (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+    %closes the menu...
+    delete(handles.figure1)
+
+function menu_mesh_item_time_edit_duration_Callback(hObject, eventdata, handles)
+% hObject    handle to menu_mesh_item_time_edit_duration (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of menu_mesh_item_time_edit_duration as text
+%        str2double(get(hObject,'String')) returns contents of menu_mesh_item_time_edit_duration as a double
+    global duration;
+    value = str2double(get(hObject, 'String'));
+    duration = value;
+    updateTime;
+
+% --- Executes during object creation, after setting all properties.
+function menu_mesh_item_time_edit_duration_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to menu_mesh_item_time_edit_duration (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function menu_mesh_item_time_edit_dt_Callback(hObject, eventdata, handles)
+% hObject    handle to menu_mesh_item_time_edit_dt (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of menu_mesh_item_time_edit_dt as text
+%        str2double(get(hObject,'String')) returns contents of menu_mesh_item_time_edit_dt as a double
+    global dt;
+    
+    value = str2double(get(hObject, 'String'));
+    dt = value;
+    updateTime;
+    updatestability(handles);
+
+
+% --- Executes during object creation, after setting all properties.
+function menu_mesh_item_time_edit_dt_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to menu_mesh_item_time_edit_dt (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
