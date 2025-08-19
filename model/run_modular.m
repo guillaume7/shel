@@ -13,6 +13,9 @@ addpath('model/boundary_conditions');
 addpath('model/boundary_conditions/momentum');
 addpath('model/boundary_conditions/tracer');
 addpath('model/boundary_conditions/waterlevel');
+addpath('model/grid');
+addpath('model/state');
+addpath('model/outputs');
 
 % Modular entry point for SHEL
 params = loadParams(); % You should implement loadParams to read config or GUI settings
