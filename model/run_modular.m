@@ -59,7 +59,9 @@ for t = 1:numSteps
     state = waterlevelBC.apply(state);
     state = tracerSolver.step(state);
     state = tracerBC.apply(state);
-    state = Diagnostics.compute(state, t);
+    % Compute diagnostics
+    state = LocalDiagnostics.computeAll(state);
+    state = GlobalDiagnostics.computeAll(state, t);
     % Output, visualization, etc.
     OutputManager.saveOutput(state, t);
     OutputManager.plotModel(state);
