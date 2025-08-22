@@ -208,7 +208,7 @@ C_D u\sqrt{u^2 + v^2} &= C_D u\sqrt{u^2 + \left(\frac{(m_V\,v)_{i - 1} + m_V\,v 
 \end{aligned}
 $$
 
-Notice how the $(Huu)_{j}$, $(Huv)_{j}$, $f(Hv)$ and $C_D u\sqrt{u^2 + v^2}$ terms lose significant precision compared to the other terms, due to their 4-term averaging.
+Notice how the $Huu_{j + 1/2}$, $Huv_{j - 1/2}$, $f(Hv)$ and $C_D u\sqrt{u^2 + v^2}$ terms lose significant precision compared to the other terms, due to their 4-term averaging.
 
 Hence, rewriting the full momentum CTCS spatial scheme we get:
 
@@ -287,9 +287,7 @@ at $t_0$ and at $t_1$. Hence, in order to avoid mode decoupling, a
 Robert-Asselin filter (Asselin, 1972) for $u,\,v,\,\eta$ at each integration time-step is used,
 as suggested by Kantha and Clayson (2000):
 
-$$
-P^l = P^l + \gamma (P^{l - 1} - 2P^l + P^{l + 1})
-$$
+$$P^l = P^l + \gamma (P^{l - 1} - 2P^l + P^{l + 1})$$
 
 where $\gamma$ is a parameter set to $0.1$ (Kantha and Clayson, 2000). The Robert-Asselin
 provides a good coupling between the two initial conditions, at the expense of some loss in precision (Asselin, 1972).
