@@ -81,21 +81,22 @@ The former set of experiences was achieved with closed walls at the boundaries. 
 
 The steady-state solution where the Coriolis force balances the pressure gradient in a domain writes:
 
-$$\left\{
-\begin{array}{l}
-     f \, v_g = g\,\frac{{\partial \eta_g }}{{\partial x}} \\
-     f \, u_g = - g\,\frac{{\partial \eta_g }}{{\partial y}} \\
- \end{array} \right.$$
+$$
+\begin{cases}
+     f \, v_g = g\,\frac{\partial \eta_g }{\partial x} \\
+     f \, u_g = - g\,\frac{\partial \eta_g }{\partial y}
+\end{cases}
+$$
 
 By applying the first derivatives along $y$ and $x$ to the first and second differential equation respectively, and assuming that the Coriolis frequency is constant throughout the domain, the result yields:
 
 $$\begin{align}
-\left\{ \begin{array}{l}
-\frac{\partial v_g}{\partial x} = \frac{g}{f}\frac{{\partial^2 \eta_g }}{{\partial x^2}} \\
-\frac{\partial u_g}{\partial y} = - \frac{g}{f}\frac{{\partial \eta_g }}{{\partial y^2}} \\
-\end{array} \right.
+\begin{cases}
+\frac{\partial v_g}{\partial x} = \frac{g}{f}\frac{\partial^2 \eta_g }{\partial x^2} \\
+\frac{\partial u_g}{\partial y} = - \frac{g}{f}\frac{\partial \eta_g }{\partial y^2}
+\end{cases}
 \Rightarrow
-\frac{{\partial^2 \eta_g }}{{\partial x^2}} + \frac{{\partial^2 \eta_g }}{{\partial y^2}} = \frac{f}{g}\left( \frac{\partial v_g}{\partial x} - \frac{\partial u_g}{\partial y} \right) = \frac{f}{g} \zeta_g
+\frac{\partial^2 \eta_g }{\partial x^2} + \frac{\partial^2 \eta_g }{\partial y^2} = \frac{f}{g}\left( \frac{\partial v_g}{\partial x} - \frac{\partial u_g}{\partial y} \right) = \frac{f}{g} \zeta_g
 \end{align}$$
 
 $\zeta_g$ is the vertical component of relative vorticity in geostrophical equilibrium. Remembering the conservation of potential vorticity, we get:
@@ -110,8 +111,8 @@ Q &= \frac{\zeta + f}{H} = const \\
 The $g,\;0$ subscript notation means, respectively, geostrophical equilibrium and initial instant; furthermore, $H \equiv d + \eta$, where $d$ is the depth relative to a reference geopotential and $\eta$ is the surface elevation from a reference geopotential. Inserting the property found in the equation above into the partial derivatives equation yields:
 
 $$\begin{align}
-\frac{{\partial^2 \eta_g }}{{\partial x^2}} + \frac{{\partial^2 \eta_g }}{{\partial y^2}} &= \frac{f^2}{g\,H_0} \left(\eta_g - \eta_0 \right) + \frac{f}{g}\zeta_0 \\
-&= \frac{f^2}{c^2} \left(\eta_g - \eta_0 \right) + \frac{f}{g}\zeta_0
+\frac{\partial^2 \eta_g}{\partial x^2} + \frac{\partial^2 \eta_g}{\partial y^2} &= \frac{f^2}{g\,H_0} (\eta_g - \eta_0) + \frac{f}{g}\zeta_0 \\
+&= \frac{f^2}{c^2} (\eta_g - \eta_0) + \frac{f}{g}\zeta_0
 \end{align}$$
 
 where $c_0^2 \equiv g\,H_0$ and where it is considered that $\eta \ll d$, so that $c_0 \approx c$. When the solution has radial symmetry and the initial vorticity is null, the equation writes:

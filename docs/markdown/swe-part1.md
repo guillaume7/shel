@@ -37,14 +37,15 @@ illustrated in the figure above. The SWE are widely
 described throughout the literature; for example, they are given
 in Kantha and Clayson (2000) as:
 
-$$\left\{
-\begin{array}{ll}
- \frac{{\partial Hu}}{{\partial t}} + \frac{{\partial Huu}}{{\partial x}} + \frac{{\partial Huv}}{{\partial y}} - fHv =& \nu \left( \frac{\partial}{\partial x}\left( H \frac{\partial u}{\partial x }\right) + \frac{\partial }{\partial y}\left(H \frac{\partial u}{\partial y }\right) \right)\\
- & - gH\frac{{\partial \eta }}{{\partial x}} + \frac{{\tau _u^w }}{{\rho _0 }} - \frac{{\tau _u^b }}{{\rho _0 }} \\
- \frac{{\partial Hv}}{{\partial t}} + \frac{{\partial Hvu}}{{\partial x}} + \frac{{\partial Hvv}}{{\partial y}} + fHu =& \nu \left( \frac{\partial}{\partial x}\left( H \frac{\partial v}{\partial x }\right) + \frac{\partial }{\partial y}\left(H \frac{\partial v}{\partial y }\right) \right)\\
- & - gH\frac{{\partial \eta }}{{\partial y}} + \frac{{\tau _v^w }}{{\rho _0 }} - \frac{{\tau _v^b }}{{\rho _0 }} \\
- \frac{{\partial \eta }}{{\partial t}} + \frac{{\partial Hu}}{{\partial x}} + \frac{{\partial Hv}}{{\partial y}} = 0 \\
- \end{array} \right.$$
+$$
+\begin{cases}
+ \frac{\partial Hu}{\partial t} + \frac{\partial Huu}{\partial x} + \frac{\partial Huv}{\partial y} - fHv = \nu \left( \frac{\partial}{\partial x}\left( H \frac{\partial u}{\partial x }\right) + \frac{\partial}{\partial y}\left(H \frac{\partial u}{\partial y }\right) \right) \\
+ \quad - gH\frac{\partial \eta}{\partial x} + \frac{\tau _u^w}{\rho _0} - \frac{\tau _u^b}{\rho _0} \\
+ \frac{\partial Hv}{\partial t} + \frac{\partial Hvu}{\partial x} + \frac{\partial Hvv}{\partial y} + fHu = \nu \left( \frac{\partial}{\partial x}\left( H \frac{\partial v}{\partial x }\right) + \frac{\partial}{\partial y}\left(H \frac{\partial v}{\partial y }\right) \right) \\
+ \quad - gH\frac{\partial \eta}{\partial y} + \frac{\tau _v^w}{\rho _0} - \frac{\tau _v^b}{\rho _0} \\
+ \frac{\partial \eta}{\partial t} + \frac{\partial Hu}{\partial x} + \frac{\partial Hv}{\partial y} = 0
+\end{cases}
+$$
 
 where $H$ is the depth from the surface level to the bottom, $u$
 and $v$ are the zonal and meridional components of velocity, $x$,
@@ -63,7 +64,7 @@ where $C_D$ is the bottom drag coefficient and $u_b$ and $v_b$ are
 the zonal and meridional velocity bottom velocity components. The
 bottom drag coefficient (Leitao, 2003) is given by:
 
-$$C_D = \left(k/\ln \left( {\frac{{z_D + z_0 }}{{z_0 }}} \right)\right)^2$$
+$$C_D = \left(k/\ln \left( \frac{z_D + z_0}{z_0} \right)\right)^2$$
 
 where $z_D$ is the distance to the bottom, $z_0 =0.002$ m is a
 typical roughness length (Leitao, 2003) and the Von
@@ -164,14 +165,14 @@ is centered in time and centered in time (CTCS) described in Kantha and Clayson 
 For the zonal momentum (U-Cell), the first-order spatial discretization writes:
 
 $$\begin{align*}
-\frac{{\partial Hu}}{{\partial t}} &= - \left( {\left( {Huu} \right)_{i + 1/2} - \left( {Huu} \right)_{i - 1/2} } \right)/\Delta x \\
-& - \left( {\left( {Huv} \right)_{j + 1/2} - \left( {Huv} \right)_{j - 1/2} } \right)/\Delta y \\
-& + f\left( {Hv} \right) \\
+\frac{\partial Hu}{\partial t} &= - \left( (Huu)_{i + 1/2} - (Huu)_{i - 1/2} \right)/\Delta x \\
+& - \left( (Huv)_{j + 1/2} - (Huv)_{j - 1/2} \right)/\Delta y \\
+& + f(Hv) \\
 & + \nu \left( \left(H\frac{\partial u}{\partial x}\right)_{i+1/2} - \left(H\frac{\partial u}{\partial x}\right)_{i-1/2} \right)/\Delta x \\
 & + \nu \left( \left(H\frac{\partial u}{\partial y}\right)_{j+1/2} - \left(H\frac{\partial u}{\partial y}\right)_{j-1/2} \right)/\Delta y \\
-& - gH\left( {\eta _{i + 1/2} - \eta _{i - 1/2} } \right)/ \Delta x \\
-& + \frac{{\rho _a }}{{\rho _0 }}C_a u_{10} \sqrt {u_{10}^2 + v_{10}^2 } \\
-& - C_D u_b \sqrt {u_b^2 + v_b^2 } \\
+& - gH(\eta _{i + 1/2} - \eta _{i - 1/2})/ \Delta x \\
+& + \frac{\rho _a}{\rho _0}C_a u_{10} \sqrt{u_{10}^2 + v_{10}^2} \\
+& - C_D u_b \sqrt{u_b^2 + v_b^2} \\
 & \equiv Ru
 \end{align*}$$
 
@@ -179,25 +180,25 @@ where the halved indices correspond to fluxes at the U-cells'
 faces. Thus, the CTCS fluxes write:
 
 $$\begin{align*}
-\left( {Huu} \right)_{i + 1/2} &= m_{U\,i+1}\,H\left( {u_{i + 1} + u} \right)^2 /2^2 \\
-\left( {Huu} \right)_{i - 1/2} &= m_{U\,i-1}\,H_{i - 1} \left( {u + u_{i - 1} } \right)^2 /2^2 \\
-\left( {Huv} \right)_{j + 1/2} &= m_{U\,j+1}\,\left( {H_{i - 1} + H_i + H_{i - 1,j + 1} + H_{i,j + 1} } \right) \\
-& \times \left( {u_{j + 1} + u} \right)\left( {v_{i - 1,j + 1} + v_{i,j + 1} } \right)/16 \\
-\left( {Huv} \right)_{j - 1/2} &= m_{U\,j-1}\,\left( {H_{i - 1} + H_i + H_{i - 1,j - 1} + H_{i,j - 1} } \right) \\
-& \times \left( {u + u_{j - 1} } \right)\left( {v_{i - 1} + v} \right)/16 \\
-f\left( {Hv} \right) &= f\left( {H + H_{i - 1} } \right)/2 \\
-& \times \frac{ (m_V\,v)_{i - 1} + m_V\,v + (m_V\,v)_{j + 1} + (m_V\,v)_{i - 1,j + 1} }{ m_{V\,i-1} + m_{V} + m_{V\,j+1} + m_{V\,i-1,j+1} }
+(Huu)_{i + 1/2} &= m_{U\,i+1}\,H(u_{i + 1} + u)^2 /2^2 \\
+(Huu)_{i - 1/2} &= m_{U\,i-1}\,H_{i - 1} (u + u_{i - 1})^2 /2^2 \\
+(Huv)_{j + 1/2} &= m_{U\,j+1}\,(H_{i - 1} + H_i + H_{i - 1,j + 1} + H_{i,j + 1}) \\
+& \times (u_{j + 1} + u)(v_{i - 1,j + 1} + v_{i,j + 1})/16 \\
+(Huv)_{j - 1/2} &= m_{U\,j-1}\,(H_{i - 1} + H_i + H_{i - 1,j - 1} + H_{i,j - 1}) \\
+& \times (u + u_{j - 1})(v_{i - 1} + v)/16 \\
+f(Hv) &= f(H + H_{i - 1})/2 \\
+& \times \frac{(m_V\,v)_{i - 1} + m_V\,v + (m_V\,v)_{j + 1} + (m_V\,v)_{i - 1,j + 1}}{ m_{V\,i-1} + m_{V} + m_{V\,j+1} + m_{V\,i-1,j+1}}
 \end{align*}$$
 
 $$\begin{align*}
-\nu \left( \left(H\frac{\partial u}{\partial x}\right)_{i+1/2} - \left(H\frac{\partial u}{\partial x}\right)_{i-1/2} \right) &= \\
-& \nu \left( { m_{U\,i+1} H \frac{u_{i+1} - u}{\Delta x} - m_{U\,i-1} H_{i-1} \frac{u-u_{i-1}}{\Delta x} } \right) \\
-\nu \left( \left(H\frac{\partial u}{\partial y}\right)_{j+1/2} - \left(H\frac{\partial u}{\partial y}\right)_{j-1/2} \right) &= \\
-& \nu \left( { m_{U\,j+1} H \frac{u_{j+1} - u}{\Delta y} - m_{U\,j-1} H_{j-1} \frac{u-u_{j-1}}{\Delta y} } \right) \\
-gH\left( {\eta _{i + 1/2} - \eta _{i - 1/2} } \right) &= \\
-& g\left( H + H_{i - 1} \right) /2 \left( {\eta - \eta _{i - 1} } \right) \\
-C_D u\sqrt {u_{}^2 + v_{}^2 } &= \\
-& C_D u\sqrt {u_{}^2 + \left( \frac{ (m_V\,v)_{i - 1} + m_V\,v + (m_V\,v)_{j + 1} + (m_V\,v)_{i - 1,j + 1} }{ m_{V\,i-1} + m_{V} + m_{V\,j+1} + m_{V\,i-1,j+1} } \right)^2 }
+\nu \left((H\frac{\partial u}{\partial x})_{i+1/2} - (H\frac{\partial u}{\partial x})_{i-1/2} \right) &= \\
+& \nu \left( m_{U\,i+1} H \frac{u_{i+1} - u}{\Delta x} - m_{U\,i-1} H_{i-1} \frac{u-u_{i-1}}{\Delta x} \right) \\
+\nu \left((H\frac{\partial u}{\partial y})_{j+1/2} - (H\frac{\partial u}{\partial y})_{j-1/2} \right) &= \\
+& \nu \left( m_{U\,j+1} H \frac{u_{j+1} - u}{\Delta y} - m_{U\,j-1} H_{j-1} \frac{u-u_{j-1}}{\Delta y} \right) \\
+gH(\eta _{i + 1/2} - \eta _{i - 1/2}) &= \\
+& g(H + H_{i - 1})/2 (\eta - \eta _{i - 1}) \\
+C_D u\sqrt{u^2 + v^2} &= \\
+& C_D u\sqrt{u^2 + \left(\frac{(m_V\,v)_{i - 1} + m_V\,v + (m_V\,v)_{j + 1} + (m_V\,v)_{i - 1,j + 1}}{ m_{V\,i-1} + m_{V} + m_{V\,j+1} + m_{V\,i-1,j+1}}\right)^2}
 \end{align*}$$
 
 Notice how the $\left( {Huu} \right)_{j + 1/2}$, $\left( {Huv}
@@ -208,21 +209,21 @@ terms, due to their 4 terms averaging.
 Hence, rewriting the full momentum CTCS spatial scheme we get:
 
 $$\begin{align}
-\frac{{\partial Hu}}{{\partial t}} = & - \left( m_{U\,i+1} {H\left( {u_{i + 1} + u} \right)^2 /2^2 - m_{U\,i-1} H_{i - 1} \left( {u + u_{i - 1} } \right)^2 /2^2 } \right)/\Delta x \\
+\frac{\partial Hu}{\partial t} = & - \left( m_{U\,i+1} H(u_{i + 1} + u)^2 /2^2 - m_{U\,i-1} H_{i - 1} (u + u_{i - 1})^2 /2^2 \right)/\Delta x \\
 & - \left( \begin{array}{l}
- m_{U\,j+1}\,\left( {H_{i - 1} + H_i + H_{i - 1,j + 1} + H_{i,j + 1} } \right) \\
- \times \left( {u_{j + 1} + u} \right)\left( {v_{i - 1,j + 1} + v_{i,j + 1} } \right)/16 \\
- - m_{U\,j-1}\,\left( {H_{i - 1} + H_i + H_{i - 1,j - 1} + H_{i,j - 1} } \right) \\
- \times\left( {u + u_{j - 1} } \right)\left( {v_{i - 1} + v} \right)/16 \\
+ m_{U\,j+1}\,(H_{i - 1} + H_i + H_{i - 1,j + 1} + H_{i,j + 1}) \\
+ \times (u_{j + 1} + u)(v_{i - 1,j + 1} + v_{i,j + 1})/16 \\
+ - m_{U\,j-1}\,(H_{i - 1} + H_i + H_{i - 1,j - 1} + H_{i,j - 1}) \\
+ \times(u + u_{j - 1})(v_{i - 1} + v)/16 \\
  \end{array} \right)/\Delta y \\
-& + f\left( {H + H_{i - 1} } \right)/2 \\
-& \times \frac{ (m_V\,v)_{i - 1} + m_V\,v + (m_V\,v)_{j + 1} + (m_V\,v)_{i - 1,j + 1} }{ m_{V\,i-1} + m_{V} + m_{V\,j+1} + m_{V\,i-1,j+1} } \\
-& + \nu \left( { m_{U\,i+1} H \frac{u_{i+1} - u}{\Delta x} - m_{U\,i-1} H_{i-1} \frac{u-u_{i-1}}{\Delta x} } \right) / \Delta x \\
-& + \nu \left( { m_{U\,j+1} H \frac{u_{j+1} - u}{\Delta y} - m_{U\,j-1} H_{j-1} \frac{u-u_{j-1}}{\Delta y} } \right) / \Delta y \\
-& - g\left( H + H_{i - 1} \right)/2\left( {\eta - \eta _{i - 1} } \right)/\Delta x \\
-& + \frac{{\rho _a }}{{\rho _0 }}C_a u_{10} \sqrt {u_{10}^2 + v_{10}^2 } \\
+& + f(H + H_{i - 1})/2 \\
+& \times \frac{(m_V\,v)_{i - 1} + m_V\,v + (m_V\,v)_{j + 1} + (m_V\,v)_{i - 1,j + 1}}{m_{V\,i-1} + m_{V} + m_{V\,j+1} + m_{V\,i-1,j+1}} \\
+& + \nu \left( m_{U\,i+1} H \frac{u_{i+1} - u}{\Delta x} - m_{U\,i-1} H_{i-1} \frac{u-u_{i-1}}{\Delta x} \right) / \Delta x \\
+& + \nu \left( m_{U\,j+1} H \frac{u_{j+1} - u}{\Delta y} - m_{U\,j-1} H_{j-1} \frac{u-u_{j-1}}{\Delta y} \right) / \Delta y \\
+& - g(H + H_{i - 1})/2(\eta - \eta _{i - 1})/\Delta x \\
+& + \frac{\rho _a}{\rho _0}C_a u_{10} \sqrt{u_{10}^2 + v_{10}^2} \\
 & - C_D u \\
-& \times \sqrt {u_{}^2 + \left( \frac{ (m_V\,v)_{i - 1} + m_V\,v + (m_V\,v)_{j + 1} + (m_V\,v)_{i - 1,j + 1} }{ m_{V\,i-1} + m_{V} + m_{V\,j+1} + m_{V\,i-1,j+1} } \right)^2 } \\
+& \times \sqrt{u^2 + \left( \frac{(m_V\,v)_{i - 1} + m_V\,v + (m_V\,v)_{j + 1} + (m_V\,v)_{i - 1,j + 1}}{m_{V\,i-1} + m_{V} + m_{V\,j+1} + m_{V\,i-1,j+1}} \right)^2} \\
 & \equiv Ru
 \end{align}$$
 
@@ -239,35 +240,35 @@ U-cells are used:
 The finite-difference first-order numerical scheme for the waterlevel (T-Cell) writes out:
 
 $$\begin{align*}
-\frac{{\partial \eta }}{{\partial t}} &= - \left( {\left( {Hu} \right)_{i + 1/2} - \left( {Hu} \right)_{i - 1/2} } \right)/\Delta x \\
-& - \left( {\left( {Hv} \right)_{j + 1/2} - \left( {Hv} \right)_{j - 1/2} } \right)/\Delta y \\
+\frac{\partial \eta}{\partial t} &= - \left( (Hu)_{i + 1/2} - (Hu)_{i - 1/2} \right)/\Delta x \\
+& - \left( (Hv)_{j + 1/2} - (Hv)_{j - 1/2} \right)/\Delta y \\
 & \equiv R\eta
 \end{align*}$$
 
 and each face's CTCS flux term writes down:
 
 $$\begin{align*}
-\left( {Hu} \right)_{i + 1/2} &= m_{T\,i+1}\,\left( {H + H_{i + 1} } \right)/2\;u_{i + 1} \\
-\left( {Hu} \right)_{i - 1/2} &= m_{T\,i-1}\,\left( {H_{i - 1} + H} \right)/2\;u \\
-\left( {Hv} \right)_{j + 1/2} &= m_{T\,j+1}\,\left( {H + H_{j + 1} } \right)/2\;v_{j + 1} \\
-\left( {Hv} \right)_{j - 1/2} &= m_{T\,j-1}\,\left( {H_{j - 1} + H} \right)/2\;v
+(Hu)_{i + 1/2} &= m_{T\,i+1}\,(H + H_{i + 1})/2\;u_{i + 1} \\
+(Hu)_{i - 1/2} &= m_{T\,i-1}\,(H_{i - 1} + H)/2\;u \\
+(Hv)_{j + 1/2} &= m_{T\,j+1}\,(H + H_{j + 1})/2\;v_{j + 1} \\
+(Hv)_{j - 1/2} &= m_{T\,j-1}\,(H_{j - 1} + H)/2\;v
 \end{align*}$$
 
 Thus, the full waterlevel CTCS numerical scheme is:
 
 $$\begin{align*}
-\frac{{\partial \eta }}{{\partial t}} &= - \left( {m_{T\,i+1}\,\left( {H + H_{i + 1} } \right)/2\;u_{i + 1} - m_{T\,i-1}\,\left( {H_{i - 1} + H} \right)/2\;u} \right)/\Delta x \\
-& - m_{T\,j+1}\,\left( {\left( {H + H_{j + 1} } \right)/2\;v_{j + 1} - m_{T\,j-1}\,\left( {H_{j - 1} + H} \right)/2\;v} \right)/\Delta y \\
+\frac{\partial \eta}{\partial t} &= - \left( m_{T\,i+1}\,(H + H_{i + 1})/2\;u_{i + 1} - m_{T\,i-1}\,(H_{i - 1} + H)/2\;u \right)/\Delta x \\
+& - \left( m_{T\,j+1}\,(H + H_{j + 1})/2\;v_{j + 1} - m_{T\,j-1}\,(H_{j - 1} + H)/2\;v \right)/\Delta y \\
 & \equiv R\eta
 \end{align*}$$
 
 The time scheme used is the Leapfrog as described in Kantha and Clayson (2000):
 
 $$\begin{align*}
-\eta ^{l + 1} &= \eta ^{l - 1} + 2\Delta t\,\left\{ {R\eta } \right\} \\
+\eta ^{l + 1} &= \eta ^{l - 1} + 2\Delta t\,R\eta \\
 H^{l + 1} &= \eta ^{l + 1} + d \\
-u^{l + 1} &= \left( {u^{l - 1} \left( {H^{l - 1} + H_{i - 1}^{l - 1} } \right) + 4\Delta t\,\left\{ {Ru} \right\}} \right)/\left( {H^{l + 1} + H_{i - 1}^{l + 1} } \right) \\
-v^{l + 1} &= \left( {v^{l - 1} \left( {H^{l - 1} + H_{j - 1}^{l - 1} } \right) + 4\Delta t\,\left\{ {Rv} \right\}} \right)/\left( {H^{l + 1} + H_{j - 1}^{l + 1} } \right)
+u^{l + 1} &= \left( u^{l - 1} (H^{l - 1} + H_{i - 1}^{l - 1}) + 4\Delta t\,Ru \right)/(H^{l + 1} + H_{i - 1}^{l + 1}) \\
+v^{l + 1} &= \left( v^{l - 1} (H^{l - 1} + H_{j - 1}^{l - 1}) + 4\Delta t\,Rv \right)/(H^{l + 1} + H_{j - 1}^{l + 1})
 \end{align*}$$
 
 Notice how the leapfrog time scheme obliges two initial conditions
@@ -275,7 +276,7 @@ at $t_0$ and at $t_1$. Hence, in order to avoid mode decoupling, a
 Robert-Asselin filter (Asselin, 1972) for $u,\,v,\,\eta$ at each integration time-step is used,
 as suggested by Kantha and Clayson (2000):
 
-$$P^l = P^l + \gamma \left( {P^{l - 1} - 2P^l + P^{l + 1} } \right)$$
+$$P^l = P^l + \gamma (P^{l - 1} - 2P^l + P^{l + 1})$$
 
 where $\gamma$ is a parameter set to $0.1$ (Kantha and Clayson, 2000). The Robert-Asselin
 provides a good coupling between the two initial conditions, at the expense of some loss in precision (Asselin, 1972).
@@ -284,13 +285,13 @@ The radiative scheme implemented follows a NVOE stencil on a C grid (Herzfeld, 2
 
 $$\begin{align*}
 \eta^{l+1}_{1,\,j} &= \eta_{1,\,j} - 2 \frac{\Delta t}{\Delta x} \,\sqrt{g\, H_{1,\,j}} 
-\, \left( \eta_{1,\,j} - \eta_{2,\,j} \right) \\
+\, (\eta_{1,\,j} - \eta_{2,\,j}) \\
 u^{l+1}_{1,\,j} &= - \sqrt{\frac{g}{H^{l+1}_{1,\,j}}} \, \eta^{l+1}_{1,\,j}
 \end{align*}$$
 
 for $j=1,\,...,\,N$, and is defined by, for the velocity component tangent to the boundary:
 
-$$v^{l+1}_{1,\,j}=\left( \begin{array}{l} v_{1,\,j} \, \left( H_{1,\,j} + H_{1,\,j-1} \right) \\- 2 \, \frac{\Delta t}{\Delta x} \, \sqrt{g\,\frac{H_{1,\,j} + H_{1,\,j-1}}{2}} \, \left( v_{1,\,j} - v_{2,\,j} \right) \end{array} \right) / \left( H^{l+1}_{1,\,j} + H^{l+1}_{1,\,j-1} \right)$$
+$$v^{l+1}_{1,\,j}=\left( v_{1,\,j} \, (H_{1,\,j} + H_{1,\,j-1}) - 2 \, \frac{\Delta t}{\Delta x} \, \sqrt{g\,\frac{H_{1,\,j} + H_{1,\,j-1}}{2}} \, (v_{1,\,j} - v_{2,\,j}) \right) / (H^{l+1}_{1,\,j} + H^{l+1}_{1,\,j-1})$$
 
 for $j=2,\,...,\,N$.
 
@@ -298,13 +299,13 @@ For the *eastern* boundary, the radiation boundary condition writes:
 
 $$\begin{align*}
 \eta^{l+1}_{M,\,j} &= \eta_{M,\,j} - 2 \frac{\Delta t}{\Delta x} \,\sqrt{g\, H_{M,\,j}} 
-\, \left( \eta_{M,\,j} - \eta_{M-1,\,j} \right) \\
+\, (\eta_{M,\,j} - \eta_{M-1,\,j}) \\
 u^{l+1}_{M+1,\,j} &= - \sqrt{\frac{g}{H^{l+1}_{M,\,j}}} \, \eta^{l+1}_{M,\,j}
 \end{align*}$$
 
 for $j=1,\,...,\,N$, and is defined by, for the velocity component tangent to the boundary:
 
-$$v^{l+1}_{M,\,j}=\left( \begin{array}{l} v_{M,\,j} \, \left( H_{M,\,j} + H_{M,\,j-1} \right) \\- 2 \, \frac{\Delta t}{\Delta x} \, \sqrt{g\,\frac{H_{M,\,j} + H_{M,\,j-1}}{2}} \, \left( v_{M,\,j} - v_{M-1,\,j} \right) \end{array} \right) / \left( H^{l+1}_{M,\,j} + H^{l+1}_{M,\,j-1} \right)$$
+$$v^{l+1}_{M,\,j}=\left( v_{M,\,j} \, (H_{M,\,j} + H_{M,\,j-1}) - 2 \, \frac{\Delta t}{\Delta x} \, \sqrt{g\,\frac{H_{M,\,j} + H_{M,\,j-1}}{2}} \, (v_{M,\,j} - v_{M-1,\,j}) \right) / (H^{l+1}_{M,\,j} + H^{l+1}_{M,\,j-1})$$
 
 for $j=2,\,...,\,N$. Note that the Flather (1976) radiation condition applied to the normal component of velocity to the boundary can be replaced with a simple null-gradient and yield similar results:
 
@@ -327,8 +328,7 @@ Once more, to derive an adequate scheme for the *southern* and *northern* bounda
 The stability criterion is the Courant-Friedrich-Levy criterion (Courant et al., 1959) described in
 Kantha and Clayson (2000):
 
-$$\Delta t \left( \sqrt {gH} + V_{max} \right) \left( {\frac{1}{{\Delta x }} +
-\frac{1}{{\Delta y }}} \right) < 1.0$$
+$$\Delta t \left( \sqrt{gH} + V_{max} \right) \left( \frac{1}{\Delta x} + \frac{1}{\Delta y} \right) < 1.0$$
 
 where $V_{max}$ is the maximum advection field intensity in m/s.
 Note that for stability reasons, in the momentum equations, the
