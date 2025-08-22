@@ -1,10 +1,20 @@
 # SHEL - SHallow-waters numerical modEL
 
+<div align="center">
+  <img src="docs/markdown/figs/bump-4.svg" alt="Water level simulation" width="600"/>
+  <p><em>Simulation of water elevation propagation in a shallow water domain</em></p>
+</div>
+
 ## What is SHEL?
 
 The SHEL (SHallow-waters numerical modEL) is a finite volume, free-surface, variable bottom, shallow-waters equations numerical solver.
 
 The SHEL is coded in Matlab with a built-in graphical interface for loading, editing and saving of simulation parameters and forcings and also for running, visualizing and exporting images (eps, png) and movies (avi).
+
+<div align="center">
+  <img src="docs/markdown/figs/arakawaCgrid.svg" alt="Arakawa C-grid" width="400"/>
+  <p><em>SHEL uses the Arakawa C-grid staggered mesh system for numerical stability</em></p>
+</div>
 
 The code is compact, efficient and extensible, meaning that developers can easily replace the core solver files with custom numerical schemes and can even contribute to the stack of available numerical schemes.
 
@@ -33,6 +43,11 @@ Comprehensive documentation is available in the [docs/markdown](docs/markdown) d
 - [Part 3: Validation and Results](docs/markdown/swe-part3.md)
 - [Conclusions and References](docs/markdown/swe-references.md)
 
+<div align="center">
+  <img src="docs/markdown/figs/radiate-coriolis-energy.svg" alt="Energy conservation" width="600"/>
+  <p><em>SHEL tracks energy conservation during simulations, showing kinetic, potential, and total energy</em></p>
+</div>
+
 ## How to Use SHEL
 
 1. Open Matlab
@@ -54,3 +69,8 @@ Universidade Técnica de Lisboa.
 - Email: guillaume.riflet at gmail.com
 - Website: http://code.google.com/p/shel/
 - Last Updated: 2010-08-19
+
+<div align="center">
+  <img src="docs/markdown/figs/radiate-coriolis-velocity-modulus-sam2p.svg" alt="Velocity field with Coriolis effect" width="600"/>
+  <p><em>Visualization of velocity field showing the influence of Coriolis force on ocean currents</em></p>
+</div>
