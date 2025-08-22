@@ -170,7 +170,6 @@ is centered in time and centered in time (CTCS) described in Kantha and Clayson 
 For the zonal momentum (U-Cell), the first-order spatial discretization writes:
 
 $$
-\begin{aligned}
 \frac{\partial Hu}{\partial t} &= - \frac{(Huu)_{i + 1/2} - (Huu)_{i - 1/2}}{\Delta x} \\
 & - \frac{(Huv)_{j + 1/2} - (Huv)_{j - 1/2}}{\Delta y} \\
 & + f(Hv) \\
@@ -180,7 +179,6 @@ $$
 & + \frac{\rho _a}{\rho _0}C_a u_{10} \sqrt{u_{10}^2 + v_{10}^2} \\
 & - C_D u_b \sqrt{u_b^2 + v_b^2} \\
 & \equiv Ru
-\end{aligned}
 $$
 
 where the halved indices correspond to fluxes at the U-cells'
