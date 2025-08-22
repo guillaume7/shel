@@ -43,23 +43,31 @@ water level relative to rest. $\tau _u^b$ is the bottom stress
 zonal component, $\tau _u^w$ is the wind stress zonal component.
 The bottom stress (Pietrzak et al., 2002) is given by:
 
-$$\tau _u^b = \rho _0 C_D u_b \sqrt {u_b^2 + v_b^2 }$$
+$$
+\tau _u^b = \rho _0 C_D u_b \sqrt {u_b^2 + v_b^2 }
+$$
 
 where $C_D$ is the bottom drag coefficient and $u_b$ and $v_b$ are
 the zonal and meridional velocity bottom velocity components. The
 bottom drag coefficient (Leitao, 2003) is given by:
 
-$$C_D = \left(k/\ln \left( \frac{z_D + z_0}{z_0} \right)\right)^2$$
+$$
+C_D = \left(k/\ln \left( \frac{z_D + z_0}{z_0} \right)\right)^2
+$$
 
 where $z_D$ is the distance to the bottom, $z_0 =0.002$ m is a
 typical roughness length (Leitao, 2003) and the Von
 Karman constant (Leitao, 2003) is set to:
 
-$$k = 0.4.$$
+$$
+k = 0.4.
+$$
 
 The wind stress (Pietrzak et al., 2002) is given by:
 
-$$\tau _u^w = \rho _a C_a u_{10} \sqrt {u_{10}^2 + v_{10}^2 }$$
+$$
+\tau _u^w = \rho _a C_a u_{10} \sqrt {u_{10}^2 + v_{10}^2 }
+$$
 
 where $\rho _a = 1.25$ kg/m³ is the air density, $C_a$ is an air
 drag coefficient whose values can be found in Pietrzak et al. (2002) and $u_{10}$ and $v_{10}$ is the air speed at
@@ -97,7 +105,9 @@ and $\{2,\,...,\,M\}\times \{2,\,...,\,(N-1)\}$.
 
 A land mask, $m_T$, for the T-cells mesh is introduced. The goal is to impose a null-flux boundary condition surrounding any land cell, i.e. 
 
-$$\vec{v} \cdot \vec{n} = 0.$$
+$$
+\vec{v} \cdot \vec{n} = 0.
+$$
 
 It returns 1 if the cell is filled with water and 0 if the cell is land. This implies the definition of appropriate null-fluxes masks, $m_U$ and $m_V$, for the U and V-cells. Thus, for every $i,j$ such that $m_T = 0$, it is required that $m_U = 0$, $m_{U\,i+1} = 0$, $m_V = 0$ and $m_{V\,j+1} = 0$. Everywhere else the value of the masks is $1$. The T, U and V masks are to be applied in the numerical scheme to the T-cell properties, the U-cell properties and the V-cell properties, respectively.
 
@@ -105,17 +115,23 @@ It returns 1 if the cell is filled with water and 0 if the cell is land. This im
 
 The optional no-slip boundary condition (Pedlosky, 1987) consists of both null-flux and null-tangential velocities at the vertical walls of the domain, i.e.
 
-$$\vec{v} \cdot \vec{n} = 0,$$
+$$
+\vec{v} \cdot \vec{n} = 0,
+$$
 
 and
 
-$$\vec{v} \; \bot \; \vec{n} = 0.$$
+$$
+\vec{v} \; \bot \; \vec{n} = 0.
+$$
 
 Thus, for every $i,j$ such that $m_T = 0$, it is required, additionally to the defined above null-flux condition, that $m_{U\,i,\,j+1} = 0$, $m_{U\,i+1,\,j+1} = 0$, $m_{U\,i,\,j-1} = 0$ and $m_{U\,i+1,\,j-1} = 0$ and that $m_{V\,i-1,\,j} = 0$, $m_{V\,i+1,\,j} = 0$, $m_{V\,i-1,\,j+1} = 0$ and $m_{V\,i+1,\,j+1} = 0$.
 
 One interesting aspect of the no-slip boundary condition is that it necessarily requires a global zero-curl for closed domains,
 
-$$\oint \vec{v} \cdot \vec{dS} = 0.$$
+$$
+\oint \vec{v} \cdot \vec{dS} = 0.
+$$
 
 Hence, using the Kelvin-Stokes theorem, the no-slip boundary condition is an interesting configuration to test the correct implementation of the model: the curl within the domain must sum up to zero. Nevertheless, the no-slip boundary condition is a very strong constraint that acts on the kinematics and not on the dynamics of the motion per se (it is independent of the equation of motion).
 
@@ -129,11 +145,15 @@ Most regional oceanic modellers desire both aspects, of letting information out 
 
 Radiative boundary conditions are passive boundary conditions (designed to let perturbations go out of the boundary) and usually consider the linearized hyperbolic version of the equations along the normal axis relatively to the open boundary. In this work, the gravity wave radiative method (also known as Sommerfeld radiative method) was implemented for the water elevation, $\eta$, and for the velocity tangential to the open boundary:
 
-$$\frac{\partial \Phi}{\partial t} + \vec{c} \cdot \vec{n} \frac{\partial \Phi}{\partial \vec{n}} = 0,$$
+$$
+\frac{\partial \Phi}{\partial t} + \vec{c} \cdot \vec{n} \frac{\partial \Phi}{\partial \vec{n}} = 0,
+$$
 
 where $\Phi$ is either the water elevation or the tangential velocity, $\vec{n}$ is the external normal vector to the open boundary and $\vec{c}$ is the phase wave celerity vector. In every occurence, the normal celerity wave intensity is considered to be $\vec{c} \cdot \vec{n} = \sqrt{g\,H}$. The passive Flather (1976) radiation method was implemented for the velocity normal to the open boundary:
 
-$$H\,\vec{v} \cdot \vec{n} = \eta \, \vec{c} \cdot \vec{n},$$
+$$
+H\,\vec{v} \cdot \vec{n} = \eta \, \vec{c} \cdot \vec{n},
+$$
 
 where $\vec{v}$ is the flow velocity vector. Both methods are implemented with the normal velocity outside of the elevation node (NVOE).
 
@@ -149,7 +169,8 @@ is centered in time and centered in time (CTCS) described in Kantha and Clayson 
 
 For the zonal momentum (U-Cell), the first-order spatial discretization writes:
 
-$$\begin{aligned}
+$$
+\begin{aligned}
 \frac{\partial Hu}{\partial t} &= - \frac{(Huu)_{i + 1/2} - (Huu)_{i - 1/2}}{\Delta x} \\
 & - \frac{(Huv)_{j + 1/2} - (Huv)_{j - 1/2}}{\Delta y} \\
 & + f(Hv) \\
@@ -159,12 +180,14 @@ $$\begin{aligned}
 & + \frac{\rho _a}{\rho _0}C_a u_{10} \sqrt{u_{10}^2 + v_{10}^2} \\
 & - C_D u_b \sqrt{u_b^2 + v_b^2} \\
 & \equiv Ru
-\end{aligned}$$
+\end{aligned}
+$$
 
 where the halved indices correspond to fluxes at the U-cells'
 faces. Thus, the CTCS fluxes write:
 
-$$\begin{aligned}
+$$
+\begin{aligned}
 (Huu)_{i + 1/2} &= m_{U\,i+1}\,H(u_{i + 1} + u)^2 /4 \\
 (Huu)_{i - 1/2} &= m_{U\,i-1}\,H_{i - 1} (u + u_{i - 1})^2 /4 \\
 (Huv)_{j + 1/2} &= m_{U\,j+1}\,(H_{i - 1} + H_i + H_{i - 1,j + 1} + H_{i,j + 1}) \\
@@ -173,20 +196,24 @@ $$\begin{aligned}
 &\quad \times (u + u_{j - 1})(v_{i - 1} + v)/16 \\
 f(Hv) &= f(H + H_{i - 1})/2 \\
 &\quad \times \frac{(m_V\,v)_{i - 1} + m_V\,v + (m_V\,v)_{j + 1} + (m_V\,v)_{i - 1,j + 1}}{ m_{V\,i-1} + m_{V} + m_{V\,j+1} + m_{V\,i-1,j+1}}
-\end{aligned}$$
+\end{aligned}
+$$
 
-$$\begin{aligned}
+$$
+\begin{aligned}
 \nu \left((H\frac{\partial u}{\partial x})_{i+1/2} - (H\frac{\partial u}{\partial x})_{i-1/2} \right) &= \nu \left( m_{U\,i+1} H \frac{u_{i+1} - u}{\Delta x} - m_{U\,i-1} H_{i-1} \frac{u-u_{i-1}}{\Delta x} \right) \\
 \nu \left((H\frac{\partial u}{\partial y})_{j+1/2} - (H\frac{\partial u}{\partial y})_{j-1/2} \right) &= \nu \left( m_{U\,j+1} H \frac{u_{j+1} - u}{\Delta y} - m_{U\,j-1} H_{j-1} \frac{u-u_{j-1}}{\Delta y} \right) \\
 gH(\eta _{i + 1/2} - \eta _{i - 1/2}) &= g(H + H_{i - 1})/2 (\eta - \eta _{i - 1}) \\
 C_D u\sqrt{u^2 + v^2} &= C_D u\sqrt{u^2 + \left(\frac{(m_V\,v)_{i - 1} + m_V\,v + (m_V\,v)_{j + 1} + (m_V\,v)_{i - 1,j + 1}}{ m_{V\,i-1} + m_{V} + m_{V\,j+1} + m_{V\,i-1,j+1}}\right)^2}
-\end{aligned}$$
+\end{aligned}
+$$
 
 Notice how the $(Huu)_{j + 1/2}$, $(Huv)_{j - 1/2}$, $f(Hv)$ and $C_D u\sqrt{u^2 + v^2}$ terms lose significant precision compared to the other terms, due to their 4-term averaging.
 
 Hence, rewriting the full momentum CTCS spatial scheme we get:
 
-$$\begin{align}
+$$
+\begin{align}
 \frac{\partial Hu}{\partial t} = & - \frac{1}{\Delta x}\left( m_{U\,i+1} H(u_{i + 1} + u)^2 /4 - m_{U\,i-1} H_{i - 1} (u + u_{i - 1})^2 /4 \right) \\
 & - \frac{1}{\Delta y}\biggl( m_{U\,j+1}(H_{i - 1} + H_i + H_{i - 1,j + 1} + H_{i,j + 1}) \\
 & \quad \times (u_{j + 1} + u)(v_{i - 1,j + 1} + v_{i,j + 1})/16 \\
@@ -200,7 +227,8 @@ $$\begin{align}
 & + \frac{\rho _a}{\rho _0}C_a u_{10} \sqrt{u_{10}^2 + v_{10}^2} \\
 & - C_D u\sqrt{u^2 + \left( \frac{(m_V\,v)_{i - 1} + m_V\,v + (m_V\,v)_{j + 1} + (m_V\,v)_{i - 1,j + 1}}{m_{V\,i-1} + m_{V} + m_{V\,j+1} + m_{V\,i-1,j+1}} \right)^2} \\
 & \equiv Ru
-\end{align}$$
+\end{align}
+$$
 
 For the meridional spatial momentum scheme in the V-Cells, clever
 symmetry one-to-one relations with zonal momentum scheme in the
@@ -214,81 +242,103 @@ U-cells are used:
 
 The finite-difference first-order numerical scheme for the waterlevel (T-Cell) writes out:
 
-$$\begin{aligned}
+$$
+\begin{aligned}
 \frac{\partial \eta}{\partial t} &= - \frac{(Hu)_{i + 1/2} - (Hu)_{i - 1/2}}{\Delta x} \\
 & - \frac{(Hv)_{j + 1/2} - (Hv)_{j - 1/2}}{\Delta y} \\
 & \equiv R\eta
-\end{aligned}$$
+\end{aligned}
+$$
 
 and each face's CTCS flux term writes down:
 
-$$\begin{aligned}
+$$
+\begin{aligned}
 (Hu)_{i + 1/2} &= m_{T\,i+1}\,(H + H_{i + 1})/2\;u_{i + 1} \\
 (Hu)_{i - 1/2} &= m_{T\,i-1}\,(H_{i - 1} + H)/2\;u \\
 (Hv)_{j + 1/2} &= m_{T\,j+1}\,(H + H_{j + 1})/2\;v_{j + 1} \\
 (Hv)_{j - 1/2} &= m_{T\,j-1}\,(H_{j - 1} + H)/2\;v
-\end{aligned}$$
+\end{aligned}
+$$
 
 Thus, the full waterlevel CTCS numerical scheme is:
 
-$$\begin{aligned}
+$$
+\begin{aligned}
 \frac{\partial \eta}{\partial t} &= - \frac{m_{T\,i+1}\,(H + H_{i + 1})/2\;u_{i + 1} - m_{T\,i-1}\,(H_{i - 1} + H)/2\;u}{\Delta x} \\
 & - \frac{m_{T\,j+1}\,(H + H_{j + 1})/2\;v_{j + 1} - m_{T\,j-1}\,(H_{j - 1} + H)/2\;v}{\Delta y} \\
 & \equiv R\eta
-\end{aligned}$$
+\end{aligned}
+$$
 
 The time scheme used is the Leapfrog as described in Kantha and Clayson (2000):
 
-$$\begin{aligned}
+$$
+\begin{aligned}
 \eta ^{l + 1} &= \eta ^{l - 1} + 2\Delta t\,R\eta \\
 H^{l + 1} &= \eta ^{l + 1} + d \\
 u^{l + 1} &= \frac{u^{l - 1} (H^{l - 1} + H_{i - 1}^{l - 1}) + 4\Delta t\,Ru}{H^{l + 1} + H_{i - 1}^{l + 1}} \\
 v^{l + 1} &= \frac{v^{l - 1} (H^{l - 1} + H_{j - 1}^{l - 1}) + 4\Delta t\,Rv}{H^{l + 1} + H_{j - 1}^{l + 1}}
-\end{aligned}$$
+\end{aligned}
+$$
 
 Notice how the leapfrog time scheme obliges two initial conditions
 at $t_0$ and at $t_1$. Hence, in order to avoid mode decoupling, a
 Robert-Asselin filter (Asselin, 1972) for $u,\,v,\,\eta$ at each integration time-step is used,
 as suggested by Kantha and Clayson (2000):
 
-$$P^l = P^l + \gamma (P^{l - 1} - 2P^l + P^{l + 1})$$
+$$
+P^l = P^l + \gamma (P^{l - 1} - 2P^l + P^{l + 1})
+$$
 
 where $\gamma$ is a parameter set to $0.1$ (Kantha and Clayson, 2000). The Robert-Asselin
 provides a good coupling between the two initial conditions, at the expense of some loss in precision (Asselin, 1972).
 
 The radiative scheme implemented follows a NVOE stencil on a C grid (Herzfeld, 2008). The *western* boundary radiative condition is defined, for the elevation and the component of velocity perpendicular to the boundary, by:
 
-$$\begin{align*}
+$$
+\begin{aligned}
 \eta^{l+1}_{1,\,j} &= \eta_{1,\,j} - 2 \frac{\Delta t}{\Delta x} \,\sqrt{g\, H_{1,\,j}} 
 \, (\eta_{1,\,j} - \eta_{2,\,j}) \\
 u^{l+1}_{1,\,j} &= - \sqrt{\frac{g}{H^{l+1}_{1,\,j}}} \, \eta^{l+1}_{1,\,j}
-\end{align*}$$
+\end{aligned}
+$$
 
 for $j=1,\,...,\,N$, and is defined by, for the velocity component tangent to the boundary:
 
-$$v^{l+1}_{1,\,j}=\left( v_{1,\,j} \, (H_{1,\,j} + H_{1,\,j-1}) - 2 \, \frac{\Delta t}{\Delta x} \, \sqrt{g\,\frac{H_{1,\,j} + H_{1,\,j-1}}{2}} \, (v_{1,\,j} - v_{2,\,j}) \right) / (H^{l+1}_{1,\,j} + H^{l+1}_{1,\,j-1})$$
+$$
+v^{l+1}_{1,\,j}= \frac{v_{1,\,j} \, (H_{1,\,j} + H_{1,\,j-1}) - 2 \, \frac{\Delta t}{\Delta x} \, \sqrt{g\,\frac{H_{1,\,j} + H_{1,\,j-1}}{2}} \, (v_{1,\,j} - v_{2,\,j})}{H^{l+1}_{1,\,j} + H^{l+1}_{1,\,j-1}}
+$$
 
 for $j=2,\,...,\,N$.
 
 For the *eastern* boundary, the radiation boundary condition writes:
 
-$$\begin{align*}
+$$
+\begin{aligned}
 \eta^{l+1}_{M,\,j} &= \eta_{M,\,j} - 2 \frac{\Delta t}{\Delta x} \,\sqrt{g\, H_{M,\,j}} 
 \, (\eta_{M,\,j} - \eta_{M-1,\,j}) \\
 u^{l+1}_{M+1,\,j} &= - \sqrt{\frac{g}{H^{l+1}_{M,\,j}}} \, \eta^{l+1}_{M,\,j}
-\end{align*}$$
+\end{aligned}
+$$
 
 for $j=1,\,...,\,N$, and is defined by, for the velocity component tangent to the boundary:
 
-$$v^{l+1}_{M,\,j}=\left( v_{M,\,j} \, (H_{M,\,j} + H_{M,\,j-1}) - 2 \, \frac{\Delta t}{\Delta x} \, \sqrt{g\,\frac{H_{M,\,j} + H_{M,\,j-1}}{2}} \, (v_{M,\,j} - v_{M-1,\,j}) \right) / (H^{l+1}_{M,\,j} + H^{l+1}_{M,\,j-1})$$
+$$
+v^{l+1}_{M,\,j}= \frac{v_{M,\,j} \, (H_{M,\,j} + H_{M,\,j-1}) - 2 \, \frac{\Delta t}{\Delta x} \, \sqrt{g\,\frac{H_{M,\,j} + H_{M,\,j-1}}{2}} \, (v_{M,\,j} - v_{M-1,\,j})}{H^{l+1}_{M,\,j} + H^{l+1}_{M,\,j-1}}
+$$
 
 for $j=2,\,...,\,N$. Note that the Flather (1976) radiation condition applied to the normal component of velocity to the boundary can be replaced with a simple null-gradient and yield similar results:
 
-$$u^{l+1}_{1,\,j} = u^{l+1}_{2,\,j}$$
+$$
+u^{l+1}_{1,\,j} = u^{l+1}_{2,\,j}
+$$
 
 for $i=1$, and
 
-$$u^{l+1}_{m+1,\,j} = u^{l+1}_{m,\,j}$$
+$$
+u^{l+1}_{m+1,\,j} = u^{l+1}_{m,\,j}
+$$
 
 for $i=m+1$.
 
@@ -303,7 +353,9 @@ Once more, to derive an adequate scheme for the *southern* and *northern* bounda
 The stability criterion is the Courant-Friedrich-Levy criterion (Courant et al., 1959) described in
 Kantha and Clayson (2000):
 
-$$\Delta t \left( \sqrt{gH} + V_{max} \right) \left( \frac{1}{\Delta x} + \frac{1}{\Delta y} \right) < 1.0$$
+$$
+\Delta t \left( \sqrt{gH} + V_{max} \right) \left( \frac{1}{\Delta x} + \frac{1}{\Delta y} \right) < 1.0
+$$
 
 where $V_{max}$ is the maximum advection field intensity in m/s.
 Note that for stability reasons, in the momentum equations, the
