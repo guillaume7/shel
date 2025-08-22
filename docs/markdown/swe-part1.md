@@ -1,27 +1,12 @@
-# SWAM, a Shallow WAter numerical Model: Scientific Documentation v0.9
+# SHEL, a SHallow water equations modEL: Scientific Documentation v0.9
 
 **Author: Guillaume Riflet**
 
 [◀ Back to Table of Contents](README.md)
 
-## Abstract
-
-The Shallow-WAters equations numerical Model (SWAM) is a development environment allowing the rapid prototyping of new finite-difference numerical schemes. It is suited for undergrad and grad-students who wish to learn how finite-difference numerical schemes are actually implemented and/or wish to implement their own. It is also suited to students (or professors) who simply wish to visualize some simple scenarios of shallow-water flows (for their students). 
-
-SWAM is developed in Matlab and equipped with a Matlab GUI for easy loading, running and visualization of case-studies (it exports in png and eps formats and does avi movies). The model comes with a series of pre-configured test-cases. New test-cases can easily be implemented, saved and shared with peers. The program is built so that other developers can replace fairly easily the built-in numerical schemes with new numerical schemes and, eventually, contribute to the available list of numerical schemes for SWAM (finite-difference-based only). 
-
-By default, the model comes with the shallow water equations discretized in an Arakawa C-grid with variable bottom, free-lid, land-mask, and a leapfrog and central differences scheme combined with simple Asselin-Roberts filtering, as presented in Kantha and Clayson (2000) and further elaborated in this document. Dirichelet, Neummann and Sommerfeld type conditions are implemented at the boundaries. Simple tests were performed with a gaussian level elevation where the conservation of volume, momentum, mechanical energy and vorticity were analyzed.
-
-## Keywords
-
-- Shallow-waters equations
-- Open boundary condition
-- Okubo-Weiss scalar
-- Numerical model
-
 ## Introduction
 
-The Shallow-WAters equations numerical Model (SWAM) is a development environment for implementing and testing finite-difference numerical schemes for shallow water equations. It provides a platform for educational purposes, allowing students and researchers to understand how numerical discretization affects the simulation of coastal and oceanic processes.
+The SHallow water equations modEL (SHEL) is a development environment for implementing and testing finite-difference numerical schemes for shallow water equations. It provides a platform for educational purposes, allowing students and researchers to understand how numerical discretization affects the simulation of coastal and oceanic processes.
 
 This document presents the mathematical formulation, numerical implementation, and validation of the model. It covers the core equations, grid structure, boundary conditions, and the numerical schemes used to solve the shallow water equations. The model's performance is assessed through various test cases focused on conservation properties and physical consistency.
 
@@ -29,11 +14,11 @@ This document presents the mathematical formulation, numerical implementation, a
 
 ### The Mathematical Model
 
-![System depicted by the mathematical model. The reference level is indicated by a dash-dotted line. $\eta$ is the water elevation from the reference level, $d$ is the depth from the reference level and $H$ is the total depth. The forces acting on the system are illustrated by vector arrows. $g$ is the gravitational acceleration, $\tau_w$ is the wind stress, $\tau_b$ is the bottom stress and $\Omega \times \textbf{v}$ is the Coriolis acceleration.](figs/swe-system-illustration-xana.svg)
+**Fig. 1:** ![System depicted by the mathematical model. The reference level is indicated by a dash-dotted line. $\eta$ is the water elevation from the reference level, $d$ is the depth from the reference level and $H$ is the total depth. The forces acting on the system are illustrated by vector arrows. $g$ is the gravitational acceleration, $\tau_w$ is the wind stress, $\tau_b$ is the bottom stress and $\Omega \times \textbf{v}$ is the Coriolis acceleration.](figs/swe-system-illustration-xana.svg)
 
 The shallow waters equations (SWE) describe the 2D barotropic
 motion of water masses. The system and its forcings are
-illustrated in the figure above. The SWE are widely
+illustrated in Fig. 1. The SWE are widely
 described throughout the literature; for example, they are given
 in Kantha and Clayson (2000) as:
 
@@ -82,9 +67,9 @@ drag coefficient whose values can be found in Pietrzak et al. (2002) and $u_{10}
 
 ### The Mesh
 
-![Arakawa C staggered grid patterns. From left to right: the T-cell, where $\eta$ and $H$ are evaluated at the centres, and $u$ and $v$ are evaluated at the eastern, western faces and southern, northern faces respectively. The U-cell where $u$ is evaluated at the centre, $\eta$ and $H$ are evaluated at the eastern, western faces, and $v$ is evaluated at the corners. The V-cell, where $v$ is evaluated at the centre, $\eta$ and $H$ are evaluated at the southern, northern faces, and $u$ is evaluated at the corners. The distance between two consecutive cells of the same type is $\Delta x$, zonally, and $\Delta y$, meridionally. The indices $i$ and $j$ correspond to the $i$-th zonal cell and the $j$-th meridional cell counted in the South-North direction and in the West-East direction respectively.](figs/arakawaCgrid.svg)
+**Fig. 2:** ![Arakawa C staggered grid patterns. From left to right: the T-cell, where $\eta$ and $H$ are evaluated at the centres, and $u$ and $v$ are evaluated at the eastern, western faces and southern, northern faces respectively. The U-cell where $u$ is evaluated at the centre, $\eta$ and $H$ are evaluated at the eastern, western faces, and $v$ is evaluated at the corners. The V-cell, where $v$ is evaluated at the centre, $\eta$ and $H$ are evaluated at the southern, northern faces, and $u$ is evaluated at the corners. The distance between two consecutive cells of the same type is $\Delta x$, zonally, and $\Delta y$, meridionally. The indices $i$ and $j$ correspond to the $i$-th zonal cell and the $j$-th meridional cell counted in the South-North direction and in the West-East direction respectively.](figs/arakawaCgrid.svg)
 
-The mesh in use is an Arakawa Staggered regular C-grid (Arakawa, 1966) as illustrated in the figure above. It
+The mesh in use is an Arakawa Staggered regular C-grid (Arakawa, 1966) as illustrated in Fig. 2. It
 is composed of three distinct cells: the U-cell, the V-cell, and
 the T-cell, where at the centres are the $u$, the
 $v$ and the $\eta$ variables of equations above.
@@ -93,8 +78,8 @@ The C-grid provides better precision for the non-linear advecting
 terms than the B-grid, however it loses precision when evaluating
 the Coriolis term in equations (Arakawa, 1966). For simplicity, the mesh will have constant
 step-sizes $\Delta x$ and $\Delta y$. The indices $i$ and $j$ as
-shown in the Arakawa C-grid figure and in
-the boundaries figure correspond to the $i$-th zonal cell
+shown in Fig. 2 and in
+Fig. 3 correspond to the $i$-th zonal cell
 and the $j$-th meridional cell counted in the South-North
 direction and in the West-East direction respectively.
 
@@ -134,7 +119,7 @@ $$\oint \vec{v} \cdot \vec{dS} = 0.$$
 
 Hence, using the Kelvin-Stokes theorem, the no-slip boundary condition is an interesting configuration to test the correct implementation of the model: the curl within the domain must sum up to zero. Nevertheless, the no-slip boundary condition is a very strong constraint that acts on the kinematics and not on the dynamics of the motion per se (it is independent of the equation of motion).
 
-![Detailed mesh emphasizing the boundaries. Composite of T, U and V-cells, the mesh illustrates the zone of integration of each type of cell: the blue rectangle contains the T-cells computed nodes, the thin green rectangle contains the U-cells computed nodes, the thin red rectangle contains the V-cells computed nodes. The thick green and red rectangles, however, delimit respectively the faces of the U and V-cells computed nodes.](figs/Boundaries2.svg)
+**Fig. 3:** ![Detailed mesh emphasizing the boundaries. Composite of T, U and V-cells, the mesh illustrates the zone of integration of each type of cell: the blue rectangle contains the T-cells computed nodes, the thin green rectangle contains the U-cells computed nodes, the thin red rectangle contains the V-cells computed nodes. The thick green and red rectangles, however, delimit respectively the faces of the U and V-cells computed nodes.](figs/Boundaries2.svg)
 
 #### Radiative Boundary Conditions
 

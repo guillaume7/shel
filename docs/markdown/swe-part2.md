@@ -1,4 +1,4 @@
-# SWAM Model Validation
+# SHEL Model Validation
 
 [◀ Back to Table of Contents](README.md)
 
@@ -101,7 +101,7 @@ $$\text{Fr} \sim \frac{U}{c}$$
 
 The Froude number, in hydraulic pipes, characterizes slow, rapid and critical flows according if the number is below, above or equal to unity. Each type of flow has distinct topological properties. Particularly in their locus of control, leewards (slow) or upwards (rapid). In the wave motion propagation, it also makes sense to characterize the ratio between the phase wave celerity and the flow created by its propagation in its wake. 
 
-Concretely speaking, the flow corresponds to the oscillatory motion that undergo the surface particles, the time period being that of the phase wave period, $T$, and the radius of oscillation simply being the half of the height between a crest and a trough, as illustrated in the wave particle oscillation figure. In the particular case of the gaussian bump, the Froude number is deduced by taking the ratio between the estimated velocity equation and the celerity equation, and yields:
+Concretely speaking, the flow corresponds to the oscillatory motion that undergo the surface particles, the time period being that of the phase wave period, $T$, and the radius of oscillation simply being the half of the height between a crest and a trough, as illustrated in Fig. 4. In the particular case of the gaussian bump, the Froude number is deduced by taking the ratio between the estimated velocity equation and the celerity equation, and yields:
 
 $$\text{Fr} \sim \frac{h_0}{2\,H}$$
 
@@ -175,7 +175,7 @@ $$\frac{TE}{TE_0}(t^\star) = -t^\star + 1$$
 
 This equation seems like a good candidate for a linear fully-adimensional approximation near the instant of release of the gaussian bump, $t_0$, of the time evolution of the mechanical energy of the system. Later in the energy decay study section, it will be seen with a numerical experiment that the proposed model of the adimensional equation shows an accurate characteristic time, $T_\sigma$, and an accurate dependency with the inverse of $\sigma^2$. However, it fails to show a dependency with $\nu$.
 
-![The oscillatory motion of particles caused by wave propagation is characterized by the wave amplitude, $h_0$, and time period, $T = \frac{\lambda}{\sqrt{g\,\left(h_0 + d \right)}}$. Their mean linear velocity is estimated to be $U = \frac{2\,\pi\,h_0}{T} = \frac{2\,\pi\,h_0\,\sqrt{g\,\left(h_0 + d\right)}}{\lambda}$.](figs/swe-wave-system.svg)
+**Fig. 4:** ![The oscillatory motion of particles caused by wave propagation is characterized by the wave amplitude, $h_0$, and time period, $T = \frac{\lambda}{\sqrt{g\,\left(h_0 + d \right)}}$. Their mean linear velocity is estimated to be $U = \frac{2\,\pi\,h_0}{T} = \frac{2\,\pi\,h_0\,\sqrt{g\,\left(h_0 + d\right)}}{\lambda}$.](figs/swe-wave-system.svg)
 
 ### Basic Results
 
@@ -196,37 +196,37 @@ This equation seems like a good candidate for a linear fully-adimensional approx
 | Boundary | Closed |
 | Volume | $1.13 \times 10^8$ m$^3$ |
 
-The figure below shows the gaussian bump at initial instant for the configuration described in the table above:
+Fig. 5 shows the gaussian bump at initial instant for the configuration described in the table above:
 
-![Gaussian elevation test-case energy time evolution in inviscid, frictionless conditions at initial instant.](figs/validation-eta-001-0s-sam2p.svg)
+**Fig. 5:** ![Gaussian elevation test-case energy time evolution in inviscid, frictionless conditions at initial instant.](figs/validation-eta-001-0s-sam2p.svg)
 
 In the configuration described by the table, the geometry of the system is bi-axially symmetric along the x-axis and along the y-axis. The grid is square and with an uneven number of cells along each axis. The gaussian bump has radial symmetry and its barycentre is located exactly at the central grid-cell of the square domain. The momentum and continuity equations also display radial symmetry. Hence, the expected solution should display a symmetry equal to the composition of the symmetries contained by the geometry, the initial condition and the PDE. In this case, it should display a perfectly bi-axial symmetry, along the x-axis and along the y-axis. 
 
 The figures below show the state of the waterlevel and the flow of the velocity field after $1.8 \times 10^5$ s of simulation. The axial symmetry of the waterlevel and of the velocity field is one of the attributes that advocates in favor of a correct implementation of the numerical scheme. If any mistake was made in the terms of the continuity equation or in the terms of the momentum equation (it could be a sign error or an index attribution error in the numerical scheme), then it would probably break the symmetry of the results.
 
-![Gaussian elevation test-case in inviscid, frictionless conditions at time instant $1.8 \times 10^5$ s.](figs/validation-eta-005-180000s-sam2p.svg)
+**Fig. 6:** ![Gaussian elevation test-case in inviscid, frictionless conditions at time instant $1.8 \times 10^5$ s.](figs/validation-eta-005-180000s-sam2p.svg)
 
-![Gaussian level velocity field in inviscid, frictionless conditions at time instant $1.8 \times 10^5$ s.](figs/validation-uv-004-180000s.svg)
+**Fig. 7:** ![Gaussian level velocity field in inviscid, frictionless conditions at time instant $1.8 \times 10^5$ s.](figs/validation-uv-004-180000s.svg)
 
-In the present test-case, the conservation of volume, vorticity and momentum are expected. The conservation of energy is not expected due to the artificial numerical viscosity inherent in this type of finite-diferencing technique. The figure below shows the time evolution of the volume. The total volume is conserved as expected both from the continuity equation condition and from the conservative nature of the finite-volume CTCS diferencing technique applied to regularly-spaced grid cells.
+In the present test-case, the conservation of volume, vorticity and momentum are expected. The conservation of energy is not expected due to the artificial numerical viscosity inherent in this type of finite-diferencing technique. Fig. 8 shows the time evolution of the volume. The total volume is conserved as expected both from the continuity equation condition and from the conservative nature of the finite-volume CTCS diferencing technique applied to regularly-spaced grid cells.
 
-![Time evolution of the volume. The boundaries are closed and the volume is conserved at $4.9 \times 10^12$ m$^3$.](figs/validation-l-001-180000s-volume-f.svg)
+**Fig. 8:** ![Time evolution of the volume. The boundaries are closed and the volume is conserved at $4.9 \times 10^12$ m$^3$.](figs/validation-l-001-180000s-volume-f.svg)
 
 The figures below display the vertical curl field:
 
 $$\zeta = \frac{\partial v}{\partial x} - \frac{\partial u}{\partial y}$$
 
-at the end of simulation, at time instant $1.8 \times 10^5$ s, and the integrated curl field along the time. The local curl field is zero everywhere except close to the boundaries. Nevertheless, the circulation along the boundaries still yields zero, as the global curl figure shows. Arakawa (1966) has an insightful discussion examining several jacobian discretization operators that allow the conservation of energy, vorticity, or both for the vorticity equation of motion. It is not a trivial task to ensure conservation of both energy and vorticity. Conservation of vorticity was ensured with this rather simple and economic scheme.
+at the end of simulation, at time instant $1.8 \times 10^5$ s, and the integrated curl field along the time. The local curl field is zero everywhere except close to the boundaries. Nevertheless, the circulation along the boundaries still yields zero, as Fig. 10 shows. Arakawa (1966) has an insightful discussion examining several jacobian discretization operators that allow the conservation of energy, vorticity, or both for the vorticity equation of motion. It is not a trivial task to ensure conservation of both energy and vorticity. Conservation of vorticity was ensured with this rather simple and economic scheme.
 
-![Curl at instant $1.8 \times 10^5$ s. The order of magnitude of the extrema is roughly $10^{-7}$ s$^{-1}$. The curl is locally zero everywhere, except in a line near the boundary. Its integration yields zero nonetheless, as is confirmed by the global curl results.](figs/validation-l-002-curl-180000s-sam2p.svg)
+**Fig. 9:** ![Curl at instant $1.8 \times 10^5$ s. The order of magnitude of the extrema is roughly $10^{-7}$ s$^{-1}$. The curl is locally zero everywhere, except in a line near the boundary. Its integration yields zero nonetheless, as is confirmed by the global curl results.](figs/validation-l-002-curl-180000s-sam2p.svg)
 
-![Evolution with time of the global curl. Global curl is conserved, as expected.](figs/validation-global-vorticity-180000-w.svg)
+**Fig. 10:** ![Evolution with time of the global curl. Global curl is conserved, as expected.](figs/validation-global-vorticity-180000-w.svg)
 
 The partial time derivative of the momentum equations in the the shallow-water equations, after integration in a closed domain, $\Omega$, yields zero in the absence of friction terms (source and sink terms):
 
 $$\int_\Omega \frac{\partial u}{\partial t}\,dA = 0$$
 
-This latter result was calculated making use of the fundamental theorem of Calculus. In the figure below, the time evolution of the integrated velocity associated to the $u$ and $v$ components is shown. The expected result is zero but in fact, the model returns a result in the order of $10^{-7}$ m$^{4}$ s$^{-1}$. This discrepancy is mainly due to numerical error that arises when subtracting two large but very similar numbers using digital computers. 
+This latter result was calculated making use of the fundamental theorem of Calculus. In Fig. 13, the time evolution of the integrated velocity associated to the $u$ and $v$ components is shown. The expected result is zero but in fact, the model returns a result in the order of $10^{-7}$ m$^{4}$ s$^{-1}$. This discrepancy is mainly due to numerical error that arises when subtracting two large but very similar numbers using digital computers. 
 
 Consider $n$ the order of magnitude of the large, yet similar, subtracted numbers. The exact floating-point operation should return nearly zero. However, the 14 decimal digit number returned by the numerical calculation, yields the correct result only up to $10^{-14} \times 10^{n}$ of precision. To simplify, and as an example, the following calculation:
 
@@ -252,14 +252,14 @@ err &\sim U_0 \, A \, H \times 10^{-14} \\
 
 Thus, any value similar or below the error, $err \sim 10^{-4}$, as regards the integration of any scalar field of velocities, is as close to zero as it gets. Hence, the signal in the time evolution of the integrated velocities in the domain should be considered white noise. Consequently, as far numerical computing goes, the momentum is conserved by the implemented numerical scheme.
 
-![Velocity modulus at instant 3500 s. The maximum velocity is estimated to be around $2 \times 10^{-3}$ m s$^{-1}$.](figs/validation-velocity-modulus-3500s-sam2p.svg)
+**Fig. 11:** ![Velocity modulus at instant 3500 s. The maximum velocity is estimated to be around $2 \times 10^{-3}$ m s$^{-1}$.](figs/validation-velocity-modulus-3500s-sam2p.svg)
 
-![Velocity modulus at instant 180000 s. The maximum velocity is estimated to be around $1 \times 10^{-3}$ m s$^{-1}$.](figs/validation-velocity-modulus-180000s-sam2p.svg)
+**Fig. 12:** ![Velocity modulus at instant 180000 s. The maximum velocity is estimated to be around $1 \times 10^{-3}$ m s$^{-1}$.](figs/validation-velocity-modulus-180000s-sam2p.svg)
 
-![Time evolution of the the $u$ and $v$ components of velocity integrated in the whole domain. The erratic behavior ranging $10^{-7}$ m$^{4}$ s$^{-1}$ is strictly due to numerical errors.](figs/validation-UV-integrated-velocity-180000.svg)
+**Fig. 13:** ![Time evolution of the the $u$ and $v$ components of velocity integrated in the whole domain. The erratic behavior ranging $10^{-7}$ m$^{4}$ s$^{-1}$ is strictly due to numerical errors.](figs/validation-UV-integrated-velocity-180000.svg)
 
-The figure below shows the evolution of the total, kinetic and potential energy of the gaussian elevation test case in inviscid, frictionless conditions. The initial energy is in very good agreement with the theoretical estimate of $2.89 \times 10^9$ J, calculated via the APE equation, and its decay is strictly due to numerical diffusion, since the closed boundary conditions allow no energy flux through the boundary (radiation) and there are no source nor sink terms. The leapfrog+CS scheme is only second-order accurate in time and space, and is known for its rather high numerical diffusion. 
+Fig. 14 shows the evolution of the total, kinetic and potential energy of the gaussian elevation test case in inviscid, frictionless conditions. The initial energy is in very good agreement with the theoretical estimate of $2.89 \times 10^9$ J, calculated via the APE equation, and its decay is strictly due to numerical diffusion, since the closed boundary conditions allow no energy flux through the boundary (radiation) and there are no source nor sink terms. The leapfrog+CS scheme is only second-order accurate in time and space, and is known for its rather high numerical diffusion. 
 
 If the modeled domain had its walls pushed back to infinity, then the $KE$ and the $APE$ would each be exactly half the $TE$ (Gill, 1982). In this case, the walls reflect the waves back and forth within the domain. At each reflection, a major energy transfer occurs from $KE$ to $PE$, resulting in a peak in $PE$ and a low in $KE$, which is visible in the waterlevel by an elevation at the boundary when the transfer occurs. The term that allows this energy transfer is the source and sink term $\rho\,g\,w$ as seen in the, previously deduced, energy equations of motion for kinetic energy and for potential energy. Mind however that this energy transfer is fully reversible and doesn't have a direct implication in the, so-called, energy cascade process (Burchard, 2002). During this process no dissipation of energy is considered in the energy equations. Hence, in order to completely explain the time evolution behaviour of energy, it would be very interesting to estimate the energy decay rate. Another very interesting question would be to determine in which conditions does the energy decay returned by the numerical model is driven by physical viscosity instead of numerical viscosity. In this case, for instance, the energy dissipation is driven by numerical viscosity since it has zero physical viscosity.
 
-![Gaussian elevation test-case energy time evolution in inviscid, frictionless conditions for a 180000 s run. The energy decay is strictly due to numerical diffusion.](figs/validation-r-003-global-TE-P-K.svg)
+**Fig. 14:** ![Gaussian elevation test-case energy time evolution in inviscid, frictionless conditions for a 180000 s run. The energy decay is strictly due to numerical diffusion.](figs/validation-r-003-global-TE-P-K.svg)
