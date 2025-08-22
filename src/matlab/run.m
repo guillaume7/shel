@@ -22,7 +22,7 @@ global fig2;
 
 dir = cd; %gets current directory
 addpath([dir '\model']); %looks for functions in the sub-folder .\model
-addpath([dir '\GUI']); %looks for functions in the sub-folder .\GUI
+addpath([dir '\gui']); %looks for functions in the sub-folder .\gui
 
 fig2 = GUI_ControlPanel2D;
 handles = guihandles(fig2);
@@ -31,5 +31,5 @@ GUI_ControlPanel2D('resetbutton_Callback',fig2,0,handles);
 %--------------------------------------------------------------------------
 %SHEL SHallow-water numerical modEL
 %Copyright (C) 2006,2009,2010,2011. Guillaume Riflet,
-%Instituto Superior Técnico da Universidade Técnica de Lisboa.
+%Instituto Superior Tï¿½cnico da Universidade Tï¿½cnica de Lisboa.
 %--------------------------------------------------------------------------
