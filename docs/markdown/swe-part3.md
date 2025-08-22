@@ -117,7 +117,7 @@ $$\begin{align}
 
 where $c_0^2 \equiv g\,H_0$ and where it is considered that $\eta \ll d$, so that $c_0 \approx c$. When the solution has radial symmetry and the initial vorticity is null, the equation writes:
 
-$$\frac{\partial^2 \eta}{\partial r^2} = \frac{f^2}{c^2} \left(\eta_g - \eta_0 \right)$$
+$$\frac{\partial^2 \eta}{\partial r^2} = \frac{f^2}{c^2} (\eta_g - \eta_0)$$
 
 which is a non-homogeneous second-order linear differential equation, where $r^2 \equiv x^2 + y^2$. Depending on the value of $\eta_0$, an analytical solution of this equation can be easily found, in perfect analogy with the example shown in Gill (1982).
 
@@ -142,7 +142,7 @@ The table below indicates the configuration of the experiment consisting in the 
 
 Fig. 21 shows the total volume evolution with time of the experiment described in the table. This time, the final volume gains a small increase relative to its original value. This is theoretically deducible with the principle of conservation of the initial potential vorticity, $Q$, given by, according to Gill (1982, p. 192):
 
-$$Q\left(t\right) = \frac{\zeta - f \, \frac{\eta}{H}}{H}$$
+$$Q(t) = \frac{\zeta - f \, \frac{\eta}{H}}{H}$$
 
 **Fig. 21:** ![Domain volume evolution in time. The transient perturbation in the volume occurs when the gravity wave reaches the OB while making its exit. The final volume oscillates and is slightly above the original volume, as the gaussian bump exits the domain. The volume difference is roughly of the order of $\sim 10^7$ m$^3$.](figs/radiate-coriolis-volume.svg)
 

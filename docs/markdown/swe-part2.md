@@ -10,7 +10,7 @@ The interest of a gaussian level initial condition is that one can test adjustme
 
 The other interesting aspect of the gaussian level initial condition, is that its volume is easily integrable, and its initial potential energy is also easily integrable. Indeed, the gaussian water elevation is given by expression:
 
-$$\eta_{\sigma_x\,\sigma_y} (x,y) = \frac{V}{\sigma_{x}\sigma_{y} \pi }e^{-\left(\frac{ (x-x_0)^2}{\sigma_{x}^2} + \frac{ (y-y_0)^2 }{ \sigma_{y}^2 }\right)}$$
+$$\eta_{\sigma_x\,\sigma_y} (x,y) = \frac{V}{\sigma_{x}\sigma_{y} \pi }e^{-(\frac{ (x-x_0)^2}{\sigma_{x}^2} + \frac{ (y-y_0)^2 }{ \sigma_{y}^2 })}$$
 
 where $\sigma_x$, $\sigma_y$ is the gaussian bell width along the $x$-axis and the $y$-axis, $x_0$, $y_0$ are the coordinates of the gaussian bell centre. The integral of this equation over an infinite domain is classical and yields exactly $V$:
 
@@ -18,7 +18,7 @@ $$\int \eta_{\sigma_x\,\sigma_y} \, dx\,dy = V.$$
 
 Another way of writing the equation in terms of the gaussian bell-shaped surface height, $h_0 \equiv \eta_{\sigma_x\,\sigma_y}(x_0,\,y_0)$, is:
 
-$$\eta_{\sigma_x\,\sigma_y} (x,y) = h_0 \, e^{-\left(\frac{ (x-x_0)^2}{\sigma_{x}^2} \,+\, \frac{ (y-y_0)^2 }{ \sigma_{y}^2 }\right)}$$
+$$\eta_{\sigma_x\,\sigma_y} (x,y) = h_0 \, e^{-(\frac{ (x-x_0)^2}{\sigma_{x}^2} \,+\, \frac{ (y-y_0)^2 }{ \sigma_{y}^2 })}$$
 
 which makes:
 
@@ -125,7 +125,7 @@ $$TE_{,\,t} = -\int_{V} \, \rho \, \epsilon \, dV$$
 
 where $\epsilon$ is the dissipation rate, which yields for the shallow waters equation of motion:
 
-$$\epsilon = \nu \, \left( \left(\frac{\partial u}{\partial x}\right)^2 + \left(\frac{\partial u}{\partial y}\right)^2 + \left(\frac{\partial v}{\partial x}\right)^2 + \left(\frac{\partial v}{\partial y}\right)^2 \right)$$
+$$\epsilon = \nu \, ( (\frac{\partial u}{\partial x})^2 + (\frac{\partial u}{\partial y})^2 + (\frac{\partial v}{\partial x})^2 + (\frac{\partial v}{\partial y})^2 )$$
 
 Considering that the viscous dissipation is a simple turbulence model, then one can infer that the integrated turbulent kinetic energy (TKE) production rate is given by the kinetic energy viscous dissipation rate but with an opposite sign:
 
@@ -159,7 +159,7 @@ TE_{,\,t} &= - \rho \, \epsilon_{\sigma} \, \pi \, \sigma^2 \, H \\
 
 Hence the linear approximation of the time evolution of the adimensionalized mechanical energy can be estimated by:
 
-$$\frac{TE}{TE_0}\left(t\right) = -\frac{\nu}{\sigma^2}\,t + 1$$
+$$\frac{TE}{TE_0}(t) = -\frac{\nu}{\sigma^2}\,t + 1$$
 
 This equation, which satisfies the condition $TE(0) = TE_0$, is very interesting because it allows to postulate a characteristic time of dissipation, $T_\sigma$, of the mechanical energy of the system (a gaussian bump) given by:
 
@@ -175,7 +175,7 @@ $$\frac{TE}{TE_0}(t^\star) = -t^\star + 1$$
 
 This equation seems like a good candidate for a linear fully-adimensional approximation near the instant of release of the gaussian bump, $t_0$, of the time evolution of the mechanical energy of the system. Later in the energy decay study section, it will be seen with a numerical experiment that the proposed model of the adimensional equation shows an accurate characteristic time, $T_\sigma$, and an accurate dependency with the inverse of $\sigma^2$. However, it fails to show a dependency with $\nu$.
 
-**Fig. 4:** ![The oscillatory motion of particles caused by wave propagation is characterized by the wave amplitude, $h_0$, and time period, $T = \frac{\lambda}{\sqrt{g\,\left(h_0 + d \right)}}$. Their mean linear velocity is estimated to be $U = \frac{2\,\pi\,h_0}{T} = \frac{2\,\pi\,h_0\,\sqrt{g\,\left(h_0 + d\right)}}{\lambda}$.](figs/swe-wave-system.svg)
+**Fig. 4:** ![The oscillatory motion of particles caused by wave propagation is characterized by the wave amplitude, $h_0$, and time period, $T = \frac{\lambda}{\sqrt{g\,(h_0 + d)}}$. Their mean linear velocity is estimated to be $U = \frac{2\,\pi\,h_0}{T} = \frac{2\,\pi\,h_0\,\sqrt{g\,(h_0 + d)}}{\lambda}$.](figs/swe-wave-system.svg)
 
 ### Basic Results
 

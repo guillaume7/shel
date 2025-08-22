@@ -24,9 +24,9 @@ in Kantha and Clayson (2000) as:
 
 $$
 \begin{cases}
- \frac{\partial Hu}{\partial t} + \frac{\partial \left(Huu\right)}{\partial x} + \frac{\partial \left(Huv\right)}{\partial y} - fHv = \nu \left( \frac{\partial}{\partial x}\left( H \frac{\partial u}{\partial x }\right) + \frac{\partial}{\partial y}\left(H \frac{\partial u}{\partial y }\right) \right) \\
+ \frac{\partial Hu}{\partial t} + \frac{\partial (H u u)}{\partial x} + \frac{\partial (H u v)}{\partial y} - fHv = \nu \left( \frac{\partial}{\partial x}\left( H \frac{\partial u}{\partial x }\right) + \frac{\partial}{\partial y}\left(H \frac{\partial u}{\partial y }\right) \right) \\
  \quad - gH\frac{\partial \eta}{\partial x} + \frac{\tau _u^w}{\rho _0} - \frac{\tau _u^b}{\rho _0} \\
- \frac{\partial Hv}{\partial t} + \frac{\partial \left(Hvu\right)}{\partial x} + \frac{\partial \left(Hvv\right)}{\partial y} + fHu = \nu \left( \frac{\partial}{\partial x}\left( H \frac{\partial v}{\partial x }\right) + \frac{\partial}{\partial y}\left(H \frac{\partial v}{\partial y }\right) \right) \\
+ \frac{\partial Hv}{\partial t} + \frac{\partial (H v u)}{\partial x} + \frac{\partial (H v v)}{\partial y} + fHu = \nu \left( \frac{\partial}{\partial x}\left( H \frac{\partial v}{\partial x }\right) + \frac{\partial}{\partial y}\left(H \frac{\partial v}{\partial y }\right) \right) \\
  \quad - gH\frac{\partial \eta}{\partial y} + \frac{\tau _v^w}{\rho _0} - \frac{\tau _v^b}{\rho _0} \\
  \frac{\partial \eta}{\partial t} + \frac{\partial Hu}{\partial x} + \frac{\partial Hv}{\partial y} = 0
 \end{cases}
@@ -171,9 +171,9 @@ For the zonal momentum (U-Cell), the first-order spatial discretization writes:
 
 $$
 \begin{aligned}
-\frac{\partial Hu}{\partial t} &= - \frac{\left(H u u\right)_{i + 1/2} - \left(H u u\right)_{i - 1/2}}{\Delta x} \\
-& - \frac{\left(H u v\right)_{j + 1/2} - \left(H u v\right)_{j - 1/2}}{\Delta y} \\
-& + f \left(H v\right) \\
+\frac{\partial Hu}{\partial t} &= - \frac{(H u u)_{i + 1/2} - (H u u)_{i - 1/2}}{\Delta x} \\
+& - \frac{(H u v)_{j + 1/2} - (H u v)_{j - 1/2}}{\Delta y} \\
+& + f(H v) \\
 & + \frac{\nu}{\Delta x} \left( \left(H\frac{\partial u}{\partial x}\right)_{i+1/2} - \left(H\frac{\partial u}{\partial x}\right)_{i-1/2} \right) \\
 & + \frac{\nu}{\Delta y} \left( \left(H\frac{\partial u}{\partial y}\right)_{j+1/2} - \left(H\frac{\partial u}{\partial y}\right)_{j-1/2} \right) \\
 & - \frac{gH(\eta _{i + 1/2} - \eta _{i - 1/2})}{\Delta x} \\
@@ -188,13 +188,13 @@ faces. Thus, the CTCS fluxes write:
 
 $$
 \begin{aligned}
-\left(H u u\right)_{i + 1/2} &= m_{U\,i+1}\,H(u_{i + 1} + u)^2 /4 \\
-\left(H u u\right)_{i - 1/2} &= m_{U\,i-1}\,H_{i - 1} (u + u_{i - 1})^2 /4 \\
-\left(H u v\right)_{j + 1/2} &= m_{U\,j+1}\,(H_{i - 1} + H_i + H_{i - 1,j + 1} + H_{i,j + 1}) \\
+(H u u)_{i + 1/2} &= m_{U\,i+1}\,H(u_{i + 1} + u)^2 /4 \\
+(H u u)_{i - 1/2} &= m_{U\,i-1}\,H_{i - 1} (u + u_{i - 1})^2 /4 \\
+(H u v)_{j + 1/2} &= m_{U\,j+1}\,(H_{i - 1} + H_i + H_{i - 1,j + 1} + H_{i,j + 1}) \\
 &\quad \times (u_{j + 1} + u)(v_{i - 1,j + 1} + v_{i,j + 1})/16 \\
-\left(H u v\right)_{j - 1/2} &= m_{U\,j-1}\,(H_{i - 1} + H_i + H_{i - 1,j - 1} + H_{i,j - 1}) \\
+(H u v)_{j - 1/2} &= m_{U\,j-1}\,(H_{i - 1} + H_i + H_{i - 1,j - 1} + H_{i,j - 1}) \\
 &\quad \times (u + u_{j - 1})(v_{i - 1} + v)/16 \\
-f\left(H v\right) &= f(H + H_{i - 1})/2 \\
+f(H v) &= f(H + H_{i - 1})/2 \\
 &\quad \times \frac{(m_V\,v)_{i - 1} + m_V\,v + (m_V\,v)_{j + 1} + (m_V\,v)_{i - 1,j + 1}}{ m_{V\,i-1} + m_{V} + m_{V\,j+1} + m_{V\,i-1,j+1}}
 \end{aligned}
 $$
@@ -208,7 +208,7 @@ C_D u\sqrt{u^2 + v^2} &= C_D u\sqrt{u^2 + \left(\frac{(m_V\,v)_{i - 1} + m_V\,v 
 \end{aligned}
 $$
 
-Notice how the $\left(H u u\right)_{j + 1/2}$, $\left(H u v\right)_{j - 1/2}$, $f\left(H v\right)$ and $C_D u\sqrt{u^2 + v^2}$ terms lose significant precision compared to the other terms, due to their 4-term averaging.
+Notice how the $(H u u)_{j + 1/2}$, $(H u v)_{j - 1/2}$, $f(H v)$ and $C_D u\sqrt{u^2 + v^2}$ terms lose significant precision compared to the other terms, due to their 4-term averaging.
 
 Hence, rewriting the full momentum CTCS spatial scheme we get:
 
@@ -237,15 +237,15 @@ U-cells are used:
 - switch $\Delta x$ and $\Delta y$: $\Delta x \leftrightarrow \Delta y$
 - switch $i$ and $j$: $i \leftrightarrow j$
 - switch $u$ and $v$: $u \leftrightarrow v$
-- switch signal of the Coriolis term: $\left( + \leftrightarrow - \right)$
+- switch signal of the Coriolis term: $(+ \leftrightarrow -)$
 - switch $M$ and $N$: $M \leftrightarrow N$
 
 The finite-difference first-order numerical scheme for the waterlevel (T-Cell) writes out:
 
 $$
 \begin{aligned}
-\frac{\partial \eta}{\partial t} &= - \frac{\left(Hu\right)_{i + 1/2} - \left(Hu\right)_{i - 1/2}}{\Delta x} \\
-& - \frac{\left(Hv\right)_{j + 1/2} - \left(Hv\right)_{j - 1/2}}{\Delta y} \\
+\frac{\partial \eta}{\partial t} &= - \frac{(H u)_{i + 1/2} - (H u)_{i - 1/2}}{\Delta x} \\
+& - \frac{(H v)_{j + 1/2} - (H v)_{j - 1/2}}{\Delta y} \\
 & \equiv R\eta
 \end{aligned}
 $$
@@ -254,10 +254,10 @@ and each face's CTCS flux term writes down:
 
 $$
 \begin{aligned}
-\left(Hu\right)_{i + 1/2} &= m_{T\,i+1}\,(H + H_{i + 1})/2\;u_{i + 1} \\
-\left(Hu\right)_{i - 1/2} &= m_{T\,i-1}\,(H_{i - 1} + H)/2\;u \\
-\left(Hv\right)_{j + 1/2} &= m_{T\,j+1}\,(H + H_{j + 1})/2\;v_{j + 1} \\
-\left(Hv\right)_{j - 1/2} &= m_{T\,j-1}\,(H_{j - 1} + H)/2\;v
+(H u)_{i + 1/2} &= m_{T\,i+1}\,(H + H_{i + 1})/2\;u_{i + 1} \\
+(H u)_{i - 1/2} &= m_{T\,i-1}\,(H_{i - 1} + H)/2\;u \\
+(H v)_{j + 1/2} &= m_{T\,j+1}\,(H + H_{j + 1})/2\;v_{j + 1} \\
+(H v)_{j - 1/2} &= m_{T\,j-1}\,(H_{j - 1} + H)/2\;v
 \end{aligned}
 $$
 
@@ -287,7 +287,7 @@ at $t_0$ and at $t_1$. Hence, in order to avoid mode decoupling, a
 Robert-Asselin filter (Asselin, 1972) for $u,\,v,\,\eta$ at each integration time-step is used,
 as suggested by Kantha and Clayson (2000):
 
-$$P^l = P^l + \gamma \left(P^{l - 1} - 2P^l + P^{l + 1}\right)$$
+$$P^l = P^l + \gamma (P^{l - 1} - 2P^l + P^{l + 1})$$
 
 where $\gamma$ is a parameter set to $0.1$ (Kantha and Clayson, 2000). The Robert-Asselin
 provides a good coupling between the two initial conditions, at the expense of some loss in precision (Asselin, 1972).
@@ -297,7 +297,7 @@ The radiative scheme implemented follows a NVOE stencil on a C grid (Herzfeld, 2
 $$
 \begin{aligned}
 \eta^{l+1}_{1,\,j} &= \eta_{1,\,j} - 2 \frac{\Delta t}{\Delta x} \,\sqrt{g\, H_{1,\,j}} 
-\, \left(\eta_{1,\,j} - \eta_{2,\,j}\right) \\
+\, (\eta_{1,\,j} - \eta_{2,\,j}) \\
 u^{l+1}_{1,\,j} &= - \sqrt{\frac{g}{H^{l+1}_{1,\,j}}} \, \eta^{l+1}_{1,\,j}
 \end{aligned}
 $$
@@ -305,7 +305,7 @@ $$
 for $j=1,\,...,\,N$, and is defined by, for the velocity component tangent to the boundary:
 
 $$
-v^{l+1}_{1,\,j}= \frac{v_{1,\,j} \, \left(H_{1,\,j} + H_{1,\,j-1}\right) - 2 \, \frac{\Delta t}{\Delta x} \, \sqrt{g\,\frac{H_{1,\,j} + H_{1,\,j-1}}{2}} \, \left(v_{1,\,j} - v_{2,\,j}\right)}{H^{l+1}_{1,\,j} + H^{l+1}_{1,\,j-1}}
+v^{l+1}_{1,\,j}= \frac{v_{1,\,j} \, (H_{1,\,j} + H_{1,\,j-1}) - 2 \, \frac{\Delta t}{\Delta x} \, \sqrt{g\,\frac{H_{1,\,j} + H_{1,\,j-1}}{2}} \, (v_{1,\,j} - v_{2,\,j})}{H^{l+1}_{1,\,j} + H^{l+1}_{1,\,j-1}}
 $$
 
 for $j=2,\,...,\,N$.
@@ -315,7 +315,7 @@ For the *eastern* boundary, the radiation boundary condition writes:
 $$
 \begin{aligned}
 \eta^{l+1}_{M,\,j} &= \eta_{M,\,j} - 2 \frac{\Delta t}{\Delta x} \,\sqrt{g\, H_{M,\,j}} 
-\, \left(\eta_{M,\,j} - \eta_{M-1,\,j}\right) \\
+\, (\eta_{M,\,j} - \eta_{M-1,\,j}) \\
 u^{l+1}_{M+1,\,j} &= - \sqrt{\frac{g}{H^{l+1}_{M,\,j}}} \, \eta^{l+1}_{M,\,j}
 \end{aligned}
 $$
@@ -323,7 +323,7 @@ $$
 for $j=1,\,...,\,N$, and is defined by, for the velocity component tangent to the boundary:
 
 $$
-v^{l+1}_{M,\,j}= \frac{v_{M,\,j} \, \left(H_{M,\,j} + H_{M,\,j-1}\right) - 2 \, \frac{\Delta t}{\Delta x} \, \sqrt{g\,\frac{H_{M,\,j} + H_{M,\,j-1}}{2}} \, \left(v_{M,\,j} - v_{M-1,\,j}\right)}{H^{l+1}_{M,\,j} + H^{l+1}_{M,\,j-1}}
+v^{l+1}_{M,\,j}= \frac{v_{M,\,j} \, (H_{M,\,j} + H_{M,\,j-1}) - 2 \, \frac{\Delta t}{\Delta x} \, \sqrt{g\,\frac{H_{M,\,j} + H_{M,\,j-1}}{2}} \, (v_{M,\,j} - v_{M-1,\,j})}{H^{l+1}_{M,\,j} + H^{l+1}_{M,\,j-1}}
 $$
 
 for $j=2,\,...,\,N$. Note that the Flather (1976) radiation condition applied to the normal component of velocity to the boundary can be replaced with a simple null-gradient and yield similar results:
