@@ -208,7 +208,7 @@ C_D u\sqrt{u^2 + v^2} &= C_D u\sqrt{u^2 + \left(\frac{(m_V\,v)_{i - 1} + m_V\,v 
 \end{aligned}
 $$
 
-Notice how the $(Huu)_{j + 1}$, $(Huv)_{j - 1}$, $f(Hv)$ and $C_D u\sqrt{u^2 + v^2}$ terms lose significant precision compared to the other terms, due to their 4-term averaging.
+Notice how the $(Huu)_{j}$, $(Huv)_{j}$, $f(Hv)$ and $C_D u\sqrt{u^2 + v^2}$ terms lose significant precision compared to the other terms, due to their 4-term averaging.
 
 Hence, rewriting the full momentum CTCS spatial scheme we get:
 
