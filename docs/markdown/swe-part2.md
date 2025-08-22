@@ -159,7 +159,7 @@ TE_{,\,t} &= - \rho \, \epsilon_{\sigma} \, \pi \, \sigma^2 \, H \\
 
 Hence the linear approximation of the time evolution of the adimensionalized mechanical energy can be estimated by:
 
-$$\frac{TE}{TE_0}(t) = -\frac{\nu}{\sigma^2}\,t + 1$$
+$$\frac{TE}{TE_0}\left(t\right) = -\frac{\nu}{\sigma^2}\,t + 1$$
 
 This equation, which satisfies the condition $TE(0) = TE_0$, is very interesting because it allows to postulate a characteristic time of dissipation, $T_\sigma$, of the mechanical energy of the system (a gaussian bump) given by:
 
