@@ -1,0 +1,69 @@
+[MASTER]
+# Use multiple processes to speed up Pylint
+jobs=4
+
+# Add files or directories to the blacklist
+ignore=CVS
+
+# Enable type checking extension
+load-plugins=pylint.extensions.typing
+
+# Maximum number of characters on a single line
+max-line-length=88
+
+# Good variable names which should always be accepted
+good-names=i,j,k,ex,Run,_,x,y,z,t,u,v,h,f,dt
+
+[MESSAGES CONTROL]
+# Enable specific messages that are disabled by default
+enable=
+    typecheck,
+    typing
+
+# Disable temporarily while setting up strict typing
+disable=
+    no-name-in-module,
+    import-outside-toplevel,
+    too-many-instance-attributes,
+    trailing-whitespace,
+    broad-exception-caught,
+    unspecified-encoding,
+    logging-fstring-interpolation,
+    consider-using-with,
+    unused-import,
+    line-too-long,
+    consider-alternative-union-syntax,
+    deprecated-typing-alias,
+    useless-option-value
+
+[TYPECHECK]
+# List of members which are set dynamically and missed by pylint inference system
+ignored-classes=numpy.*,torch.*,cv2.*,pytest.*,PyQt5.*
+ignored-modules=numpy,torch,cv2,pytest,PyQt5
+
+[SIMILARITIES]
+# Minimum lines number of a similarity
+min-similarity-lines=10
+
+# Ignore comments when computing similarities
+ignore-comments=yes
+
+# Ignore docstrings when computing similarities
+ignore-docstrings=yes
+
+# Ignore imports when computing similarities
+ignore-imports=yes
+
+[FORMAT]
+# Expected format of line ending
+expected-line-ending-format=LF
+
+[DESIGN]
+# Maximum number of arguments for function / method
+max-args=8
+
+# Maximum number of attributes for a class
+max-attributes=15
+
+# Maximum number of statements in function / method body
+max-statements=50

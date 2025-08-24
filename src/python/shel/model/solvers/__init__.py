@@ -1,0 +1,3 @@
+"""
+solvers module for SHEL.
+"""

@@ -72,5 +72,5 @@ Universidade Técnica de Lisboa.
 
 <div align="center">
   <img src="docs/markdown/figs/radiate-coriolis-velocity-modulus-sam2p.svg" alt="Velocity field with Coriolis effect" width="600"/>
-  <p><em>Visualization of velocity field modulus depicting the evolution of motion from a guassian waterlevel initial elevation</em></p>
+  <p><em>Visualization of velocity field modulus depicting the evolution of motion from a gaussian elevation as the initial waterlevel</em></p>
 </div>
