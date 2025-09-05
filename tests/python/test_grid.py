@@ -5,6 +5,8 @@ import pytest
 import numpy as np
 
 from shel.model.grid import Grid
+from shel.model.grid import build_staggered_masks, apply_noslip_flux_masks, build_corner_mask, build_all_masks
+from shel.model.state import ModelState
 
 
 def test_grid_initialization():
@@ -142,3 +144,73 @@ def test_land_mask():
     # Test with invalid shape
     with pytest.raises(ValueError):
         grid.set_land_mask(np.zeros((5, 5)))
+
+
+def test_staggered_masks_all_water():
+    config = {"grid": {"nx": 4, "ny": 3, "dx": 1.0, "dy": 1.0}}
+    grid = Grid(config)
+    mask_t = np.ones((3, 4), dtype=int)
+    mu, mv = build_staggered_masks(mask_t)
+    assert mu.shape == (3, 5)
+    assert mv.shape == (4, 4)
+    assert np.all(mu == 1)
+    assert np.all(mv == 1)
+
+
+def test_staggered_masks_with_land_cell():
+    # Single land cell should zero adjacent faces.
+    config = {"grid": {"nx": 3, "ny": 3, "dx": 1.0, "dy": 1.0}}
+    grid = Grid(config)
+    mask_t = np.ones((3, 3), dtype=int)
+    mask_t[1, 1] = 0  # center land
+    mu, mv = build_staggered_masks(mask_t)
+    # Adjacent U faces: (1,1) and (1,2)
+    assert mu[1,1] == 0 and mu[1,2] == 0
+    # Adjacent V faces: (1,1) and (2,1)
+    assert mv[1,1] == 0 and mv[2,1] == 0
+    # Non-adjacent faces remain 1
+    assert mu[0,0] == 1 and mv[0,0] == 1
+
+
+def test_noslip_flux_masks():
+    # Build masks for a plus-shaped water area to ensure interior reductions.
+    config = {"grid": {"nx": 5, "ny": 5, "dx": 1.0, "dy": 1.0}}
+    grid = Grid(config)
+    mask_t = np.zeros((5,5), dtype=int)
+    mask_t[2,2] = 1
+    mask_t[2,1] = 1; mask_t[2,3] = 1; mask_t[1,2] = 1; mask_t[3,2] = 1
+    mu, mv = build_staggered_masks(mask_t)
+    mu_ns, mv_ns = apply_noslip_flux_masks(mask_t, mu, mv)
+    # Faces around isolated water arms should be zeroed except those fully surrounded by water.
+    # The central cross has no 2x2 all-water block except at the center which lacks corners -> resulting interior masks zero.
+    interior_u = mu_ns[1:5-0-1,1:5]  # subset representing interior region; simple checks
+    assert np.any(interior_u == 0)
+    interior_v = mv_ns[1:5,1:5-0-1]
+    assert np.any(interior_v == 0)
+
+
+def test_corner_mask():
+    mask_t = np.array([[1,1,1],[1,0,1],[1,1,1]])
+    mq = build_corner_mask(mask_t)
+    # Corner mask shape
+    assert mq.shape == (mask_t.shape[0]+1, mask_t.shape[1]+1)
+    # Corner above the land cell (between land and waters) should be 0 only if all contributing T cells 0 -> here mixed so expect product zero? Land at (1,1) zeros interior corners sharing it.
+    # Interior corners: (1,1),(1,2),(2,1),(2,2) each include land cell -> zero
+    assert mq[1,1] == 0 and mq[1,2] == 0 and mq[2,1] == 0 and mq[2,2] == 0
+    # Outer corner far from land remains 1
+    assert mq[0,0] == 1
+
+
+def test_model_state_mask_update():
+    config = {"grid": {"nx": 3, "ny": 3, "dx": 1.0, "dy": 1.0}, "model": {"timestep": 1.0}}
+    state = ModelState(config)
+    land_mask = np.ones((3,3), dtype=int)
+    land_mask[1,1] = 0
+    state.set_land_mask(land_mask)
+    assert state.mask_u is not None and state.mask_v is not None and state.mask_q is not None
+    # Faces adjacent to land zero
+    assert state.mask_u[1,1] == 0 and state.mask_u[1,2] == 0
+    assert state.mask_v[1,1] == 0 and state.mask_v[2,1] == 0
+    # Corner masks near land zero
+    assert state.mask_q[1,1] == 0
+

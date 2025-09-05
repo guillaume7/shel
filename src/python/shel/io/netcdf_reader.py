@@ -76,8 +76,8 @@ def read_grid(file_path: str) -> Tuple[NDArray, NDArray, Dict[str, Any]]:
             raise KeyError(f"No y-coordinate variable found in {file_path}")
 
         # Get coordinate values
-        x = ds[x_var].values
-        y = ds[y_var].values
+        x: NDArray = ds[x_var].values
+        y: NDArray = ds[y_var].values
 
         # Get grid attributes
         grid_attrs = {
@@ -133,7 +133,7 @@ def read_bathymetry(file_path: str, variable_name: Optional[str] = None) -> NDAr
         if variable_name is None or variable_name not in ds:
             raise KeyError(f"Bathymetry variable not found in {file_path}")
 
-        bathy = ds[variable_name].values
+        bathy: NDArray = ds[variable_name].values
 
     logger.info(f"Read bathymetry from {file_path} using variable '{variable_name}'")
     return bathy

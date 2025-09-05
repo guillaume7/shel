@@ -53,6 +53,8 @@ def test_model_state_initialization():
     assert np.allclose(state.u, 0.0)
     assert np.allclose(state.v, 0.0)
     assert np.allclose(state.d, 0.0)
+    # Masks initially None until bathymetry (implicit land mask) or explicit mask
+    assert state.mask_u is None and state.mask_v is None
 
 
 def test_set_bathymetry():
@@ -75,6 +77,8 @@ def test_set_bathymetry():
 
     # Check that total depth was updated (H = eta + d)
     assert np.allclose(state.H, 1000.0)  # eta is 0, so H = d
+    # After bathymetry, masks should exist (all-water domain)
+    assert state.mask_u is not None and state.mask_v is not None and state.mask_q is not None
 
     # Test with invalid shape
     with pytest.raises(ValueError):
@@ -154,6 +158,16 @@ def test_energy_calculation():
     # Check volume conservation
     initial_volume = state.compute_volume()
     assert initial_volume > 0
+
+
+def test_state_serialization_includes_masks():
+    config = {"grid": {"nx": 4, "ny": 3, "dx": 1.0, "dy": 1.0}, "model": {"timestep": 1.0}}
+    state = ModelState(config)
+    bathy = np.ones((3,4))
+    state.set_bathymetry(bathy)
+    dct = state.to_dict()
+    assert "masks" in dct
+    assert dct["masks"]["u"] is not None and dct["masks"]["v"] is not None and dct["masks"]["q"] is not None
 
 
 def test_time_stepping():
