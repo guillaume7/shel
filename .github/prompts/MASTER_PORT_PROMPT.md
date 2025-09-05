@@ -1,6 +1,6 @@
 ---
 title: "SHEL Python Port & Refactor Master Prompt"
-updated: 2025-09-05
+updated: 2025-09-06
 status: authoritative
 ---
 
@@ -78,9 +78,13 @@ Legend: Done = implemented & passing tests; In-Progress = partial / some tests; 
 | 7 | Closed (no-normal-flow) momentum BC | Done | Implemented solver-side helpers (`common/boundaries.apply_closed`), wired in ministep; tests. |
 | 7 | Free-slip momentum BC | Done | Implemented (`apply_freeslip`), wired in ministep; tests verify zero tangential gradient at walls. |
 | 7 | Per-side BC resolution and application | Done | Config-aware resolver + per-side application for momentum and eta (`common/stepper.py` + `common/boundaries.py`). |
-| 7 | Radiation (Sommerfeld) BC prototype | In-Progress | Per-side for momentum and eta; smoke test only; needs timing refinement and parity checks. |
-| 7 | Radiation (Flather) BC | In-Progress | Momentum prototype (requires eta_ext) + smoke test; integration policy for eta pending. |
-| 7 | Waterlevel BC variants | In-Progress | Eta radiative per-side path added; closed/freeslip via velocities; fuller coverage pending. |
+| 7 | Per-side BC resolution and application | Done | Config-aware resolver + per-side application for momentum and eta (`common/stepper.py`); legacy shim removed. |
+| 7 | Eta BC timing (pre/post) with post enforcement | Done | `stepper` supports pre-application and always-enforce post-step for stability; configurable via `eta_bc_stage`. |
+| 7 | Relaxation controls (eta and momentum) | Done | `boundary_eta_relax` and `boundary_momentum_relax` supported; Flather uses momentum relax (gamma). |
+| 7 | Sponge layer (cosine/linear taper) | Done | Optional post-step blending near OBCs: width/alpha/taper/apply_to; tests added. |
+| 7 | Radiation (Sommerfeld) BC prototype | In-Progress | Per-side for momentum and eta; smoke test only; timing/parity vs MATLAB pending. |
+| 7 | Radiation (Flather) BC | Done | Momentum + eta strategies implemented with relaxation; per-side wiring in stepper; examples added; MATLAB parity tuning pending. |
+| 7 | Waterlevel BC variants | In-Progress | Radiative/Flather eta paths implemented with relax; broader variant set pending. |
 | 7 | Tracer BC variants | Todo | Not started. |
 | 8 | Surface forcings (wind stress, pressure) | Todo | Scaffolding only. |
 | 8 | Bottom drag coefficient utilities | Todo | Not started. |
@@ -165,11 +169,11 @@ Golden-run artifacts stored under `tests/fixtures/golden/` with versioned JSON m
 - Checkpoint/restart facility (versioned state snapshots).
 
 ## 16. Active Near-Term Sprint Focus
-1. Boundary condition strategy base: migrate remaining solver helpers and stepper usage fully to strategies; add wall conservation/shear tests for no‑slip if adopted.
+1. Radiation BCs: finalize Sommerfeld timing (eta vs continuity ordering) and tune Flather/Sommerfeld coefficients for MATLAB parity; add comparison tests.
 2. Leapfrog integrator (+ Asselin filter) harness reusing current tendencies; parity and stability checks vs explicit Euler on short runs (inertial/gravity wave cases).
 3. Dynamic regression v2: time‑series baseline (E, V, eta_rms, u_rms) over N steps with per‑metric tolerances; versioned JSON manifest and generator.
-4. Radiation BCs: finalize Sommerfeld timing (eta vs continuity ordering) and add Flather variant; expand outlet tests and MATLAB comparison notes.
-5. Advection improvements: introduce 2nd‑order upwind option and unit tests (non‑oscillatory step, diffusion benchmark).
+4. Tracer BC strategies: design and implement initial closed/radiative variants with basic tests.
+5. Sponge enhancements: variable width per side, diagonal/2D tapers, and tests on non‑uniform H and active wave cases.
 
 ## 17. Change Log (Recent)
 - 2025-09-05: Consolidated prompts; added GUI phases; added divergence/shear/stretch diagnostics.
@@ -184,5 +188,6 @@ Golden-run artifacts stored under `tests/fixtures/golden/` with versioned JSON m
  - 2025-09-05: Introduced Boundary Condition strategy layer under `shel/model/boundary_conditions/` with registry and strategies (Closed, Free‑slip, Radiative/Sommerfeld). Bridged existing `solvers/common/boundaries.py` to use strategies. Added registry/dispatch tests. Full suite: 66 passed, 4 skipped (GUI).
  - 2025-09-05: Organized BC strategies into domain subpackages (`boundary_conditions/common`, `momentum`, `waterlevel`), migrated `model_runner` and `ministep/stepper` to strategy layer, removed legacy `boundary_conditions/boundary.py` and old solver shim `solvers/common/boundaries.py`. Full suite: 66 passed, 4 skipped (GUI).
    - 2025-09-05: Added `boundary_conditions/README.md` documenting strategy API, layout, and usage.
+ - 2025-09-06: Flather OBCs completed: momentum and eta strategies with relaxation; per-side application in `stepper` with eta timing (pre/post, always post-enforced). Examples added: `examples/python/flather_config_example.py` and `examples/python/flather_sponge_config_example.py` (cosine-tapered sponge, conservative params). Optional sponge layer implemented with width/alpha/taper/apply_to and tests. Full suite: 72 passed, 4 skipped (GUI).
 
 Maintainers: Update status table & change log in any PR modifying numerics, diagnostics, or architecture.

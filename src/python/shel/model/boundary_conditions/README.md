@@ -29,6 +29,21 @@ For Flather, pass eta_ext and eta_old to apply_side:
 
 - m = get_bc("flather")[0](); m.apply_side(U,V, side, U_old=U0, V_old=V0, H=H, g=g, dt=dt, dx=dx, dy=dy, eta_old=eta0, eta_ext=eta_boundary)
 
+Timing and relaxation
+- The stepper supports applying eta BCs either pre- or post-continuity via config key `eta_bc_stage` with values `"pre"` or `"post"` (default `post`).
+- For Flather eta, you can blend toward external elevation with `boundary_eta_relax` in [0,1]; 1.0 is pure Dirichlet, smaller values relax.
+- For Flather momentum, you can scale the normal-velocity correction with `boundary_momentum_relax` in [0,1]; 1.0 applies the full correction, smaller values soften it.
+
+Sponge layer (optional)
+- Enable a near‑boundary sponge to smooth the transition from external signals:
+  - `sponge.enabled`: bool
+  - `sponge.width`: integer number of cells inward to apply blending
+  - `sponge.alpha`: blend strength at the boundary (decays inward)
+  - `sponge.taper`: `"cosine"` (default) or `"linear"`
+  - `sponge.apply_to`: `"eta"`, `"momentum"`, or `"both"`
+- Eta sponge blends columns/rows toward the external boundary eta.
+- Momentum sponge relaxes interior normal velocity toward the boundary value to reduce gradients.
+
 Notes
 - Strategies are stateless; instantiate and reuse as needed.
 - Radiative timing for eta vs continuity is approximate in the ministep path and may be refined.

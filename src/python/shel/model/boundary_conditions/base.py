@@ -45,6 +45,7 @@ class MomentumBC(BoundaryCondition, ABC):
         dy: float | None = None,
     eta_old: Array | None = None,
     eta_ext: Array | None = None,
+    relax: float | None = None,
     ) -> None:
         """Apply to a single side in-place. Extra args optional per strategy."""
 
@@ -65,5 +66,6 @@ class EtaBC(BoundaryCondition, ABC):
         dt: float | None = None,
         dx: float | None = None,
         dy: float | None = None,
+    relax: float | None = None,
     ) -> None:
         """Apply to a single side in-place. Extra args optional per strategy."""

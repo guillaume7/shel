@@ -19,6 +19,7 @@ class RadiativeSommerfeldEtaBC(EtaBC):
         dt: float | None = None,
         dx: float | None = None,
         dy: float | None = None,
+        relax: float | None = None,
     ) -> None:
         assert eta_old is not None and H is not None
         assert g is not None and dt is not None and dx is not None and dy is not None
@@ -52,15 +53,18 @@ class FlatherEtaBC(EtaBC):
         dt: float | None = None,
         dx: float | None = None,
         dy: float | None = None,
+        relax: float | None = None,
     ) -> None:
         # Simple Dirichlet: if external eta provided, set boundary to it; otherwise no-op
         if eta_ext is None:
             return None
+        alpha = 1.0 if relax is None else float(relax)
+        alpha = 0.0 if alpha < 0.0 else (1.0 if alpha > 1.0 else alpha)
         if side == "west":
-            eta_next[:, 0] = eta_ext[:, 0]
+            eta_next[:, 0] = (1 - alpha) * eta_next[:, 0] + alpha * eta_ext[:, 0]
         elif side == "east":
-            eta_next[:, -1] = eta_ext[:, -1]
+            eta_next[:, -1] = (1 - alpha) * eta_next[:, -1] + alpha * eta_ext[:, -1]
         elif side == "south":
-            eta_next[0, :] = eta_ext[0, :]
+            eta_next[0, :] = (1 - alpha) * eta_next[0, :] + alpha * eta_ext[0, :]
         elif side == "north":
-            eta_next[-1, :] = eta_ext[-1, :]
+            eta_next[-1, :] = (1 - alpha) * eta_next[-1, :] + alpha * eta_ext[-1, :]

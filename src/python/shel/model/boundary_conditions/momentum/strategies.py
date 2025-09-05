@@ -79,9 +79,10 @@ class RadiativeSommerfeldBC(MomentumBC):
         g: float | None = None,
         dt: float | None = None,
         dx: float | None = None,
-        dy: float | None = None,
-        eta_old: Array | None = None,
-        eta_ext: Array | None = None,
+    dy: float | None = None,
+    eta_old: Array | None = None,
+    eta_ext: Array | None = None,
+    relax: float | None = None,
     ) -> None:
         assert U_old is not None and V_old is not None and H is not None
         assert g is not None and dt is not None and dx is not None and dy is not None
@@ -122,6 +123,7 @@ class FlatherBC(MomentumBC):
         dy: float | None = None,
         eta_old: Array | None = None,
         eta_ext: Array | None = None,
+        relax: float | None = None,
     ) -> None:
         # Minimal Flather: if external eta is not provided, no-op.
         if H is None or g is None or eta_old is None or eta_ext is None:
@@ -129,11 +131,16 @@ class FlatherBC(MomentumBC):
         c = mean_c_along_side(H, g, side)
         # Use mean H along the selected side to scale
         H_mean = mean_H_along_side(H, side)
+        gamma = 1.0 if relax is None else float(relax)
+        if gamma < 0.0:
+            gamma = 0.0
+        if gamma > 1.0:
+            gamma = 1.0
         if side in ("west", "east"):
             corr = (
-                (c / H_mean) * (eta_ext[:, 0] - eta_old[:, 0])
+                gamma * (c / H_mean) * (eta_ext[:, 0] - eta_old[:, 0])
                 if side == "west"
-                else (c / H_mean) * (eta_ext[:, -1] - eta_old[:, -1])
+                else gamma * (c / H_mean) * (eta_ext[:, -1] - eta_old[:, -1])
             )
             if U_old is not None:
                 if side == "west":
@@ -142,9 +149,9 @@ class FlatherBC(MomentumBC):
                     U[:, -1] = U_old[:, -1] + corr
         else:
             corr = (
-                (c / H_mean) * (eta_ext[0, :] - eta_old[0, :])
+                gamma * (c / H_mean) * (eta_ext[0, :] - eta_old[0, :])
                 if side == "south"
-                else (c / H_mean) * (eta_ext[-1, :] - eta_old[-1, :])
+                else gamma * (c / H_mean) * (eta_ext[-1, :] - eta_old[-1, :])
             )
             if V_old is not None:
                 if side == "south":
