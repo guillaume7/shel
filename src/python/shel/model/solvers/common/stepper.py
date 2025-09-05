@@ -11,7 +11,7 @@ from typing import Mapping, Any, Dict
 import numpy as np
 
 from .ministep import explicit_step
-from .boundaries import apply_momentum_per_side, apply_eta_per_side
+from shel.model.boundary_conditions import get_bc
 
 Array = np.ndarray
 
@@ -41,7 +41,7 @@ def resolve_bc_type_from_config(config: Mapping[str, Any] | None) -> str:
 def resolve_bc_sides_from_config(config: Mapping[str, Any] | None) -> Dict[str, str]:
     """Return a per-side BC mapping: {west,east,south,north} -> type.
 
-    Supported types: "closed", "freeslip", "radiative". Unknown entries default to
+    Supported types: "closed", "freeslip", "radiative", "flather". Unknown entries default to
     "closed". Missing config returns all-closed.
     """
     sides = {"west": "closed", "east": "closed", "south": "closed", "north": "closed"}
@@ -52,7 +52,7 @@ def resolve_bc_sides_from_config(config: Mapping[str, Any] | None) -> Dict[str, 
         return sides
     for k in sides.keys():
         val = str(bc_cfg.get(k, "closed")).lower()
-        if val in ("closed", "freeslip", "radiative"):
+        if val in ("closed", "freeslip", "radiative", "flather"):
             sides[k] = val
         else:
             sides[k] = "closed"
@@ -95,10 +95,44 @@ def explicit_step_with_config(
     )
     # Apply per-side overrides if present (e.g., radiative on one boundary)
     bc_sides = resolve_bc_sides_from_config(config)
-    apply_momentum_per_side(U_next, V_next, U, V, H, g, dt, dx, dy, bc_sides)
-    # Eta radiative update uses eta before continuity; we approximate using eta from entry
-    # Note: For full fidelity, ministep would need to apply eta BCs pre/post continuity consistently.
-    apply_eta_per_side(eta_next, eta, H, g, dt, dx, dy, bc_sides)
+    # Optional external eta per side for open boundaries (prototype input name)
+    eta_ext_map = None
+    if isinstance(config, dict):
+        eta_ext_map = config.get("boundary_eta_ext")  # expects dict side->2D array
+
+    # Momentum per-side
+    for side, bct in bc_sides.items():
+        m_cls, _ = get_bc(bct)
+        if m_cls is not None:
+            m_cls().apply_side(
+                U_next,
+                V_next,
+                side,
+                U_old=U,
+                V_old=V,
+                H=H,
+                g=g,
+                dt=dt,
+                dx=dx,
+                dy=dy,
+                eta_old=eta,
+                eta_ext=None if not isinstance(eta_ext_map, dict) else eta_ext_map.get(side),
+            )
+    # Eta per-side (radiative only for now)
+    for side, bct in bc_sides.items():
+        _, e_cls = get_bc(bct)
+    if e_cls is not None:
+            e_cls().apply_side_eta(
+                eta_next,
+                side,
+                eta_old=eta,
+        eta_ext=None if not isinstance(eta_ext_map, dict) else eta_ext_map.get(side),
+                H=H,
+                g=g,
+                dt=dt,
+                dx=dx,
+                dy=dy,
+            )
     return eta_next, U_next, V_next
 
 

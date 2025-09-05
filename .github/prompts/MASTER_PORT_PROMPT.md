@@ -74,10 +74,14 @@ Legend: Done = implemented & passing tests; In-Progress = partial / some tests; 
 | 5 | Minimal explicit one-step harness (pressure+advection+drag+visc [+ Coriolis opt]) | Done | `solvers/common/ministep.py`; closed-box volume conserved over few steps; optional f-plane Coriolis with inertial response test. |
 | 6 | Extended advection (2nd order upwind) | Todo | Future. |
 | 6 | Quadratic drag & biharmonic diffusion | Todo | Future. |
-| 7 | Boundary condition strategy base & registry | Todo | Directory scaffold only. |
-| 7 | Closed / No-slip momentum BC | Todo | Not started. |
-| 7 | Radiation (Sommerfeld/Flather) BC | Todo | Not started. |
-| 7 | Waterlevel & tracer BC variants | Todo | Not started. |
+| 7 | Boundary condition strategy base & registry | Done | New functional strategy API (`boundary_conditions/base.py`, `registry.py`, `strategies.py`) + package exports. |
+| 7 | Closed (no-normal-flow) momentum BC | Done | Implemented solver-side helpers (`common/boundaries.apply_closed`), wired in ministep; tests. |
+| 7 | Free-slip momentum BC | Done | Implemented (`apply_freeslip`), wired in ministep; tests verify zero tangential gradient at walls. |
+| 7 | Per-side BC resolution and application | Done | Config-aware resolver + per-side application for momentum and eta (`common/stepper.py` + `common/boundaries.py`). |
+| 7 | Radiation (Sommerfeld) BC prototype | In-Progress | Per-side for momentum and eta; smoke test only; needs timing refinement and parity checks. |
+| 7 | Radiation (Flather) BC | In-Progress | Momentum prototype (requires eta_ext) + smoke test; integration policy for eta pending. |
+| 7 | Waterlevel BC variants | In-Progress | Eta radiative per-side path added; closed/freeslip via velocities; fuller coverage pending. |
+| 7 | Tracer BC variants | Todo | Not started. |
 | 8 | Surface forcings (wind stress, pressure) | Todo | Scaffolding only. |
 | 8 | Bottom drag coefficient utilities | Todo | Not started. |
 | 8 | Energy/work rate validation tests | Todo | Needs solver loop. |
@@ -161,10 +165,10 @@ Golden-run artifacts stored under `tests/fixtures/golden/` with versioned JSON m
 - Checkpoint/restart facility (versioned state snapshots).
 
 ## 16. Active Near-Term Sprint Focus
-1. Boundary condition strategy base + Closed/No‑slip BC: implement strategy interfaces, apply in ministep, and add wall conservation/shear tests.
+1. Boundary condition strategy base: migrate remaining solver helpers and stepper usage fully to strategies; add wall conservation/shear tests for no‑slip if adopted.
 2. Leapfrog integrator (+ Asselin filter) harness reusing current tendencies; parity and stability checks vs explicit Euler on short runs (inertial/gravity wave cases).
 3. Dynamic regression v2: time‑series baseline (E, V, eta_rms, u_rms) over N steps with per‑metric tolerances; versioned JSON manifest and generator.
-4. Radiation BC scaffold (Sommerfeld/Flather) with a 1D outlet test; integrate behind a flag in the stepping harness.
+4. Radiation BCs: finalize Sommerfeld timing (eta vs continuity ordering) and add Flather variant; expand outlet tests and MATLAB comparison notes.
 5. Advection improvements: introduce 2nd‑order upwind option and unit tests (non‑oscillatory step, diffusion benchmark).
 
 ## 17. Change Log (Recent)
@@ -175,6 +179,10 @@ Golden-run artifacts stored under `tests/fixtures/golden/` with versioned JSON m
 - 2025-09-05: Minimal pressure gradient (T→U/V) and continuity (flux-form explicit Euler) implemented with tests, including closed-box volume conservation.
 - 2025-09-05: Added linear bottom drag and Laplacian diffusion tendencies with unit tests; Phase 5 core operators green.
 - 2025-09-05: Added minimal explicit one-step harness combining pressure, drag, diffusion; few-step closed-box volume conservation test passes.
-- 2025-09-05: Added multi-step dynamic golden baseline regression harness: generator `devops/scripts/generate_dynamic_golden.py`, baseline JSON `tests/python/golden/dynamic_baseline.json`, and regression test `tests/python/test_golden_dynamic.py`. Full suite: 56 passed, 4 skipped (GUI).
+- 2025-09-05: Added multi-step dynamic golden baseline regression harness: generator `devops/scripts/generate_dynamic_golden.py`, baseline JSON `tests/python/golden/dynamic_baseline.json`, and regression test `tests/python/test_golden_dynamic.py`.
+- 2025-09-05: Solver-side boundary conditions: closed (no-normal-flow) and free‑slip implemented and wired into `explicit_step`; per‑side BC resolution via config-aware stepper; radiative (Sommerfeld) prototype for momentum and eta with a minimal east‑outlet smoke test. Full suite: 63 passed, 4 skipped (GUI).
+ - 2025-09-05: Introduced Boundary Condition strategy layer under `shel/model/boundary_conditions/` with registry and strategies (Closed, Free‑slip, Radiative/Sommerfeld). Bridged existing `solvers/common/boundaries.py` to use strategies. Added registry/dispatch tests. Full suite: 66 passed, 4 skipped (GUI).
+ - 2025-09-05: Organized BC strategies into domain subpackages (`boundary_conditions/common`, `momentum`, `waterlevel`), migrated `model_runner` and `ministep/stepper` to strategy layer, removed legacy `boundary_conditions/boundary.py` and old solver shim `solvers/common/boundaries.py`. Full suite: 66 passed, 4 skipped (GUI).
+   - 2025-09-05: Added `boundary_conditions/README.md` documenting strategy API, layout, and usage.
 
 Maintainers: Update status table & change log in any PR modifying numerics, diagnostics, or architecture.

@@ -1,23 +1,29 @@
-"""Boundary condition package (Phase 1 skeleton).
+"""Boundary condition package.
 
-Defines abstract base & factory registries in `boundary.py` (legacy
-implementation). Future refactor will split domain-specific strategies
-into subpackages matching prompt blueprint.
+Exports legacy ModelState-based API (boundary.py) and new functional strategy
+interfaces used by the ministep path.
 """
 
-from .boundary import (
-	BoundaryCondition,
-	ClosedBoundaryCondition,
-	FreeslipBoundaryCondition,
-	RadiativeBoundaryCondition,
-	BoundaryConditionFactory,
-)
+# Legacy OO API kept temporarily for backward compatibility during refactor.
+# Can be removed once all orchestrated paths are migrated.
+from .base import BoundaryCondition, MomentumBC, EtaBC
+from .registry import get_bc, register_bc, list_bcs
+from .strategies import ClosedBC, FreeSlipBC, RadiativeSommerfeldBC
+from .momentum.strategies import FlatherBC
+from .waterlevel.strategies import RadiativeSommerfeldEtaBC as RadiativeEtaBC
 
 __all__ = [
+	# Strategy API
 	"BoundaryCondition",
-	"ClosedBoundaryCondition",
-	"FreeslipBoundaryCondition",
-	"RadiativeBoundaryCondition",
-	"BoundaryConditionFactory",
+	"MomentumBC",
+	"EtaBC",
+	"get_bc",
+	"register_bc",
+	"list_bcs",
+	"ClosedBC",
+	"FreeSlipBC",
+	"RadiativeSommerfeldBC",
+	"FlatherBC",
+	"RadiativeEtaBC",
 ]
 

@@ -17,7 +17,7 @@ from numpy.typing import NDArray
 
 from shel.model.state import ModelState
 from shel.model.solvers.factory import SolverFactory
-from shel.model.boundary_conditions.boundary import BoundaryConditionFactory
+from shel.model.boundary_conditions import get_bc
 from shel.model.initial_conditions.waterlevel import WaterlevelInitialCondition
 from shel.model.initial_conditions.bottom import BathymetryInitialCondition
 from shel.io import netcdf_reader, parquet_reader
@@ -61,13 +61,17 @@ class ModelRunner:
         solver_type = config["model"].get("solver", "leapfrog")
         self.solver = SolverFactory.create(solver_type, config)
 
-        # Set up boundary conditions
-        self.boundary_conditions = []
-        boundary_types = config.get("boundary_conditions", {})
-        for boundary_type, value in boundary_types.items():
-            if boundary_type in ["north", "south", "east", "west"]:
-                bc = BoundaryConditionFactory.create(value, config)
-                self.boundary_conditions.append(bc)
+        # Prepare boundary condition strategies per side using the new registry
+        self.bc_sides = self._resolve_bc_sides_from_config(config)
+        # Instantiate one strategy per type (stateless strategies can be reused)
+        self._bc_momentum_by_type = {}
+        self._bc_eta_by_type = {}
+        for bct in set(self.bc_sides.values()):
+            m_cls, e_cls = get_bc(bct)
+            if m_cls is not None:
+                self._bc_momentum_by_type[bct] = m_cls()
+            if e_cls is not None:
+                self._bc_eta_by_type[bct] = e_cls()
 
         # Set up ZeroMQ for real-time updates
         self.zmq_context = None
@@ -128,9 +132,8 @@ class ModelRunner:
             # Advance the model by one time step
             self.solver.step(self.state)
 
-            # Apply boundary conditions
-            for bc in self.boundary_conditions:
-                bc.apply(self.state)
+            # Apply boundary conditions per side using strategy layer
+            self._apply_boundary_conditions_strategies()
 
             # Output at specified intervals
             if step % output_interval == 0:
@@ -176,6 +179,57 @@ class ModelRunner:
             f"Model run completed: {num_steps} steps in {total_time:.1f}s "
             f"({num_steps/total_time:.1f} steps/s)"
         )
+
+    @staticmethod
+    def _resolve_bc_sides_from_config(config: Dict[str, Any]) -> Dict[str, str]:
+        sides = {"west": "closed", "east": "closed", "south": "closed", "north": "closed"}
+        bc_cfg = config.get("boundary_conditions", {}) if isinstance(config, dict) else {}
+        if not isinstance(bc_cfg, dict):
+            return sides
+        for k in sides.keys():
+            val = str(bc_cfg.get(k, "closed")).lower()
+            if val in ("closed", "freeslip", "radiative"):
+                sides[k] = val
+            else:
+                sides[k] = "closed"
+        return sides
+
+    def _apply_boundary_conditions_strategies(self) -> None:
+        s = self.state
+        dt = s.timestep
+        dx, dy = s.grid.dx, s.grid.dy
+        g = s.gravity
+        H = s.H
+        # Momentum per-side
+        for side, bct in self.bc_sides.items():
+            m = self._bc_momentum_by_type.get(bct)
+            if m is not None:
+                m.apply_side(
+                    s.u_new,
+                    s.v_new,
+                    side,
+                    U_old=s.u,
+                    V_old=s.v,
+                    H=H,
+                    g=g,
+                    dt=dt,
+                    dx=dx,
+                    dy=dy,
+                )
+        # Eta per-side
+        for side, bct in self.bc_sides.items():
+            e = self._bc_eta_by_type.get(bct)
+            if e is not None:
+                e.apply_side_eta(
+                    s.eta_new,
+                    side,
+                    eta_old=s.eta,
+                    H=H,
+                    g=g,
+                    dt=dt,
+                    dx=dx,
+                    dy=dy,
+                )
 
     def _write_output(self, step: int, output_dir: str, is_final: bool = False) -> None:
         """

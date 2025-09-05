@@ -19,7 +19,7 @@ from shel.model.solvers.momentum.diffusion import viscous_tendency
 from shel.model.solvers.waterlevel.continuity import update_free_surface
 from shel.model.solvers.momentum.advection import advect_momentum
 from shel.model.solvers.common.stencils import avg_x_t_to_u, avg_y_t_to_v
-from shel.model.solvers.common.boundaries import apply_closed, apply_freeslip
+from shel.model.boundary_conditions import get_bc
 
 Array = np.ndarray
 
@@ -101,14 +101,12 @@ def explicit_step(
     U_next = U + dt * dU
     V_next = V + dt * dV
 
-    # Apply boundary conditions (default: closed box)
-    if bc_type == "closed":
-        apply_closed(U_next, V_next)
-    elif bc_type == "freeslip":
-        apply_freeslip(U_next, V_next)
-    else:
-        # For unrecognized BC types, default to closed to remain safe
-        apply_closed(U_next, V_next)
+    # Apply boundary conditions via strategy layer (default closed)
+    m_cls, _ = get_bc(bc_type)
+    if m_cls is None:
+        m_cls, _ = get_bc("closed")
+    if m_cls is not None:
+        m_cls().apply_uniform(U_next, V_next)
 
     # Update free surface using flux divergence of updated velocities
     eta_next = update_free_surface(eta, H, U_next, V_next, dt, dx, dy)
