@@ -66,7 +66,8 @@ def test_field_diagnostics_basic():
     state.set_initial_velocities(u=u)
 
     fields = FieldDiagnostics.as_dict(state.u, state.v, state.grid)
-    assert set(fields.keys()) == {"vorticity", "okubo_weiss"}
+    # Allow additional diagnostics, but require these two at minimum
+    assert {"vorticity", "okubo_weiss"}.issubset(set(fields.keys()))
     vort = fields["vorticity"]
     ow = fields["okubo_weiss"]
     assert vort.shape == (cfg["grid"]["ny"] + 1, cfg["grid"]["nx"] + 1)

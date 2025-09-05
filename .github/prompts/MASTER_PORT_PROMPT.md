@@ -65,12 +65,13 @@ Legend: Done = implemented & passing tests; In-Progress = partial / some tests; 
 | 4 | Global time-series accumulator (`diagnostics/time_series.py`) | Done | `GlobalAccumulator` + tests. |
 | 4 | Integrated diagnostics (energy, enstrophy, potential enstrophy, volume) | Done | `integrated.py`; expand regression harness. |
 | 5 | Common stencils & interpolation module | Done | `solvers/common/stencils.py` with T↔U/V averages, ∂T/∂x|U, ∂T/∂y|V, div(U,V)@T; tests added. |
-| 5 | Momentum advection (centered, upwind baseline) | Todo | Not started. |
+| 5 | Momentum advection (centered, upwind baseline) | Done | Centered advection with cross-stagger interpolation; unit tests for zero-advection cases. |
 | 5 | Pressure gradient module | Done | Minimal T→U/V gradient; unit tests on linear eta. |
 | 5 | Diffusion (Laplacian viscosity) | Done | Minimal 5-point Laplacian tendencies; unit tests (linear zero, quadratic constant). |
 | 5 | Friction (linear drag) | Done | Linear bottom drag tendencies; unit test. |
 | 5 | Continuity / free-surface update (flux-form) | Done | Explicit Euler prototype with flux divergence; volume conservation test in closed box. |
 | 5 | One-step regression vs MATLAB tendencies | Todo | Blocked by solver code. |
+| 5 | Minimal explicit one-step harness (pressure+advection+drag+visc [+ Coriolis opt]) | Done | `solvers/common/ministep.py`; closed-box volume conserved over few steps; optional f-plane Coriolis with inertial response test. |
 | 6 | Extended advection (2nd order upwind) | Todo | Future. |
 | 6 | Quadratic drag & biharmonic diffusion | Todo | Future. |
 | 7 | Boundary condition strategy base & registry | Todo | Directory scaffold only. |
@@ -89,8 +90,8 @@ Legend: Done = implemented & passing tests; In-Progress = partial / some tests; 
 | 11 | Performance profiling harness | Todo | Post solver parity. |
 | 11 | Numba/CuPy acceleration layer | Todo | Future opt. |
 | 12 | Documentation updates (dev guide, parity examples) | In-Progress | Prompt consolidated; dev guide pending. |
-| * | Numerical fidelity checklist automated test | Done | Static snapshot baseline in place (`test_golden_static.py`); dynamic golden run pending solver. |
-| * | Mass & energy conservation regression (closed box) | Todo | After minimal solver. |
+| * | Numerical fidelity checklist automated test | Done | Static snapshot baseline (`test_golden_static.py`) and dynamic golden baseline added (`test_golden_dynamic.py` + generator + JSON). |
+| * | Mass & energy conservation regression (closed box) | Done | Short-run volume constancy and energy damping tests added for the explicit ministep. |
 | * | Potential enstrophy conservation (inviscid) | Todo | After solver. |
 | G1 | GUI framework scaffold (PyQt main window) | Todo | Not created. |
 | G2 | Pub/Sub protocol (ZeroMQ) design & message schema | Todo | Needs spec + prototype. |
@@ -160,10 +161,11 @@ Golden-run artifacts stored under `tests/fixtures/golden/` with versioned JSON m
 - Checkpoint/restart facility (versioned state snapshots).
 
 ## 16. Active Near-Term Sprint Focus
-1. Stencils module (`solvers/common/stencils.py`) + linear field derivative tests.
-2. Minimal pressure+continuity prototype enabling first dynamic step.
-3. Conservation test harness (volume & energy over first N steps in closed box).
-4. Define ZeroMQ message protocol doc stub (Phase G2 start).
+1. Boundary condition strategy base + Closed/No‑slip BC: implement strategy interfaces, apply in ministep, and add wall conservation/shear tests.
+2. Leapfrog integrator (+ Asselin filter) harness reusing current tendencies; parity and stability checks vs explicit Euler on short runs (inertial/gravity wave cases).
+3. Dynamic regression v2: time‑series baseline (E, V, eta_rms, u_rms) over N steps with per‑metric tolerances; versioned JSON manifest and generator.
+4. Radiation BC scaffold (Sommerfeld/Flather) with a 1D outlet test; integrate behind a flag in the stepping harness.
+5. Advection improvements: introduce 2nd‑order upwind option and unit tests (non‑oscillatory step, diffusion benchmark).
 
 ## 17. Change Log (Recent)
 - 2025-09-05: Consolidated prompts; added GUI phases; added divergence/shear/stretch diagnostics.
@@ -172,5 +174,7 @@ Golden-run artifacts stored under `tests/fixtures/golden/` with versioned JSON m
 - 2025-09-05: Phase 5 start — stencils module implemented with unit tests (linear field derivatives, averaging round-trip, zero divergence for solid-body case).
 - 2025-09-05: Minimal pressure gradient (T→U/V) and continuity (flux-form explicit Euler) implemented with tests, including closed-box volume conservation.
 - 2025-09-05: Added linear bottom drag and Laplacian diffusion tendencies with unit tests; Phase 5 core operators green.
+- 2025-09-05: Added minimal explicit one-step harness combining pressure, drag, diffusion; few-step closed-box volume conservation test passes.
+- 2025-09-05: Added multi-step dynamic golden baseline regression harness: generator `devops/scripts/generate_dynamic_golden.py`, baseline JSON `tests/python/golden/dynamic_baseline.json`, and regression test `tests/python/test_golden_dynamic.py`. Full suite: 56 passed, 4 skipped (GUI).
 
 Maintainers: Update status table & change log in any PR modifying numerics, diagnostics, or architecture.
