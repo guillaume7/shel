@@ -5,15 +5,13 @@ Pytest configuration file.
 import os
 import sys
 
+import numpy as np
+import pytest
+
 # Add the src directory to the path so we can import the package
 sys.path.insert(
     0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../src/python"))
 )
-
-import numpy as np
-
-# Import common fixtures here
-import pytest
 
 
 @pytest.fixture
@@ -32,7 +30,7 @@ def sample_grid():
 
 
 @pytest.fixture
-def sample_bathymetry(sample_grid):
+def sample_bathymetry(sample_grid):  # pylint: disable=redefined-outer-name
     """
     Return a sample bathymetry field for testing.
     """

@@ -4,6 +4,8 @@ Tests for the GUI components.
 Note: Temporarily skipped in headless CI until GUI phases (G1–G6) are tackled.
 """
 
+from typing import TYPE_CHECKING, Any
+
 import pytest
 
 try:  # pragma: no cover - optional GUI dependency
@@ -19,14 +21,31 @@ pytestmark = pytest.mark.skip(
     reason="GUI tests disabled until GUI phases are implemented"
 )
 
+MainWindow: Any
+ParameterPanel: Any
+PlotManager: Any
+
+if TYPE_CHECKING:
+    # Type-only imports for static analyzers
+    from shel.gui.main_window import MainWindow as _T_MainWindow  # noqa: F401
+    from shel.gui.parameters import ParameterPanel as _T_ParameterPanel  # noqa: F401
+    from shel.gui.visualization import PlotManager as _T_PlotManager  # noqa: F401
+
 if _PYQT_AVAILABLE:
-    from shel.gui.main_window import MainWindow  # type: ignore
-    from shel.gui.parameters import ParameterPanel  # type: ignore
-    from shel.gui.visualization import PlotManager  # type: ignore
+    # Conditional imports guarded by skip; acceptable in tests
+    from shel.gui.main_window import (
+        MainWindow,  # type: ignore  # pylint: disable=import-error
+    )
+    from shel.gui.parameters import (
+        ParameterPanel,  # type: ignore  # pylint: disable=import-error
+    )
+    from shel.gui.visualization import (
+        PlotManager,  # type: ignore  # pylint: disable=import-error
+    )
 
 
 @pytest.fixture
-def app():
+def app():  # pylint: disable=redefined-outer-name
     """Fixture for Qt application (skipped if PyQt5 unavailable)."""
     if not _PYQT_AVAILABLE:
         pytest.skip("PyQt5 not installed")
@@ -35,20 +54,20 @@ def app():
 
 
 @pytest.fixture
-def main_window(app):
+def main_window(app):  # pylint: disable=redefined-outer-name
     """Fixture for main window."""
     return MainWindow()  # type: ignore[name-defined]
 
 
 @pytest.mark.skipif(not _PYQT_AVAILABLE, reason="PyQt5 not installed")
-def test_main_window_creation(main_window):
+def test_main_window_creation(main_window):  # pylint: disable=redefined-outer-name
     """Test that the main window can be created."""
     assert main_window is not None
     assert main_window.windowTitle() == "SHEL - SHallow-water numerical modEL"
 
 
 @pytest.mark.skipif(not _PYQT_AVAILABLE, reason="PyQt5 not installed")
-def test_parameter_panel(app):
+def test_parameter_panel(app):  # pylint: disable=redefined-outer-name
     """Test that the parameter panel can be created and initialized."""
     panel = ParameterPanel()  # type: ignore[name-defined]
 
@@ -67,7 +86,7 @@ def test_parameter_panel(app):
 
 
 @pytest.mark.skipif(not _PYQT_AVAILABLE, reason="PyQt5 not installed")
-def test_plot_manager(app):
+def test_plot_manager(app):  # pylint: disable=redefined-outer-name
     """Test that the plot manager can be created and initialized."""
     plot_manager = PlotManager()  # type: ignore[name-defined]
 
@@ -81,7 +100,7 @@ def test_plot_manager(app):
 
 
 @pytest.mark.skipif(not _PYQT_AVAILABLE, reason="PyQt5 not installed")
-def test_parameter_changes(app):
+def test_parameter_changes(app):  # pylint: disable=redefined-outer-name
     """Test that parameter changes are tracked."""
     panel = ParameterPanel()  # type: ignore[name-defined]
 
