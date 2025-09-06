@@ -89,6 +89,11 @@ class ModelControlPanel(QWidget):
 
     def run_model(self) -> None:
         """Run the model."""
+
+        if not self.main_window:
+            logger.error("Main window reference is not set.")
+            return
+
         # Get configuration from the parameter panel
         config: Dict[str, Any] = self.main_window.parameter_panel.get_config()
 
@@ -160,7 +165,7 @@ class ModelControlPanel(QWidget):
 
     def stop_model(self) -> None:
         """Stop the model."""
-        if self.process and self.process.state() != QProcess.NotRunning:
+        if self.process and self.process.state() != cast(Any, QProcess).NotRunning:
             # Confirm with user
             reply = QMessageBox.question(
                 self,

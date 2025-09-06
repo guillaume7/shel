@@ -8,14 +8,14 @@ to interact with the model, visualize results, and set parameters.
 import logging
 import sys
 from functools import partial
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple, cast
 
 import numpy as np
 import zmq
 
 # Matplotlib widgets are handled within PlotManager; no direct imports needed here
 from PyQt5.QtCore import QSettings, Qt, QThread, QTimer, pyqtSignal
-from PyQt5.QtGui import QFont, QIcon
+from PyQt5.QtGui import QCloseEvent, QFont, QIcon
 from PyQt5.QtWidgets import (
     QAction,
     QApplication,
@@ -30,11 +30,14 @@ from PyQt5.QtWidgets import (
     QLabel,
     QLineEdit,
     QMainWindow,
+    QMenu,
+    QMenuBar,
     QMessageBox,
     QProgressBar,
     QPushButton,
     QSlider,
     QSpinBox,
+    QStatusBar,
     QTabWidget,
     QVBoxLayout,
     QWidget,
@@ -104,7 +107,8 @@ class MainWindow(QMainWindow):
         control_layout.addWidget(self.model_control)
 
         # Add status bar
-        self.statusBar().showMessage("Ready")
+        self.status_bar = cast("QStatusBar", self.statusBar())
+        self.status_bar.showMessage("Ready")
 
         # Set up ZeroMQ subscriber for model updates
         self.message_subscriber = None
@@ -116,10 +120,17 @@ class MainWindow(QMainWindow):
         # Load settings
         self.load_settings()
 
+    def _on_exit_triggered(self):
+        """Handle exit action triggered."""
+        self.close()
+
     def create_menus(self):
         """Create menu bar with actions."""
+        # Get menu bar with proper typing
+        self.menu_bar = cast("QMenuBar", self.menuBar())
+
         # File menu
-        file_menu = self.menuBar().addMenu("&File")
+        file_menu = cast("QMenu", self.menu_bar.addMenu("&File"))
 
         # New configuration
         new_action = QAction("&New", self)
@@ -148,7 +159,7 @@ class MainWindow(QMainWindow):
         file_menu.addSeparator()
 
         # Export menu
-        export_menu = file_menu.addMenu("&Export")
+        export_menu = cast("QMenu", file_menu.addMenu("&Export"))
 
         # Export plot as image
         export_image_action = QAction("&Image...", self)
@@ -165,11 +176,11 @@ class MainWindow(QMainWindow):
         # Exit action
         exit_action = QAction("E&xit", self)
         exit_action.setShortcut("Ctrl+Q")
-        exit_action.triggered.connect(self.close)
+        exit_action.triggered.connect(self._on_exit_triggered)
         file_menu.addAction(exit_action)
 
         # View menu
-        view_menu = self.menuBar().addMenu("&View")
+        view_menu = cast("QMenu", self.menu_bar.addMenu("&View"))
 
         # Toggle parameter panel
         toggle_params_action = QAction("&Parameters", self)
@@ -186,7 +197,7 @@ class MainWindow(QMainWindow):
         view_menu.addAction(toggle_control_action)
 
         # Plot type submenu
-        plot_type_menu = view_menu.addMenu("&Plot Type")
+        plot_type_menu = cast("QMenu", view_menu.addMenu("&Plot Type"))
 
         for plot_type in self.plot_manager.available_plots:
             plot_action = QAction(plot_type, self)
@@ -199,7 +210,7 @@ class MainWindow(QMainWindow):
             plot_type_menu.addAction(plot_action)
 
         # Help menu
-        help_menu = self.menuBar().addMenu("&Help")
+        help_menu = cast("QMenu", self.menu_bar.addMenu("&Help"))
 
         # About action
         about_action = QAction("&About", self)
@@ -239,7 +250,7 @@ class MainWindow(QMainWindow):
         volume_str = f"{message.get('volume', 0):.6e}"
 
         status = f"Time: {time_str}s | Step: {step_str} | Energy: {energy_str} | Volume: {volume_str}"
-        self.statusBar().showMessage(status)
+        self.status_bar.showMessage(status)
 
         # Update model control panel
         self.model_control.update_status(message)
@@ -271,7 +282,7 @@ class MainWindow(QMainWindow):
         self.current_config_path = None
 
         # Update status
-        self.statusBar().showMessage("New configuration created")
+        self.status_bar.showMessage("New configuration created")
 
     def open_configuration(self):
         """Open a configuration file."""
@@ -293,7 +304,7 @@ class MainWindow(QMainWindow):
                 self.current_config_path = file_path
 
                 # Update status
-                self.statusBar().showMessage(f"Loaded configuration from {file_path}")
+                self.status_bar.showMessage(f"Loaded configuration from {file_path}")
             except Exception as e:
                 QMessageBox.critical(
                     self, "Error", f"Failed to load configuration: {str(e)}"
@@ -303,7 +314,7 @@ class MainWindow(QMainWindow):
         """Save the current configuration."""
         if self.current_config_path:
             self.parameter_panel.save_to_file(self.current_config_path)
-            self.statusBar().showMessage(
+            self.status_bar.showMessage(
                 f"Saved configuration to {self.current_config_path}"
             )
         else:
@@ -318,7 +329,7 @@ class MainWindow(QMainWindow):
         if file_path:
             self.parameter_panel.save_to_file(file_path)
             self.current_config_path = file_path
-            self.statusBar().showMessage(f"Saved configuration to {file_path}")
+            self.status_bar.showMessage(f"Saved configuration to {file_path}")
 
     def export_image(self):
         """Export the current plot as an image."""
@@ -331,7 +342,7 @@ class MainWindow(QMainWindow):
 
         if file_path:
             self.plot_manager.export_current_plot(file_path)
-            self.statusBar().showMessage(f"Exported image to {file_path}")
+            self.status_bar.showMessage(f"Exported image to {file_path}")
 
     def export_animation(self):
         """Export an animation of the model run."""
@@ -349,7 +360,7 @@ class MainWindow(QMainWindow):
             # Export animation
             # self.plot_manager.export_animation(file_path, options)
 
-            self.statusBar().showMessage(f"Exported animation to {file_path}")
+            self.status_bar.showMessage(f"Exported animation to {file_path}")
 
     def check_save_current(self):
         """
@@ -425,11 +436,14 @@ class MainWindow(QMainWindow):
         # Save current plot type
         settings.setValue("plotType", self.plot_manager.current_plot_type)
 
-    def closeEvent(self, event):
+    def closeEvent(self, a0: Optional["QCloseEvent"]) -> None:
         """Handle window close event."""
+        if a0 is None:
+            return
+
         # Check if there are unsaved changes
         if not self.check_save_current():
-            event.ignore()
+            a0.ignore()
             return
 
         # Save settings
@@ -441,7 +455,7 @@ class MainWindow(QMainWindow):
             self.message_subscriber.wait()
 
         # Accept the event
-        event.accept()
+        a0.accept()
 
 
 def main():

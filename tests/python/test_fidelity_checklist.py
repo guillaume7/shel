@@ -32,12 +32,12 @@ def test_repeated_diagnostics_idempotent():
     )
     diag1 = IntegratedDiagnostics.as_dict(u, v, eta, H, g, 9.81, f)
     diag2 = IntegratedDiagnostics.as_dict(u, v, eta, H, g, 9.81, f)
-    for k, v in diag1.items():
-        assert np.isclose(v, diag2[k], rtol=0, atol=0)
+    for key, diag_val in diag1.items():
+        assert np.isclose(diag_val, diag2[key], rtol=0, atol=0)
     fields1 = FieldDiagnostics.as_dict(u, v, g)
     fields2 = FieldDiagnostics.as_dict(u, v, g)
-    for k, v in fields1.items():
-        assert np.allclose(v, fields2[k], rtol=0, atol=0)
+    for key, field_val in fields1.items():
+        assert np.allclose(field_val, fields2[key], rtol=0, atol=0)
     # PV consistency
     pv1 = potential_vorticity(u, v, H, f, g)
     pv2 = potential_vorticity(u, v, H, f, g)
