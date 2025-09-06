@@ -7,13 +7,13 @@ to interact with the model, visualize results, and set parameters.
 """
 import logging
 import sys
+from functools import partial
 from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 import zmq
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
-from matplotlib.figure import Figure
+
+# Matplotlib widgets are handled within PlotManager; no direct imports needed here
 from PyQt5.QtCore import QSettings, Qt, QThread, QTimer, pyqtSignal
 from PyQt5.QtGui import QFont, QIcon
 from PyQt5.QtWidgets import (
@@ -40,7 +40,6 @@ from PyQt5.QtWidgets import (
     QWidget,
 )
 
-from shel.gui.model_control import ModelControlPanel
 from shel.gui.parameters import ParameterPanel
 from shel.gui.utils import MessageSubscriber
 from shel.gui.visualization import PlotManager
@@ -96,7 +95,11 @@ class MainWindow(QMainWindow):
         self.parameter_panel = ParameterPanel(self)
         control_layout.addWidget(self.parameter_panel)
 
-        # Add model control panel
+        # Add model control panel (local import to avoid cyclic import during analysis)
+        from shel.gui.model_control import (
+            ModelControlPanel,  # pylint: disable=import-outside-toplevel
+        )
+
         self.model_control = ModelControlPanel(self)
         control_layout.addWidget(self.model_control)
 
@@ -172,18 +175,14 @@ class MainWindow(QMainWindow):
         toggle_params_action = QAction("&Parameters", self)
         toggle_params_action.setCheckable(True)
         toggle_params_action.setChecked(True)
-        toggle_params_action.triggered.connect(
-            lambda checked: self.parameter_panel.setVisible(checked)
-        )
+        toggle_params_action.triggered.connect(self.parameter_panel.setVisible)
         view_menu.addAction(toggle_params_action)
 
         # Toggle control panel
         toggle_control_action = QAction("&Control Panel", self)
         toggle_control_action.setCheckable(True)
         toggle_control_action.setChecked(True)
-        toggle_control_action.triggered.connect(
-            lambda checked: self.model_control.setVisible(checked)
-        )
+        toggle_control_action.triggered.connect(self.model_control.setVisible)
         view_menu.addAction(toggle_control_action)
 
         # Plot type submenu
@@ -195,7 +194,7 @@ class MainWindow(QMainWindow):
             if plot_type == self.plot_manager.current_plot_type:
                 plot_action.setChecked(True)
             plot_action.triggered.connect(
-                lambda checked, pt=plot_type: self.plot_manager.set_plot_type(pt)
+                partial(self.plot_manager.set_plot_type, plot_type)
             )
             plot_type_menu.addAction(plot_action)
 
@@ -372,7 +371,7 @@ class MainWindow(QMainWindow):
             if reply == QMessageBox.Save:
                 self.save_configuration()
                 return True
-            elif reply == QMessageBox.Cancel:
+            if reply == QMessageBox.Cancel:
                 return False
 
         return True

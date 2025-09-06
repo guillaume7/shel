@@ -9,7 +9,7 @@ import logging
 import os
 import sys
 import tempfile
-from typing import Any, Dict, List, Optional, Tuple, Union, cast
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple, Union, cast
 
 import yaml
 from PyQt5.QtCore import QProcess, Qt, QTimer
@@ -23,6 +23,9 @@ from PyQt5.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
+
+if TYPE_CHECKING:  # Avoid runtime import to prevent cyclic import with main_window
+    from shel.gui.main_window import MainWindow  # noqa: F401
 
 logger = logging.getLogger(__name__)
 
@@ -45,10 +48,8 @@ class ModelControlPanel(QWidget):
         """Initialize the model control panel."""
         super().__init__(parent)
 
-        # Store reference to main window
-        from shel.gui.main_window import MainWindow
-
-        self.main_window: Optional[MainWindow] = cast(MainWindow, parent)
+        # Store reference to main window (typed only for checkers; avoid runtime import)
+        self.main_window: Optional["MainWindow"] = cast("MainWindow", parent)
 
         # Set up the layout
         layout = QVBoxLayout(self)
