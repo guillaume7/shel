@@ -41,6 +41,42 @@ The codebase is organized as follows:
 
 > **Important Note**: Currently, `model_handles.m` is the de-facto working implementation of the numerical model. The other files represent an ongoing refactoring effort aimed at better structuring the codebase, but they have not been fully tested. The ultimate goal is to port both the GUI and the restructured model to Python to enable running the model without requiring a MATLAB license.
 
+### Python Project Layout (Domains)
+- src/python/shel/
+   - model/
+      - boundary_conditions/
+         - base.py, registry.py, strategies.py
+         - common/, momentum/, waterlevel/, tracer/
+      - grid/
+         - masks.py, metrics and geometry helpers
+      - initial_conditions/
+         - elevation/, velocity/, tracer/, bathymetry/
+         - builder utilities (e.g., build_initial_state)
+      - solvers/
+         - common/
+            - stencils.py, ministep.py, stepper.py
+         - momentum/
+            - pressure.py, diffusion.py, friction.py, advection.py
+         - waterlevel/
+            - continuity.py
+         - time/
+            - asselin.py, leapfrog.py (time steppers and filters)
+      - diagnostics/
+         - fields (vorticity, divergence, shear, stretch, PV), integrated (energy, enstrophy, volume), time_series
+      - state/
+         - state builders/validators and serialization
+      - outputs/
+         - writers/exporters (stubs)
+      - forcings/
+         - surface and bottom (stubs)
+   - gui.py and run.py (Python front-ends)
+- examples/python/
+   - flather_config_example.py, flather_sponge_config_example.py
+- tests/python/
+   - unit, integration, regression tests per domain
+
+Key policy: keep time integration algorithms under `shel/model/solvers/time/` and reuse utilities (e.g., Asselin filter) instead of duplicating code elsewhere. Prefer strategy/registry patterns for interchangeable components.
+
 ## Key Features
 1. **Multiple Numerical Schemes**: Implements the shallow water equations using an Arakawa C-grid with a leapfrog and central differences scheme, and provides extensibility for other schemes.
 

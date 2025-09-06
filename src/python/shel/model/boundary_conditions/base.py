@@ -69,3 +69,26 @@ class EtaBC(BoundaryCondition, ABC):
     relax: float | None = None,
     ) -> None:
         """Apply to a single side in-place. Extra args optional per strategy."""
+
+
+class TracerBC(BoundaryCondition, ABC):
+    """Passive tracer (T-grid) boundary condition strategy.
+
+    Minimal interface for per-side updates. Implementations may choose simple
+    zero-gradient copies or more advanced radiative/advective behavior.
+    """
+
+    @abstractmethod
+    def apply_side_tracer(
+        self,
+        C: Array,
+        side: str,
+        *,
+        C_old: Array | None = None,
+        U: Array | None = None,
+        V: Array | None = None,
+        dt: float | None = None,
+        dx: float | None = None,
+        dy: float | None = None,
+    ) -> None:
+        """Apply to a single side in-place for tracer C."""

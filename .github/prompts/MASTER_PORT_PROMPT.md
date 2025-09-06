@@ -82,14 +82,14 @@ Legend: Done = implemented & passing tests; In-Progress = partial / some tests; 
 | 7 | Eta BC timing (pre/post) with post enforcement | Done | `stepper` supports pre-application and always-enforce post-step for stability; configurable via `eta_bc_stage`. |
 | 7 | Relaxation controls (eta and momentum) | Done | `boundary_eta_relax` and `boundary_momentum_relax` supported; Flather uses momentum relax (gamma). |
 | 7 | Sponge layer (cosine/linear taper) | Done | Optional post-step blending near OBCs: width/alpha/taper/apply_to; tests added. |
-| 7 | Radiation (Sommerfeld) BC prototype | In-Progress | Per-side for momentum and eta; smoke test only; timing/parity vs MATLAB pending. |
+| 7 | Radiation (Sommerfeld) BC prototype | Done | Per-side for momentum and eta; exact formula tests for both; pulse propagation check; parity tuning vs MATLAB reserved. |
 | 7 | Radiation (Flather) BC | Done | Momentum + eta strategies implemented with relaxation; per-side wiring in stepper; examples added; MATLAB parity tuning pending. |
-| 7 | Waterlevel BC variants | In-Progress | Radiative/Flather eta paths implemented with relax; broader variant set pending. |
-| 7 | Tracer BC variants | Todo | Not started. |
+| 7 | Waterlevel BC variants | Done | Radiative, Flather, and Dirichlet eta variants supported via strategies & config. |
+| 7 | Tracer BC variants | Done | Closed and radiative tracer BC strategies registered; stepper helper + minimal tracer step apply BCs; tests added. |
 | 8 | Surface forcings (wind stress, pressure) | Todo | Scaffolding only. |
 | 8 | Bottom drag coefficient utilities | Todo | Not started. |
 | 8 | Energy/work rate validation tests | Todo | Needs solver loop. |
-| 9 | Leapfrog integrator + Asselin filter | Todo | Not implemented. |
+| 9 | Leapfrog integrator + Asselin filter | Done | Centralized under `solvers/time` with Asselin filter; config-aware wrapper applies per-side BCs and sponge; smoke tests green. |
 | 9 | Orchestrated solver refactor (`Schemes` bundle) | Todo | Await solver components. |
 | 9 | Multi-step regression parity vs MATLAB | Todo | Blocked until solver. |
 | 10 | Output manager & scheduling policy | Todo | Scaffold only. |
@@ -169,11 +169,11 @@ Golden-run artifacts stored under `tests/fixtures/golden/` with versioned JSON m
 - Checkpoint/restart facility (versioned state snapshots).
 
 ## 16. Active Near-Term Sprint Focus
-1. Radiation BCs: finalize Sommerfeld timing (eta vs continuity ordering) and tune Flather/Sommerfeld coefficients for MATLAB parity; add comparison tests.
-2. Leapfrog integrator (+ Asselin filter) harness reusing current tendencies; parity and stability checks vs explicit Euler on short runs (inertial/gravity wave cases).
-3. Dynamic regression v2: time‑series baseline (E, V, eta_rms, u_rms) over N steps with per‑metric tolerances; versioned JSON manifest and generator.
-4. Tracer BC strategies: design and implement initial closed/radiative variants with basic tests.
-5. Sponge enhancements: variable width per side, diagonal/2D tapers, and tests on non‑uniform H and active wave cases.
+1. Radiation BCs parity: finalize Sommerfeld timing (eta vs continuity ordering) and tune Flather/Sommerfeld coefficients against MATLAB snapshots; add comparison tests.
+2. Dynamic regression v2: time‑series baseline (E, V, eta_rms, u_rms) over N steps with per‑metric tolerances; versioned JSON manifest and generator.
+3. Tracer step: implement minimal advection (centered) with mask handling and integrate tracer BCs; add conservation tests.
+4. Sponge enhancements: variable width per side, diagonal/2D tapers, and tests on non‑uniform H and active wave cases.
+5. Documentation: expand README with Python quickstart and time API (Done), add developer guide for BC strategy patterns and examples (next).
 
 ## 17. Change Log (Recent)
 - 2025-09-05: Consolidated prompts; added GUI phases; added divergence/shear/stretch diagnostics.
@@ -189,5 +189,8 @@ Golden-run artifacts stored under `tests/fixtures/golden/` with versioned JSON m
  - 2025-09-05: Organized BC strategies into domain subpackages (`boundary_conditions/common`, `momentum`, `waterlevel`), migrated `model_runner` and `ministep/stepper` to strategy layer, removed legacy `boundary_conditions/boundary.py` and old solver shim `solvers/common/boundaries.py`. Full suite: 66 passed, 4 skipped (GUI).
    - 2025-09-05: Added `boundary_conditions/README.md` documenting strategy API, layout, and usage.
  - 2025-09-06: Flather OBCs completed: momentum and eta strategies with relaxation; per-side application in `stepper` with eta timing (pre/post, always post-enforced). Examples added: `examples/python/flather_config_example.py` and `examples/python/flather_sponge_config_example.py` (cosine-tapered sponge, conservative params). Optional sponge layer implemented with width/alpha/taper/apply_to and tests. Full suite: 72 passed, 4 skipped (GUI).
+ - 2025-09-06: Sommerfeld (radiative) eta tests extended with pulse propagation centroid check; tracer BC base/registry and closed/radiative strategies added with unit tests. Full suite: 77 passed, 4 skipped (GUI).
+ - 2025-09-06: Leapfrog + Asselin centralized under `solvers/time`; added `leapfrog_step_with_config` reusing stepper helpers (BC per-side, eta relax/timing, sponge). Refactored `stepper.py` to extract reusable helpers. Full suite: 79 passed, 4 skipped.
+ - 2025-09-06: Phase 7 closure — Added Sommerfeld momentum-side exact formula tests; introduced `DirichletEtaBC`; integrated tracer BCs with a minimal stepper; updated BC README; added `leapfrog_flather_dirichlet_sponge_example.py`. Full suite: 86 passed, 4 skipped.
 
 Maintainers: Update status table & change log in any PR modifying numerics, diagnostics, or architecture.

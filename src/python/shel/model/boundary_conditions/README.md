@@ -11,14 +11,15 @@ Purpose: domain‑oriented, functional BC strategies used by the solver/ministep
 - strategies.py: registrar wiring domain strategies under common names
 - common/utils.py: shared helpers (e.g., mean_c_along_side)
 - momentum/strategies.py: ClosedBC, FreeSlipBC, RadiativeSommerfeldBC, FlatherBC
-- waterlevel/strategies.py: RadiativeSommerfeldEtaBC
-- tracer/: placeholder for future tracer BCs
+- waterlevel/strategies.py: RadiativeSommerfeldEtaBC, FlatherEtaBC, DirichletEtaBC
+- tracer/: Closed and Radiative tracer BCs
 
 ## Supported names
-- closed: momentum only (no normal flow)
-- freeslip: momentum only (no normal flow + zero tangential gradient)
-- radiative: momentum + eta (Sommerfeld prototype)
-- flather: momentum only (requires external free-surface eta_ext along the open boundary)
+- closed: momentum (no normal flow) and tracer (zero-gradient)
+- freeslip: momentum (no normal flow + zero tangential gradient)
+- radiative: momentum + eta (Sommerfeld), tracer (outflow one-sided copy)
+- flather: momentum + eta (requires external free-surface `eta_ext` along the open boundary)
+- dirichlet: eta (blend toward external `eta_ext` per side)
 
 ## Usage (solver side)
 - Uniform BC in a step: get_bc(name)[0]().apply_uniform(U, V)
@@ -48,3 +49,5 @@ Notes
 - Strategies are stateless; instantiate and reuse as needed.
 - Radiative timing for eta vs continuity is approximate in the ministep path and may be refined.
 - Add new BCs by implementing the appropriate interface in the domain folder, then register in strategies.py via register_bc.
+ - Config-aware step helpers exist in `solvers/common/stepper.py` to resolve per-side BCs and apply eta/momentum/tracer BCs and sponge.
+ - For time integration, prefer `shel.model.solvers.time.leapfrog_stepper` or `leapfrog_step_with_config`.
