@@ -35,20 +35,21 @@ class BathymetryInitialCondition:
         Raises:
             ValueError: If the initial condition type is not supported
         """
-        if name.lower() == "flat":
-            return BathymetryInitialCondition.flat(ny, nx, params)
-        elif name.lower() == "sloping":
-            return BathymetryInitialCondition.sloping(ny, nx, params)
-        elif name.lower() == "gaussian_bump":
-            return BathymetryInitialCondition.gaussian_bump(ny, nx, params)
-        elif name.lower() == "gaussian_depression":
-            return BathymetryInitialCondition.gaussian_depression(ny, nx, params)
-        elif name.lower() == "channel":
-            return BathymetryInitialCondition.channel(ny, nx, params)
-        elif name.lower() == "from_file":
-            return BathymetryInitialCondition.from_file(ny, nx, params)
-        else:
-            raise ValueError(f"Unsupported bathymetry initial condition: {name}")
+        kind = name.lower()
+        dispatch = {
+            "flat": BathymetryInitialCondition.flat,
+            "sloping": BathymetryInitialCondition.sloping,
+            "gaussian_bump": BathymetryInitialCondition.gaussian_bump,
+            "gaussian_depression": BathymetryInitialCondition.gaussian_depression,
+            "channel": BathymetryInitialCondition.channel,
+            "from_file": BathymetryInitialCondition.from_file,
+        }
+        try:
+            return dispatch[kind](ny, nx, params)
+        except KeyError:
+            raise ValueError(
+                f"Unsupported bathymetry initial condition: {name}"
+            ) from None
 
     @staticmethod
     def flat(ny: int, nx: int, params: Dict[str, Any]) -> NDArray:
@@ -99,12 +100,13 @@ class BathymetryInitialCondition:
             # Slope in x-direction
             x_norm = (X - x_origin) / (nx * dx)
             d = depth_min + (depth_max - depth_min) * x_norm
-        elif direction.lower() == "y":
-            # Slope in y-direction
-            y_norm = (Y - y_origin) / (ny * dy)
-            d = depth_min + (depth_max - depth_min) * y_norm
         else:
-            raise ValueError(f"Unsupported slope direction: {direction}")
+            if direction.lower() == "y":
+                # Slope in y-direction
+                y_norm = (Y - y_origin) / (ny * dy)
+                d = depth_min + (depth_max - depth_min) * y_norm
+            else:
+                raise ValueError(f"Unsupported slope direction: {direction}")
 
         logger.info(
             f"Created sloping bathymetry: depth_min={depth_min}, "
@@ -242,12 +244,13 @@ class BathymetryInitialCondition:
             # Channel along x-direction
             distance = np.abs(Y - center)
             d = np.where(distance < width / 2, depth_deep, depth_shallow)
-        elif direction.lower() == "y":
-            # Channel along y-direction
-            distance = np.abs(X - center)
-            d = np.where(distance < width / 2, depth_deep, depth_shallow)
         else:
-            raise ValueError(f"Unsupported channel direction: {direction}")
+            if direction.lower() == "y":
+                # Channel along y-direction
+                distance = np.abs(X - center)
+                d = np.where(distance < width / 2, depth_deep, depth_shallow)
+            else:
+                raise ValueError(f"Unsupported channel direction: {direction}")
 
         logger.info(
             f"Created channel bathymetry: depth_shallow={depth_shallow}, "

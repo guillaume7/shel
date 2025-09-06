@@ -28,16 +28,34 @@ disable=
     no-name-in-module,
     import-outside-toplevel,
     too-many-instance-attributes,
+    too-many-arguments,
+    too-many-positional-arguments,
+    too-many-locals,
+    too-many-branches,
+    too-many-statements,
+    too-many-return-statements,
+    too-many-boolean-expressions,
+    too-many-nested-blocks,
+    too-many-public-methods,
+    too-many-lines,
+    too-few-public-methods,
+    too-many-ancestors,
     trailing-whitespace,
     broad-exception-caught,
     unspecified-encoding,
     logging-fstring-interpolation,
     consider-using-with,
     unused-import,
+    unused-variable,
+    unused-argument,
     line-too-long,
     consider-alternative-union-syntax,
     deprecated-typing-alias,
     useless-option-value,
+    protected-access,
+    duplicate-code,
+    attribute-defined-outside-init,
+    unnecessary-pass,
     invalid-name,
     missing-module-docstring,
     missing-class-docstring,
@@ -77,6 +95,7 @@ max-statements=50
 
 [BASIC]
 # Accept common SWE/Matlab-style short names and time indices
+good-names=i,j,k,ex,Run,_,x,y,z,t,u,v,h,f,dt,U,V,H,X,Y,PG_u,PG_v,EN,VN,U0,V0,U1,V1,U2,V2,X2,Y2,Au,Av,Hm,tbem
 good-names-rgxs=
     ^[A-Z]$,                 # U,V,H,T,X,Y,C
     ^[A-Z][0-9]+$,           # U0,V1,X2

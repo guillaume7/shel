@@ -65,7 +65,7 @@ class RadiativeSommerfeldBC(MomentumBC):
 
     def apply_uniform(self, U: Array, V: Array) -> None:
         # No-op for uniform; use side-specific application
-        return None
+        pass
 
     def apply_side(
         self,
@@ -106,7 +106,7 @@ class FlatherBC(MomentumBC):
 
     def apply_uniform(self, U: Array, V: Array) -> None:
         # No uniform behavior; use side-specific application only
-        return None
+        pass
 
     def apply_side(
         self,
@@ -127,15 +127,13 @@ class FlatherBC(MomentumBC):
     ) -> None:
         # Minimal Flather: if external eta is not provided, no-op.
         if H is None or g is None or eta_old is None or eta_ext is None:
-            return None
+            return
         c = mean_c_along_side(H, g, side)
         # Use mean H along the selected side to scale
         H_mean = mean_H_along_side(H, side)
         gamma = 1.0 if relax is None else float(relax)
-        if gamma < 0.0:
-            gamma = 0.0
-        if gamma > 1.0:
-            gamma = 1.0
+        # Clamp with builtins to satisfy lint suggestions
+        gamma = max(0.0, min(1.0, gamma))
         if side in ("west", "east"):
             corr = (
                 gamma * (c / H_mean) * (eta_ext[:, 0] - eta_old[:, 0])

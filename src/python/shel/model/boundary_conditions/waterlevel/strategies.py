@@ -57,7 +57,7 @@ class FlatherEtaBC(EtaBC):
     ) -> None:
         # Simple Dirichlet: if external eta provided, set boundary to it; otherwise no-op
         if eta_ext is None:
-            return None
+            return
         alpha = 1.0 if relax is None else float(relax)
         alpha = 0.0 if alpha < 0.0 else (1.0 if alpha > 1.0 else alpha)
         if side == "west":
@@ -88,7 +88,7 @@ class DirichletEtaBC(EtaBC):
         relax: float | None = None,
     ) -> None:
         if eta_ext is None:
-            return None
+            return
         alpha = 1.0 if relax is None else float(relax)
         alpha = 0.0 if alpha < 0.0 else (1.0 if alpha > 1.0 else alpha)
         if side == "west":

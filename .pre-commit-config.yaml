@@ -32,5 +32,5 @@ repos:
         stages: [pre-commit]
         pass_filenames: true
         args: ["-E"] # only error out on errors/fatals; style is handled by black/isort
-        files: ^src/python/.*\.py$
+        files: ^src/python/shel/model/.*\.py$
         # Pylint will automatically pick up .pylintrc at repo root

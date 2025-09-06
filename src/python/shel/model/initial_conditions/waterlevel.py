@@ -35,16 +35,19 @@ class WaterlevelInitialCondition:
         Raises:
             ValueError: If the initial condition type is not supported
         """
-        if name.lower() == "flat":
-            return WaterlevelInitialCondition.flat(ny, nx, params)
-        elif name.lower() == "gaussian_bump":
-            return WaterlevelInitialCondition.gaussian_bump(ny, nx, params)
-        elif name.lower() == "gaussian_depression":
-            return WaterlevelInitialCondition.gaussian_depression(ny, nx, params)
-        elif name.lower() == "sinusoidal":
-            return WaterlevelInitialCondition.sinusoidal(ny, nx, params)
-        else:
-            raise ValueError(f"Unsupported water elevation initial condition: {name}")
+        kind = name.lower()
+        dispatch = {
+            "flat": WaterlevelInitialCondition.flat,
+            "gaussian_bump": WaterlevelInitialCondition.gaussian_bump,
+            "gaussian_depression": WaterlevelInitialCondition.gaussian_depression,
+            "sinusoidal": WaterlevelInitialCondition.sinusoidal,
+        }
+        try:
+            return dispatch[kind](ny, nx, params)
+        except KeyError:
+            raise ValueError(
+                f"Unsupported water elevation initial condition: {name}"
+            ) from None
 
     @staticmethod
     def flat(ny: int, nx: int, params: Dict[str, Any]) -> NDArray:

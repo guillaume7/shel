@@ -193,7 +193,7 @@ class ModelRunner:
         )
         if not isinstance(bc_cfg, dict):
             return sides
-        for k in sides.keys():
+        for k in sides:
             val = str(bc_cfg.get(k, "closed")).lower()
             if val in ("closed", "freeslip", "radiative"):
                 sides[k] = val

@@ -53,7 +53,7 @@ def resolve_bc_sides_from_config(config: Mapping[str, Any] | None) -> Dict[str, 
     bc_cfg = config.get("boundary_conditions")
     if not isinstance(bc_cfg, dict):
         return sides
-    for k in sides.keys():
+    for k in sides:
         val = str(bc_cfg.get(k, "closed")).lower()
         if val in ("closed", "freeslip", "radiative", "flather"):
             sides[k] = val
