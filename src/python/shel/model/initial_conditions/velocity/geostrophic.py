@@ -14,9 +14,12 @@ staggered U and V grids. We replicate that logic here for parity and to
 keep tests simple. This is a *parametric* geostrophic field, not the
 diagnostic one obtained from numerical derivatives of eta.
 """
+
 from __future__ import annotations
+
 import numpy as np
 from numpy.typing import NDArray
+
 from ..base import VelocityIC
 from ..factory import VELOCITY_REGISTRY
 

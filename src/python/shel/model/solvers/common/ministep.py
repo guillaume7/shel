@@ -9,17 +9,18 @@ Included tendencies:
 Excluded for now: advection, Coriolis, BC strategies (we enforce closed box by
 zeroing normal-flow boundary faces after update).
 """
+
 from __future__ import annotations
 
 import numpy as np
 
-from shel.model.solvers.momentum.pressure import pressure_gradient
-from shel.model.solvers.momentum.friction import bottom_drag_tendency
-from shel.model.solvers.momentum.diffusion import viscous_tendency
-from shel.model.solvers.waterlevel.continuity import update_free_surface
-from shel.model.solvers.momentum.advection import advect_momentum
-from shel.model.solvers.common.stencils import avg_x_t_to_u, avg_y_t_to_v
 from shel.model.boundary_conditions import get_bc
+from shel.model.solvers.common.stencils import avg_x_t_to_u, avg_y_t_to_v
+from shel.model.solvers.momentum.advection import advect_momentum
+from shel.model.solvers.momentum.diffusion import viscous_tendency
+from shel.model.solvers.momentum.friction import bottom_drag_tendency
+from shel.model.solvers.momentum.pressure import pressure_gradient
+from shel.model.solvers.waterlevel.continuity import update_free_surface
 
 Array = np.ndarray
 
@@ -78,15 +79,18 @@ def explicit_step(
         ny = ny_p1 - 1
         v_at_u = np.zeros_like(U)
         v_at_u[:, 1:nx] = 0.25 * (
-            V[0:ny, 0:nx-1] + V[1:ny+1, 0:nx-1] + V[0:ny, 1:nx] + V[1:ny+1, 1:nx]
+            V[0:ny, 0 : nx - 1]
+            + V[1 : ny + 1, 0 : nx - 1]
+            + V[0:ny, 1:nx]
+            + V[1 : ny + 1, 1:nx]
         )
         # u_at_v: average U at (j-1,j) x (i,i+1)
         ny_u, nx_p1 = U.shape
         u_at_v = np.zeros_like(V)
         u_at_v[1:ny_u, :] = 0.25 * (
-            U[0:ny_u-1, 0:nx_p1-1]
-            + U[0:ny_u-1, 1:nx_p1]
-            + U[1:ny_u, 0:nx_p1-1]
+            U[0 : ny_u - 1, 0 : nx_p1 - 1]
+            + U[0 : ny_u - 1, 1:nx_p1]
+            + U[1:ny_u, 0 : nx_p1 - 1]
             + U[1:ny_u, 1:nx_p1]
         )
         dU_cor = f_u * v_at_u

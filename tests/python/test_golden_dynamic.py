@@ -1,12 +1,14 @@
 from __future__ import annotations
-import json
+
 import hashlib
+import json
 import os
+
 import numpy as np
 
-from shel.model.solvers.common.ministep import explicit_step
 from shel.model.diagnostics import IntegratedDiagnostics
 from shel.model.grid import Grid
+from shel.model.solvers.common.ministep import explicit_step
 
 
 def stable_hash(d: dict) -> str:
@@ -29,7 +31,7 @@ def run_short_sim():
     y = np.arange(ny, dtype=float)
     x = np.arange(nx, dtype=float)
     X, Y = np.meshgrid(x, y)
-    eta = 0.05 * np.exp(-(((X - nx / 2) ** 2 + (Y - ny / 2) ** 2) / (2.0 * 5.0 ** 2)))
+    eta = 0.05 * np.exp(-(((X - nx / 2) ** 2 + (Y - ny / 2) ** 2) / (2.0 * 5.0**2)))
     U = np.zeros((ny, nx + 1), dtype=float)
     V = np.zeros((ny + 1, nx), dtype=float)
     f = np.zeros_like(H)
@@ -66,9 +68,12 @@ def run_short_sim():
 
 def test_dynamic_golden_baseline_hash_matches_file():
     # If the baseline file is present, verify the hash matches; otherwise skip with guidance
-    baseline_path = os.path.join(os.path.dirname(__file__), "golden", "dynamic_baseline.json")
+    baseline_path = os.path.join(
+        os.path.dirname(__file__), "golden", "dynamic_baseline.json"
+    )
     if not os.path.exists(baseline_path):
         import pytest
+
         pytest.skip(
             "Golden baseline missing. Generate one with: python -m devops.scripts.generate_dynamic_golden > tests/python/golden/dynamic_baseline.json"
         )
@@ -83,4 +88,6 @@ def test_dynamic_golden_baseline_hash_matches_file():
     hval = stable_hash(metrics)
 
     # Tight equality to catch any changes; update baseline intentionally with generator when needed
-    assert hval == expected_hash, f"Dynamic golden hash mismatch. Got {hval}, expected {expected_hash}. If change is intended, regenerate baseline."
+    assert (
+        hval == expected_hash
+    ), f"Dynamic golden hash mismatch. Got {hval}, expected {expected_hash}. If change is intended, regenerate baseline."

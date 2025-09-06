@@ -10,9 +10,10 @@ Design principles:
 - Stateless functions where possible; minimal class wrappers for policy.
 - Separation between diagnostic computation and persistence.
 """
+
 from __future__ import annotations
 
-from typing import Dict, Any
+from typing import Any, Dict
 
 
 def serialize_state(state_dict: Dict[str, Any]) -> Dict[str, Any]:
@@ -29,5 +30,6 @@ def serialize_state(state_dict: Dict[str, Any]) -> Dict[str, Any]:
         Same object (copy in future if mutation safety required).
     """
     return state_dict
+
 
 __all__ = ["serialize_state"]

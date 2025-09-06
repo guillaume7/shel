@@ -5,6 +5,7 @@ methods that compute spatially varying (pointwise) diagnostic fields
 (e.g. vorticity, Okubo–Weiss) separate from the domain-integrated
 scalars in ``integrated.py``.
 """
+
 from __future__ import annotations
 
 from typing import Dict
@@ -23,10 +24,9 @@ class FieldDiagnostics:
         nx, ny = grid.nx, grid.ny
         dx, dy = grid.dx, grid.dy
         zeta = np.zeros((ny + 1, nx + 1), dtype=u.dtype)
-        zeta[1:ny, 1:nx] = (
-            (v[1:ny, 1:nx] - v[1:ny, 0 : nx - 1]) / dx
-            - (u[1:ny, 1:nx] - u[0 : ny - 1, 1:nx]) / dy
-        )
+        zeta[1:ny, 1:nx] = (v[1:ny, 1:nx] - v[1:ny, 0 : nx - 1]) / dx - (
+            u[1:ny, 1:nx] - u[0 : ny - 1, 1:nx]
+        ) / dy
         return zeta
 
     @staticmethod
@@ -47,7 +47,9 @@ class FieldDiagnostics:
     @staticmethod
     def stretch_rate(u: NDArray, v: NDArray, grid: Grid) -> NDArray:
         """Stretch rate on T cells (ny, nx)."""
-        return FieldDiagnostics.intermediates(u, v, grid)["strechrate_t"]  # MATLAB-spelled key
+        return FieldDiagnostics.intermediates(u, v, grid)[
+            "strechrate_t"
+        ]  # MATLAB-spelled key
 
     # ------------------------------------------------------------------
     # MATLAB-faithful intermediate diagnostics (curl, shear, stretch, etc.)
@@ -83,67 +85,103 @@ class FieldDiagnostics:
         # interior 2..M, 2..N in MATLAB => indices 1:M-1,1:N-1 zero-based
         if M > 0 and N > 0:
             curl_w[1:M, 1:N] = (
-                (mask_v[1:M, 1:N] * V[1:M, 1:N] - mask_v[0:M-1, 1:N] * V[0:M-1, 1:N]) * dy
-                - (mask_u[1:M, 1:N] * U[1:M, 1:N] - mask_u[1:M, 0:N-1] * U[1:M, 0:N-1]) * dx
+                (
+                    mask_v[1:M, 1:N] * V[1:M, 1:N]
+                    - mask_v[0 : M - 1, 1:N] * V[0 : M - 1, 1:N]
+                )
+                * dy
+                - (
+                    mask_u[1:M, 1:N] * U[1:M, 1:N]
+                    - mask_u[1:M, 0 : N - 1] * U[1:M, 0 : N - 1]
+                )
+                * dx
             ) / dA
         # corners
         curl_w[0, 0] = (mask_v[0, 0] * V[0, 0] * dy - mask_u[0, 0] * U[0, 0] * dx) / dA
-        curl_w[0, N] = (mask_v[0, N] * V[0, N] * dy - (-mask_u[0, N - 1] * U[0, N - 1]) * dx) / dA
-        curl_w[M, 0] = ((-mask_v[M - 1, 0] * V[M - 1, 0]) * dy - (mask_u[M, 0] * U[M, 0]) * dx) / dA
-        curl_w[M, N] = ((-mask_v[M - 1, N] * V[M - 1, N]) * dy - (-mask_u[M, N - 1] * U[M, N - 1]) * dx) / dA
+        curl_w[0, N] = (
+            mask_v[0, N] * V[0, N] * dy - (-mask_u[0, N - 1] * U[0, N - 1]) * dx
+        ) / dA
+        curl_w[M, 0] = (
+            (-mask_v[M - 1, 0] * V[M - 1, 0]) * dy - (mask_u[M, 0] * U[M, 0]) * dx
+        ) / dA
+        curl_w[M, N] = (
+            (-mask_v[M - 1, N] * V[M - 1, N]) * dy
+            - (-mask_u[M, N - 1] * U[M, N - 1]) * dx
+        ) / dA
         # western boundary (excluding corners)
         if M > 1:
             curl_w[1:M, 0] = (
-                (mask_v[1:M, 0] * V[1:M, 0] - mask_v[0:M-1, 0] * V[0:M-1, 0]) * dy
+                (mask_v[1:M, 0] * V[1:M, 0] - mask_v[0 : M - 1, 0] * V[0 : M - 1, 0])
+                * dy
                 - (mask_u[1:M, 0] * U[1:M, 0]) * dx
             ) / dA
             curl_w[1:M, N] = (
-                (mask_v[1:M, N] * V[1:M, N] - mask_v[0:M-1, N] * V[0:M-1, N]) * dy
+                (mask_v[1:M, N] * V[1:M, N] - mask_v[0 : M - 1, N] * V[0 : M - 1, N])
+                * dy
                 - (-mask_u[1:M, N - 1] * U[1:M, N - 1]) * dx
             ) / dA
         if N > 1:
             curl_w[0, 1:N] = (
                 (mask_v[0, 1:N] * V[0, 1:N]) * dy
-                - (mask_u[0, 1:N] * U[0, 1:N] - mask_u[0, 0:N-1] * U[0, 0:N-1]) * dx
+                - (mask_u[0, 1:N] * U[0, 1:N] - mask_u[0, 0 : N - 1] * U[0, 0 : N - 1])
+                * dx
             ) / dA
             curl_w[M, 1:N] = (
                 (-mask_v[M - 1, 1:N] * V[M - 1, 1:N]) * dy
-                - (mask_u[M, 1:N] * U[M, 1:N] - mask_u[M, 0:N-1] * U[M, 0:N-1]) * dx
+                - (mask_u[M, 1:N] * U[M, 1:N] - mask_u[M, 0 : N - 1] * U[M, 0 : N - 1])
+                * dx
             ) / dA
         # ---------------- shear rate (shearrate_w) -------------------
         shearrate_w = np.zeros_like(curl_w)
         if M > 0 and N > 0:
             shearrate_w[1:M, 1:N] = (
-                (V[1:M, 1:N] - V[0:M-1, 1:N]) * dy + (U[1:M, 1:N] - U[1:M, 0:N-1]) * dx
+                (V[1:M, 1:N] - V[0 : M - 1, 1:N]) * dy
+                + (U[1:M, 1:N] - U[1:M, 0 : N - 1]) * dx
             ) / dA
         shearrate_w[0, 0] = (V[0, 0] * dy + U[0, 0] * dx) / dA
         shearrate_w[0, N] = (V[0, N] * dy + (-U[0, N - 1]) * dx) / dA
         shearrate_w[M, 0] = ((-V[M - 1, 0]) * dy + U[M, 0] * dx) / dA
         shearrate_w[M, N] = ((-V[M - 1, N]) * dy + (-U[M, N - 1]) * dx) / dA
         if M > 1:
-            shearrate_w[1:M, 0] = ((V[1:M, 0] - V[0:M-1, 0]) * dy + U[1:M, 0] * dx) / dA
-            shearrate_w[1:M, N] = ((V[1:M, N] - V[0:M-1, N]) * dy + (-U[1:M, N - 1]) * dx) / dA
+            shearrate_w[1:M, 0] = (
+                (V[1:M, 0] - V[0 : M - 1, 0]) * dy + U[1:M, 0] * dx
+            ) / dA
+            shearrate_w[1:M, N] = (
+                (V[1:M, N] - V[0 : M - 1, N]) * dy + (-U[1:M, N - 1]) * dx
+            ) / dA
         if N > 1:
-            shearrate_w[0, 1:N] = (V[0, 1:N] * dy + (U[0, 1:N] - U[0, 0:N-1]) * dx) / dA
-            shearrate_w[M, 1:N] = ((-V[M - 1, 1:N]) * dy + (U[M, 1:N] - U[M, 0:N-1]) * dx) / dA
+            shearrate_w[0, 1:N] = (
+                V[0, 1:N] * dy + (U[0, 1:N] - U[0, 0 : N - 1]) * dx
+            ) / dA
+            shearrate_w[M, 1:N] = (
+                (-V[M - 1, 1:N]) * dy + (U[M, 1:N] - U[M, 0 : N - 1]) * dx
+            ) / dA
         # ---------------- stretch & divergence (T-cells) --------------
         strechrate_t = np.zeros((M, N), dtype=u.dtype)
         divergence_t = np.zeros((M, N), dtype=u.dtype)
         if M > 0 and N > 0:
             strechrate_t[:, :] = mask_T * (
-                ((U[1:M + 1, :] - U[0:M, :]) * dy - (V[:, 1:N + 1] - V[:, 0:N]) * dx) / dA
+                (
+                    (U[1 : M + 1, :] - U[0:M, :]) * dy
+                    - (V[:, 1 : N + 1] - V[:, 0:N]) * dx
+                )
+                / dA
             )
             divergence_t[:, :] = mask_T * (
-                ((U[1:M + 1, 0:N] - U[0:M, 0:N]) * dy + (V[0:M, 1:N + 1] - V[0:M, 0:N]) * dx) / dA
+                (
+                    (U[1 : M + 1, 0:N] - U[0:M, 0:N]) * dy
+                    + (V[0:M, 1 : N + 1] - V[0:M, 0:N]) * dx
+                )
+                / dA
             )
         # ---------------- quadratic quantities -----------------------
         enstrophy_w = 0.5 * curl_w**2
         sqshearrate_w = 0.5 * shearrate_w**2
         sqshearrate_t = 0.25 * (
             sqshearrate_w[0:M, 0:N]
-            + sqshearrate_w[1:M + 1, 0:N]
-            + sqshearrate_w[0:M, 1:N + 1]
-            + sqshearrate_w[1:M + 1, 1:N + 1]
+            + sqshearrate_w[1 : M + 1, 0:N]
+            + sqshearrate_w[0:M, 1 : N + 1]
+            + sqshearrate_w[1 : M + 1, 1 : N + 1]
         )
         sqstrechrate_t = 0.5 * strechrate_t**2 * mask_T
         sqdivergence_t = 0.5 * divergence_t**2 * mask_T
@@ -152,14 +190,16 @@ class FieldDiagnostics:
         # interpolate corner to T
         okuboweiss_t = 0.25 * (
             okuboweiss_w[0:M, 0:N]
-            + okuboweiss_w[1:M + 1, 0:N]
-            + okuboweiss_w[0:M, 1:N + 1]
-            + okuboweiss_w[1:M + 1, 1:N + 1]
+            + okuboweiss_w[1 : M + 1, 0:N]
+            + okuboweiss_w[0:M, 1 : N + 1]
+            + okuboweiss_w[1 : M + 1, 1 : N + 1]
         )
         okuboweiss_t = okuboweiss_t + sqstrechrate_t - sqdivergence_t
+
         # Transpose back to native orientation (ny,nx)
         def tb(a: NDArray) -> NDArray:
             return a.T
+
         intermediates_native = {
             "curl_w": tb(curl_w),
             "shearrate_w": tb(shearrate_w),

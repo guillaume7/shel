@@ -1,5 +1,7 @@
 from __future__ import annotations
+
 import numpy as np
+
 from shel.model.grid import Grid
 from shel.model.initial_conditions.factory import build_initial_state
 
@@ -15,13 +17,24 @@ def integrate(field: np.ndarray, dx: float, dy: float) -> float:
 def test_initial_volume_conservation_multiple_configs():
     g = make_grid()
     cfgs = [
-        {"bathymetry": {"name": "bump", "params": {"depth0": 200.0, "amp": 10.0}}, "elevation": {"name": "flat"}},
-        {"bathymetry": {"name": "step"}, "elevation": {"name": "gaussian", "params": {"amp": 0.5}}},
-        {"bathymetry": {"name": "island"}, "elevation": {"name": "gaussian", "params": {"amp": 0.2}}},
+        {
+            "bathymetry": {"name": "bump", "params": {"depth0": 200.0, "amp": 10.0}},
+            "elevation": {"name": "flat"},
+        },
+        {
+            "bathymetry": {"name": "step"},
+            "elevation": {"name": "gaussian", "params": {"amp": 0.5}},
+        },
+        {
+            "bathymetry": {"name": "island"},
+            "elevation": {"name": "gaussian", "params": {"amp": 0.2}},
+        },
     ]
     for cfg in cfgs:
         state = build_initial_state(cfg, g)
-        H = state["H"]; h = state["h"]; eta = state["eta"]
+        H = state["H"]
+        h = state["h"]
+        eta = state["eta"]
         assert np.allclose(H, h + eta)
     vol_H = integrate(H, g.dx, g.dy)
     vol_parts = integrate(h, g.dx, g.dy) + integrate(eta, g.dx, g.dy)

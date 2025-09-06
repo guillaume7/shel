@@ -24,11 +24,15 @@ def test_sommerfeld_eta_formula_east_west():
     r = c * dt / dx
 
     bc.apply_side_eta(eta_next, "west", eta_old=eta_old, H=H, g=g, dt=dt, dx=dx, dy=dy)
-    assert np.allclose(eta_next[:, 0], eta_old[:, 0] - r * (eta_old[:, 1] - eta_old[:, 0]))
+    assert np.allclose(
+        eta_next[:, 0], eta_old[:, 0] - r * (eta_old[:, 1] - eta_old[:, 0])
+    )
 
     eta_next2 = eta_old.copy()
     bc.apply_side_eta(eta_next2, "east", eta_old=eta_old, H=H, g=g, dt=dt, dx=dx, dy=dy)
-    assert np.allclose(eta_next2[:, -1], eta_old[:, -1] - r * (eta_old[:, -1] - eta_old[:, -2]))
+    assert np.allclose(
+        eta_next2[:, -1], eta_old[:, -1] - r * (eta_old[:, -1] - eta_old[:, -2])
+    )
 
 
 def test_sommerfeld_eta_formula_south_north():
@@ -51,11 +55,17 @@ def test_sommerfeld_eta_formula_south_north():
     r = c * dt / dy
 
     bc.apply_side_eta(eta_next, "south", eta_old=eta_old, H=H, g=g, dt=dt, dx=dx, dy=dy)
-    assert np.allclose(eta_next[0, :], eta_old[0, :] - r * (eta_old[1, :] - eta_old[0, :]))
+    assert np.allclose(
+        eta_next[0, :], eta_old[0, :] - r * (eta_old[1, :] - eta_old[0, :])
+    )
 
     eta_next2 = eta_old.copy()
-    bc.apply_side_eta(eta_next2, "north", eta_old=eta_old, H=H, g=g, dt=dt, dx=dx, dy=dy)
-    assert np.allclose(eta_next2[-1, :], eta_old[-1, :] - r * (eta_old[-1, :] - eta_old[-2, :]))
+    bc.apply_side_eta(
+        eta_next2, "north", eta_old=eta_old, H=H, g=g, dt=dt, dx=dx, dy=dy
+    )
+    assert np.allclose(
+        eta_next2[-1, :], eta_old[-1, :] - r * (eta_old[-1, :] - eta_old[-2, :])
+    )
 
 
 def test_sommerfeld_pulse_propagation_right_going():
@@ -72,7 +82,7 @@ def test_sommerfeld_pulse_propagation_right_going():
     x = np.arange(nx)
     X = np.tile(x, (ny, 1))
     x0 = int(nx * 0.33)
-    eta = 0.02 * np.exp(-((X - x0) ** 2) / (2.0 * 5.0 ** 2))
+    eta = 0.02 * np.exp(-((X - x0) ** 2) / (2.0 * 5.0**2))
 
     # Initialize a right-going mode: U ~ (c/H) * eta averaged to faces; V = 0
     U = np.zeros((ny, nx + 1))
@@ -83,7 +93,12 @@ def test_sommerfeld_pulse_propagation_right_going():
     from shel.model.solvers.common.stepper import explicit_step_with_config
 
     cfg = {
-        "boundary_conditions": {"west": "radiative", "east": "radiative", "south": "closed", "north": "closed"}
+        "boundary_conditions": {
+            "west": "radiative",
+            "east": "radiative",
+            "south": "closed",
+            "north": "closed",
+        }
     }
 
     # Track centroid of positive eta along x

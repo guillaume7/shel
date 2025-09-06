@@ -4,12 +4,17 @@ Collects scalar integrated diagnostics each model step (or at a chosen
 output cadence) into simple Python lists for later serialization or
 conversion to DataFrames / Parquet.
 """
+
 from __future__ import annotations
+
 from dataclasses import dataclass, field
-from typing import List, Dict
+from typing import Dict, List
+
 from numpy.typing import NDArray
-from .integrated import IntegratedDiagnostics
+
 from ..grid import Grid  # type: ignore
+from .integrated import IntegratedDiagnostics
+
 
 @dataclass
 class GlobalAccumulator:
@@ -51,5 +56,6 @@ class GlobalAccumulator:
             "enstrophy": self.enstrophy,
             "potential_enstrophy": self.potential_enstrophy,
         }
+
 
 __all__ = ["GlobalAccumulator"]

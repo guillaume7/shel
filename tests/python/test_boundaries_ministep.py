@@ -12,7 +12,7 @@ def test_closed_bc_zeroes_normal_faces_in_ministep():
     x = np.arange(nx)
     y = np.arange(ny)
     X, Y = np.meshgrid(x, y)
-    eta = 0.05 * np.exp(-(((X - nx / 2) ** 2 + (Y - ny / 2) ** 2) / (2.0 * 3.0 ** 2)))
+    eta = 0.05 * np.exp(-(((X - nx / 2) ** 2 + (Y - ny / 2) ** 2) / (2.0 * 3.0**2)))
 
     rng = np.random.default_rng(42)
     U = 0.01 * rng.standard_normal((ny, nx + 1))

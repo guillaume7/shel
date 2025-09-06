@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from ..base import EtaBC, Array
+from ..base import Array, EtaBC
 from ..common.utils import mean_c_along_side
 
 

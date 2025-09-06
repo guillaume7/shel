@@ -14,8 +14,11 @@ Land/Water Encoding:
 
 Functions herein are *pure*: they do not mutate the provided mask arrays.
 """
+
 from __future__ import annotations
+
 from typing import Tuple
+
 import numpy as np
 from numpy.typing import NDArray
 
@@ -28,7 +31,9 @@ __all__ = [
 ]
 
 
-def build_staggered_masks(mask_t: NDArray[np.integer]) -> Tuple[NDArray[np.int_], NDArray[np.int_]]:
+def build_staggered_masks(
+    mask_t: NDArray[np.integer],
+) -> Tuple[NDArray[np.int_], NDArray[np.int_]]:
     """Build U and V staggered masks from T-cell land mask.
 
     Replicates the MATLAB loops:
@@ -64,7 +69,9 @@ def build_staggered_masks(mask_t: NDArray[np.integer]) -> Tuple[NDArray[np.int_]
     # U faces: (ny, nx+1). Land cell at (i,j) affects (i,j) and (i,j+1) in MATLAB 1-based.
     # In 0-based Python: affects (i,j) and (i,j+1) provided j+1 <= nx.
     mask_u[i_t, j_t] = 0
-    inside = j_t + 1 <= nx  # j_t max is nx-1 so j_t+1 <= nx always True, but keep explicit.
+    inside = (
+        j_t + 1 <= nx
+    )  # j_t max is nx-1 so j_t+1 <= nx always True, but keep explicit.
     mask_u[i_t[inside], j_t[inside] + 1] = 0
 
     # V faces: (ny+1, nx). Land cell at (i,j) affects (i,j) and (i+1,j) in MATLAB 1-based.
@@ -75,7 +82,9 @@ def build_staggered_masks(mask_t: NDArray[np.integer]) -> Tuple[NDArray[np.int_]
     return mask_u, mask_v
 
 
-def apply_noslip_flux_masks(mask_t: NDArray[np.integer], mask_u: NDArray[np.int_], mask_v: NDArray[np.int_]) -> Tuple[NDArray[np.int_], NDArray[np.int_]]:
+def apply_noslip_flux_masks(
+    mask_t: NDArray[np.integer], mask_u: NDArray[np.int_], mask_v: NDArray[np.int_]
+) -> Tuple[NDArray[np.int_], NDArray[np.int_]]:
     """Derive noslip flux masks (mask_u, mask_v) from T mask per MATLAB logic.
 
     MATLAB (model_handles.m):
@@ -103,14 +112,13 @@ def apply_noslip_flux_masks(mask_t: NDArray[np.integer], mask_u: NDArray[np.int_
     # MATLAB expression corresponds to those four T cells.
     if ny > 1 and nx > 1:
         i_idx = np.arange(1, ny)  # 1..ny-1
-        j_idx = np.arange(1, nx)  # 1..nx-1 (since mu has nx+1 columns, interior j faces exclude endpoints)
+        j_idx = np.arange(
+            1, nx
+        )  # 1..nx-1 (since mu has nx+1 columns, interior j faces exclude endpoints)
         # Broadcast create 2D grids
         I, J = np.meshgrid(i_idx, j_idx, indexing="ij")  # shapes (ny-1, nx-1)
         corners = (
-            mask_t[I - 1, J] *
-            mask_t[I - 1, J - 1] *
-            mask_t[I, J] *
-            mask_t[I, J - 1]
+            mask_t[I - 1, J] * mask_t[I - 1, J - 1] * mask_t[I, J] * mask_t[I, J - 1]
         )
         mu[I, J] = corners
 
@@ -121,10 +129,7 @@ def apply_noslip_flux_masks(mask_t: NDArray[np.integer], mask_u: NDArray[np.int_
         j_idx_v = np.arange(1, nx)
         I, J = np.meshgrid(i_idx_v, j_idx_v, indexing="ij")
         corners_v = (
-            mask_t[I - 1, J - 1] *
-            mask_t[I - 1, J] *
-            mask_t[I, J - 1] *
-            mask_t[I, J]
+            mask_t[I - 1, J - 1] * mask_t[I - 1, J] * mask_t[I, J - 1] * mask_t[I, J]
         )
         mv[I, J] = corners_v
 
@@ -144,29 +149,31 @@ def build_corner_mask(mask_t: NDArray[np.integer]) -> NDArray[np.int_]:
     mq = np.ones((ny + 1, nx + 1), dtype=int)
     # Interior corners depend on 4 adjacent T cells
     mq[1:ny, 1:nx] = (
-        mask_t[0:ny-1, 0:nx-1]
-        * mask_t[0:ny-1, 1:nx]
-        * mask_t[1:ny, 0:nx-1]
+        mask_t[0 : ny - 1, 0 : nx - 1]
+        * mask_t[0 : ny - 1, 1:nx]
+        * mask_t[1:ny, 0 : nx - 1]
         * mask_t[1:ny, 1:nx]
     )
     # Edges: use available adjacent T cells (already 1 by default elsewhere)
     # Top edge (i=0): depends on first row of T cells horizontally
-    mq[0, 1:nx] = mask_t[0, 0:nx-1] * mask_t[0, 1:nx]
+    mq[0, 1:nx] = mask_t[0, 0 : nx - 1] * mask_t[0, 1:nx]
     # Bottom edge (i=ny): last row
-    mq[ny, 1:nx] = mask_t[ny-1, 0:nx-1] * mask_t[ny-1, 1:nx]
+    mq[ny, 1:nx] = mask_t[ny - 1, 0 : nx - 1] * mask_t[ny - 1, 1:nx]
     # Left edge (j=0)
-    mq[1:ny, 0] = mask_t[0:ny-1, 0] * mask_t[1:ny, 0]
+    mq[1:ny, 0] = mask_t[0 : ny - 1, 0] * mask_t[1:ny, 0]
     # Right edge (j=nx)
-    mq[1:ny, nx] = mask_t[0:ny-1, nx-1] * mask_t[1:ny, nx-1]
+    mq[1:ny, nx] = mask_t[0 : ny - 1, nx - 1] * mask_t[1:ny, nx - 1]
     # Corners remain 1 if any adjacent T is water; if all adjacent (1 or 2) T cells are 0 set to 0
-    mq[0,0] = mask_t[0,0]
-    mq[0,nx] = mask_t[0,nx-1]
-    mq[ny,0] = mask_t[ny-1,0]
-    mq[ny,nx] = mask_t[ny-1,nx-1]
+    mq[0, 0] = mask_t[0, 0]
+    mq[0, nx] = mask_t[0, nx - 1]
+    mq[ny, 0] = mask_t[ny - 1, 0]
+    mq[ny, nx] = mask_t[ny - 1, nx - 1]
     return mq
 
 
-def build_all_masks(mask_t: NDArray[np.integer], noslip: bool = False) -> Tuple[NDArray[np.int_], NDArray[np.int_], NDArray[np.int_]]:
+def build_all_masks(
+    mask_t: NDArray[np.integer], noslip: bool = False
+) -> Tuple[NDArray[np.int_], NDArray[np.int_], NDArray[np.int_]]:
     """Convenience wrapper: construct U/V/Q masks with optional noslip processing.
 
     Returns
@@ -180,7 +187,9 @@ def build_all_masks(mask_t: NDArray[np.integer], noslip: bool = False) -> Tuple[
     return mu, mv, mq
 
 
-def mask_velocities(u: NDArray, v: NDArray, mask_u: NDArray, mask_v: NDArray) -> Tuple[NDArray, NDArray]:
+def mask_velocities(
+    u: NDArray, v: NDArray, mask_u: NDArray, mask_v: NDArray
+) -> Tuple[NDArray, NDArray]:
     """Apply staggered masks to velocity components (pure function).
 
     Parameters

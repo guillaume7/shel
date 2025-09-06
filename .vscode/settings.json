@@ -1,7 +1,9 @@
 {
+  // Analysis path to find local modules
   "python.analysis.extraPaths": [
     "${workspaceFolder}/src/python"
   ],
+  // Testing & linting
   "python.linting.enabled": true,
   "python.linting.pylintEnabled": true,
   "python.linting.pylintPath": "pylint",
@@ -12,13 +14,24 @@
   "python.testing.pytestArgs": [
     "tests/python"
   ],
+  // Auto-format often
   "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  // Prefer the official Black Formatter extension
+  // (keeps legacy python.formatting.* for compatibility if installed)
+  "black-formatter.args": [
+    "--line-length",
+    "88"
+  ],
   "python.formatting.provider": "black",
   "python.formatting.blackPath": "black",
   "python.formatting.blackArgs": [
     "--line-length=88"
   ],
   "[python]": {
+    // Use the Python extension as the default formatter; it will invoke Black per settings
+    "editor.defaultFormatter": "ms-python.python",
+    // Organize imports on save (works well with isort if installed)
     "editor.codeActionsOnSave": {
       "source.organizeImports": "explicit"
     }

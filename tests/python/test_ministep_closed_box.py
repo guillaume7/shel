@@ -22,7 +22,7 @@ def test_ministep_closed_box_volume_conservation_over_few_steps():
     y = np.arange(ny)
     X, Y = np.meshgrid(x, y)
     cx, cy = nx / 2.0, ny / 2.0
-    eta = 0.1 * np.exp(-(((X - cx) ** 2 + (Y - cy) ** 2) / (2.0 * 4.0 ** 2)))
+    eta = 0.1 * np.exp(-(((X - cx) ** 2 + (Y - cy) ** 2) / (2.0 * 4.0**2)))
 
     U = np.zeros((ny, nx + 1))
     V = np.zeros((ny + 1, nx))
@@ -51,7 +51,9 @@ def test_ministep_stability_small_dt():
     U = 0.01 * rng.standard_normal((ny, nx + 1))
     V = 0.01 * rng.standard_normal((ny + 1, nx))
 
-    eta1, U1, V1 = explicit_step(eta, H, U, V, dt=dt, dx=dx, dy=dy, g=9.81, r=0.0, nu=0.0)
+    eta1, U1, V1 = explicit_step(
+        eta, H, U, V, dt=dt, dx=dx, dy=dy, g=9.81, r=0.0, nu=0.0
+    )
 
     for arr in (eta1, U1, V1):
         assert np.isfinite(arr).all()

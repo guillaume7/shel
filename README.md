@@ -57,6 +57,21 @@ Run tests:
 pytest -q
 ```
 
+### Pre-commit hooks (auto format + lint)
+
+Enable repository hooks to run isort, black, and pylint on commits:
+
+```bash
+pip install pre-commit  # if not already installed
+pre-commit install
+```
+
+Run on all files manually:
+
+```bash
+pre-commit run --all-files
+```
+
 ### Time API (Python)
 
 - Explicit ministep (Euler): `shel.model.solvers.common.ministep.explicit_step(eta, H, U, V, ...)`.

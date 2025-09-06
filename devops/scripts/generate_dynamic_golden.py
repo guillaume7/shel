@@ -12,13 +12,14 @@ Usage (from repo root):
 
 from __future__ import annotations
 
-import json
 import hashlib
+import json
+
 import numpy as np
 
-from shel.model.solvers.common.ministep import explicit_step
 from shel.model.diagnostics import IntegratedDiagnostics
 from shel.model.grid import Grid
+from shel.model.solvers.common.ministep import explicit_step
 
 
 def stable_hash(d: dict) -> str:
@@ -46,7 +47,9 @@ def run_short_sim(params: dict) -> dict:
     y = np.arange(ny, dtype=float)
     x = np.arange(nx, dtype=float)
     X, Y = np.meshgrid(x, y)
-    eta = eta_amp * np.exp(-(((X - nx / 2) ** 2 + (Y - ny / 2) ** 2) / (2.0 * sigma ** 2)))
+    eta = eta_amp * np.exp(
+        -(((X - nx / 2) ** 2 + (Y - ny / 2) ** 2) / (2.0 * sigma**2))
+    )
     U = np.zeros((ny, nx + 1), dtype=float)
     V = np.zeros((ny + 1, nx), dtype=float)
     f = np.zeros_like(H)
@@ -71,7 +74,9 @@ def run_short_sim(params: dict) -> dict:
 
     # Metrics
     grid = Grid({"grid": {"nx": nx, "ny": ny, "dx": dx, "dy": dy}})
-    diags = IntegratedDiagnostics.as_dict(U, V, eta, H, grid=grid, gravity=g, coriolis=f)
+    diags = IntegratedDiagnostics.as_dict(
+        U, V, eta, H, grid=grid, gravity=g, coriolis=f
+    )
     # Compose a compact set of metrics for hashing and human-inspection
     metrics = {
         "total_energy": float(diags["total_energy"]),

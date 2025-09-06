@@ -6,27 +6,27 @@ to set model parameters, initial conditions, and boundary conditions.
 """
 
 import logging
-import yaml
-from typing import Dict, Any, Optional, List
+from typing import Any, Dict, List, Optional
 
+import yaml
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (
-    QWidget,
-    QVBoxLayout,
+    QCheckBox,
+    QComboBox,
+    QDoubleSpinBox,
+    QFileDialog,
+    QFormLayout,
+    QGroupBox,
     QHBoxLayout,
     QLabel,
-    QPushButton,
-    QComboBox,
-    QTabWidget,
-    QSpinBox,
-    QDoubleSpinBox,
-    QGroupBox,
-    QFormLayout,
     QLineEdit,
-    QFileDialog,
     QMessageBox,
-    QCheckBox,
+    QPushButton,
+    QSpinBox,
+    QTabWidget,
+    QVBoxLayout,
+    QWidget,
 )
-from PyQt5.QtCore import Qt
 
 logger = logging.getLogger(__name__)
 

@@ -10,7 +10,14 @@ def test_tracer_step_minimal_applies_bcs():
     U = np.zeros((ny, nx + 1))
     V = np.zeros((ny + 1, nx))
 
-    cfg = {"boundary_conditions": {"west": "closed", "east": "radiative", "south": "closed", "north": "closed"}}
+    cfg = {
+        "boundary_conditions": {
+            "west": "closed",
+            "east": "radiative",
+            "south": "closed",
+            "north": "closed",
+        }
+    }
 
     Cn = tracer_step_minimal(C, U, V, dt=0.1, dx=1.0, dy=1.0, config=cfg)
 

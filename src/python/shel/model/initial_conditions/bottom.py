@@ -7,7 +7,7 @@ different types of bottom bathymetry configurations.
 
 import logging
 import math
-from typing import Dict, Any
+from typing import Any, Dict
 
 import numpy as np
 from numpy.typing import NDArray
@@ -273,6 +273,7 @@ class BathymetryInitialCondition:
             FileNotFoundError: If the file doesn't exist
         """
         import os
+
         from shel.io import netcdf_reader
 
         file_path = params.get("bathymetry", {}).get("file_path")

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import numpy as np
 
-from ..base import MomentumBC, Array
+from ..base import Array, MomentumBC
 from ..common.utils import mean_c_along_side, mean_H_along_side
 
 
@@ -79,10 +79,10 @@ class RadiativeSommerfeldBC(MomentumBC):
         g: float | None = None,
         dt: float | None = None,
         dx: float | None = None,
-    dy: float | None = None,
-    eta_old: Array | None = None,
-    eta_ext: Array | None = None,
-    relax: float | None = None,
+        dy: float | None = None,
+        eta_old: Array | None = None,
+        eta_ext: Array | None = None,
+        relax: float | None = None,
     ) -> None:
         assert U_old is not None and V_old is not None and H is not None
         assert g is not None and dt is not None and dx is not None and dy is not None

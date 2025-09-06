@@ -7,19 +7,23 @@ Note: Temporarily skipped in headless CI until GUI phases (G1–G6) are tackled.
 import pytest
 
 try:  # pragma: no cover - optional GUI dependency
-    from PyQt5.QtWidgets import QApplication
-    from PyQt5.QtTest import QTest  # noqa: F401
     from PyQt5.QtCore import Qt  # noqa: F401
+    from PyQt5.QtTest import QTest  # noqa: F401
+    from PyQt5.QtWidgets import QApplication
+
     _PYQT_AVAILABLE = True
 except Exception:  # broad catch to skip gracefully in minimal envs
     _PYQT_AVAILABLE = False
 
-pytestmark = pytest.mark.skip(reason="GUI tests disabled until GUI phases are implemented")
+pytestmark = pytest.mark.skip(
+    reason="GUI tests disabled until GUI phases are implemented"
+)
 
 if _PYQT_AVAILABLE:
     from shel.gui.main_window import MainWindow  # type: ignore
     from shel.gui.parameters import ParameterPanel  # type: ignore
     from shel.gui.visualization import PlotManager  # type: ignore
+
 
 @pytest.fixture
 def app():

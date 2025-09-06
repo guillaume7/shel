@@ -2,7 +2,7 @@
 
 import numpy as np
 
-from shel.model.diagnostics import IntegratedDiagnostics, FieldDiagnostics
+from shel.model.diagnostics import FieldDiagnostics, IntegratedDiagnostics
 from shel.model.state import ModelState
 
 
@@ -49,7 +49,9 @@ def test_integrated_diagnostics_basic():
     assert integ["kinetic_energy"] > 0.0
     assert integ["potential_energy"] > 0.0
     assert np.isclose(
-        integ["total_energy"], integ["kinetic_energy"] + integ["potential_energy"], rtol=1e-10
+        integ["total_energy"],
+        integ["kinetic_energy"] + integ["potential_energy"],
+        rtol=1e-10,
     )
     assert integ["volume"] > 0.0
 
@@ -86,7 +88,9 @@ def test_modelstate_to_dict_structure():
     assert "diagnostics" in dct
     diag = dct["diagnostics"]
     assert set(diag.keys()) == {"integrated", "fields"}
-    assert all(k in diag["integrated"] for k in ["kinetic_energy", "volume", "enstrophy"])
+    assert all(
+        k in diag["integrated"] for k in ["kinetic_energy", "volume", "enstrophy"]
+    )
     field_arrays = diag["fields"]
     # Ensure lists (serialized) and correct shapes
     assert isinstance(field_arrays["vorticity"], list)

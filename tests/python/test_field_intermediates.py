@@ -1,4 +1,5 @@
 import numpy as np
+
 from shel.model.diagnostics import FieldDiagnostics
 from shel.model.state import ModelState
 

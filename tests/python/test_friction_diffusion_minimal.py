@@ -1,7 +1,7 @@
 import numpy as np
 
-from shel.model.solvers.momentum.friction import bottom_drag_tendency
 from shel.model.solvers.momentum.diffusion import viscous_tendency
+from shel.model.solvers.momentum.friction import bottom_drag_tendency
 
 
 def test_bottom_drag_simple():

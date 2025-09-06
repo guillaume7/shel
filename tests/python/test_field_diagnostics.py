@@ -1,12 +1,16 @@
 from __future__ import annotations
+
 import numpy as np
+
+from shel.model.diagnostics.fields import FieldDiagnostics
 from shel.model.grid import Grid
 from shel.model.initial_conditions.factory import create_velocity
-from shel.model.diagnostics.fields import FieldDiagnostics
+
 
 def make_grid(nx=32, ny=24):
     cfg = {"grid": {"nx": nx, "ny": ny, "dx": 1000.0, "dy": 1000.0}}
     return Grid(cfg)
+
 
 def analytic_linear_field(grid: Grid):
     # Construct a linear velocity field u = ax, v = by so divergence = a + b (constant)
@@ -15,6 +19,7 @@ def analytic_linear_field(grid: Grid):
     u = a * (grid.x_u - grid.x_u.min())
     v = b * (grid.y_v - grid.y_v.min())
     return u, v, a, b
+
 
 def test_divergence_constant_linear():
     g = make_grid()

@@ -6,7 +6,7 @@ This module provides functions for reading and writing NetCDF files.
 
 import logging
 import os
-from typing import Dict, Any, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
 import xarray as xr
@@ -206,9 +206,6 @@ def append_timeseries(timeseries_data: Dict[str, Any], file_path: str) -> None:
     if os.path.exists(file_path):
         # Append to existing file
         with xr.open_dataset(file_path) as ds:
-            # Get current time dimension length
-            time_dim = len(ds.time)
-
             # Create new dataset with the new data point
             new_ds = xr.Dataset(
                 data_vars={

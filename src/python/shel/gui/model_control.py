@@ -9,20 +9,20 @@ import logging
 import os
 import sys
 import tempfile
-from typing import Dict, Any, Optional, Union, List, Tuple, cast
+from typing import Any, Dict, List, Optional, Tuple, Union, cast
 
 import yaml
+from PyQt5.QtCore import QProcess, Qt, QTimer
 from PyQt5.QtWidgets import (
-    QWidget,
-    QVBoxLayout,
+    QCheckBox,
     QHBoxLayout,
     QLabel,
-    QPushButton,
-    QProgressBar,
-    QCheckBox,
     QMessageBox,
+    QProgressBar,
+    QPushButton,
+    QVBoxLayout,
+    QWidget,
 )
-from PyQt5.QtCore import Qt, QProcess, QTimer
 
 logger = logging.getLogger(__name__)
 

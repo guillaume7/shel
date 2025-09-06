@@ -1,38 +1,22 @@
+"""Deprecated solver factory (class-based solvers removed).
+
+The project now exposes functional time steppers under
+``shel.model.solvers.time`` (e.g., ``leapfrog_stepper`` and
+``leapfrog_step_with_config``). This module is kept for backward
+compatibility only and will raise on use.
 """
-Solver factory for SHEL.
 
-This module provides a factory for creating solver instances.
-"""
+from __future__ import annotations
 
-import logging
-from typing import Dict, Any
-
-from shel.model.solvers.base import Solver
-from shel.model.solvers.leapfrog import LeapfrogSolver
-
-logger = logging.getLogger(__name__)
+from typing import Any, Dict
 
 
-class SolverFactory:
-    """Factory class for creating solver instances."""
+class SolverFactory:  # pragma: no cover - deprecated
+    """Deprecated factory kept for backward compatibility."""
 
     @staticmethod
-    def create(solver_type: str, config: Dict[str, Any]) -> Solver:
-        """
-        Create a solver instance of the specified type.
-
-        Args:
-            solver_type: Type of solver to create
-            config: Configuration dictionary
-
-        Returns:
-            Solver instance
-
-        Raises:
-            ValueError: If the solver type is not supported
-        """
-        if solver_type.lower() == "leapfrog":
-            logger.info("Creating leapfrog solver")
-            return LeapfrogSolver(config)
-        else:
-            raise ValueError(f"Unsupported solver type: {solver_type}")
+    def create(solver_type: str, config: Dict[str, Any]):  # type: ignore[unused-argument]
+        raise RuntimeError(
+            "SolverFactory is deprecated. Use functions in shel.model.solvers.time, "
+            "such as leapfrog_step_with_config."
+        )

@@ -3,36 +3,59 @@
 Provides registry-based creation of category-specific initial condition
 strategies. Concrete classes self-register in later phases.
 """
+
 from __future__ import annotations
-from typing import Dict, Type, Any
+
+from typing import Any, Dict, Type
+
 import numpy as np
-from .base import BathymetryIC, ElevationIC, VelocityIC, TracerIC
+
+from .base import BathymetryIC, ElevationIC, TracerIC, VelocityIC
 
 BATHYMETRY_REGISTRY: Dict[str, Type[BathymetryIC]] = {}
 ELEVATION_REGISTRY: Dict[str, Type[ElevationIC]] = {}
 VELOCITY_REGISTRY: Dict[str, Type[VelocityIC]] = {}
 TRACER_REGISTRY: Dict[str, Type[TracerIC]] = {}
 
+
 def create_bathymetry(name: str, **kwargs) -> BathymetryIC:
-    try: return BATHYMETRY_REGISTRY[name.lower()](**kwargs)
-    except KeyError as exc: raise ValueError(f"Unknown bathymetry IC '{name}'") from exc
+    try:
+        return BATHYMETRY_REGISTRY[name.lower()](**kwargs)
+    except KeyError as exc:
+        raise ValueError(f"Unknown bathymetry IC '{name}'") from exc
+
 
 def create_elevation(name: str, **kwargs) -> ElevationIC:
-    try: return ELEVATION_REGISTRY[name.lower()](**kwargs)
-    except KeyError as exc: raise ValueError(f"Unknown elevation IC '{name}'") from exc
+    try:
+        return ELEVATION_REGISTRY[name.lower()](**kwargs)
+    except KeyError as exc:
+        raise ValueError(f"Unknown elevation IC '{name}'") from exc
+
 
 def create_velocity(name: str, **kwargs) -> VelocityIC:
-    try: return VELOCITY_REGISTRY[name.lower()](**kwargs)
-    except KeyError as exc: raise ValueError(f"Unknown velocity IC '{name}'") from exc
+    try:
+        return VELOCITY_REGISTRY[name.lower()](**kwargs)
+    except KeyError as exc:
+        raise ValueError(f"Unknown velocity IC '{name}'") from exc
+
 
 def create_tracer(name: str, **kwargs) -> TracerIC:
-    try: return TRACER_REGISTRY[name.lower()](**kwargs)
-    except KeyError as exc: raise ValueError(f"Unknown tracer IC '{name}'") from exc
+    try:
+        return TRACER_REGISTRY[name.lower()](**kwargs)
+    except KeyError as exc:
+        raise ValueError(f"Unknown tracer IC '{name}'") from exc
+
 
 __all__ = [
-    "create_bathymetry","create_elevation","create_velocity","create_tracer",
-    "BATHYMETRY_REGISTRY","ELEVATION_REGISTRY","VELOCITY_REGISTRY","TRACER_REGISTRY",
-    "build_initial_state"
+    "create_bathymetry",
+    "create_elevation",
+    "create_velocity",
+    "create_tracer",
+    "BATHYMETRY_REGISTRY",
+    "ELEVATION_REGISTRY",
+    "VELOCITY_REGISTRY",
+    "TRACER_REGISTRY",
+    "build_initial_state",
 ]
 
 
@@ -93,7 +116,9 @@ def build_initial_state(cfg: Dict[str, Any], grid):
         v_params = vel_cfg.get("params", {})
         # Build with dependent fields if requested
         if v_name.lower() == "geostrophic":
-            u, v = create_velocity(v_name, **v_params).build(grid, eta=eta, coriolis=coriolis)
+            u, v = create_velocity(v_name, **v_params).build(
+                grid, eta=eta, coriolis=coriolis
+            )
         else:
             u, v = create_velocity(v_name, **v_params).build(grid)
     else:

@@ -1,16 +1,11 @@
 from __future__ import annotations
 
-from .registry import register_bc, list_tracer_bcs
-from .momentum.strategies import (
-    ClosedBC,
-    FreeSlipBC,
-    RadiativeSommerfeldBC as RadiativeMomentumBC,
-    FlatherBC,
-)
-from .waterlevel.strategies import RadiativeSommerfeldEtaBC as RadiativeEtaBC
-from .waterlevel.strategies import FlatherEtaBC, DirichletEtaBC
+from .momentum.strategies import ClosedBC, FlatherBC, FreeSlipBC
+from .momentum.strategies import RadiativeSommerfeldBC as RadiativeMomentumBC
+from .registry import list_tracer_bcs, register_bc
 from .tracer import TracerClosedBC, TracerRadiativeBC
-
+from .waterlevel.strategies import DirichletEtaBC, FlatherEtaBC
+from .waterlevel.strategies import RadiativeSommerfeldEtaBC as RadiativeEtaBC
 
 # Register domain-specific strategies under common names
 register_bc("closed", momentum=ClosedBC)
@@ -23,5 +18,3 @@ register_bc("radiative", tracer=TracerRadiativeBC)
 
 # Re-export canonical names expected by callers
 RadiativeSommerfeldBC = RadiativeMomentumBC
-
-

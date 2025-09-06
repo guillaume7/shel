@@ -4,15 +4,17 @@ Config-aware convenience stepper for the explicit ministep.
 Resolves boundary-condition type from a configuration mapping and forwards
 to `explicit_step`.
 """
+
 from __future__ import annotations
 
-from typing import Mapping, Any, Dict
+from typing import Any, Dict, Mapping
 
 import numpy as np
 
-from .ministep import explicit_step
 from shel.model.boundary_conditions import get_bc
 from shel.model.boundary_conditions.registry import get_tracer_bc
+
+from .ministep import explicit_step
 
 Array = np.ndarray
 
@@ -94,7 +96,9 @@ def apply_eta_bc_per_side(
                 eta_field,
                 side,
                 eta_old=eta_old,
-                eta_ext=None if not isinstance(eta_ext_map, dict) else eta_ext_map.get(side),
+                eta_ext=(
+                    None if not isinstance(eta_ext_map, dict) else eta_ext_map.get(side)
+                ),
                 H=H,
                 g=g,
                 dt=dt,
@@ -135,7 +139,9 @@ def apply_momentum_bc_per_side(
                 dx=dx,
                 dy=dy,
                 eta_old=eta_old,
-                eta_ext=None if not isinstance(eta_ext_map, dict) else eta_ext_map.get(side),
+                eta_ext=(
+                    None if not isinstance(eta_ext_map, dict) else eta_ext_map.get(side)
+                ),
                 relax=mom_relax,
             )
 
@@ -168,14 +174,24 @@ def apply_sponge_layer(
         return alpha * 0.5 * (1.0 + np.cos(np.pi * s))
 
     if eta_ext_map and (apply_to in ("eta", "both")):
-        if "west" in bc_sides and isinstance(eta_ext_map, dict) and eta_ext_map.get("west") is not None:
+        if (
+            "west" in bc_sides
+            and isinstance(eta_ext_map, dict)
+            and eta_ext_map.get("west") is not None
+        ):
             ext = eta_ext_map["west"]
             for k in range(0, width):
                 eta_field[:, k] = (1 - w(k)) * eta_field[:, k] + w(k) * ext[:, 0]
-        if "east" in bc_sides and isinstance(eta_ext_map, dict) and eta_ext_map.get("east") is not None:
+        if (
+            "east" in bc_sides
+            and isinstance(eta_ext_map, dict)
+            and eta_ext_map.get("east") is not None
+        ):
             ext = eta_ext_map["east"]
             for k in range(0, width):
-                eta_field[:, -1 - k] = (1 - w(k)) * eta_field[:, -1 - k] + w(k) * ext[:, -1]
+                eta_field[:, -1 - k] = (1 - w(k)) * eta_field[:, -1 - k] + w(k) * ext[
+                    :, -1
+                ]
 
     if eta_ext_map and (apply_to in ("momentum", "both")):
         if "west" in bc_sides:
@@ -183,13 +199,17 @@ def apply_sponge_layer(
                 U_field[:, k] = (1 - w(k)) * U_field[:, k] + w(k) * U_field[:, 0]
         if "east" in bc_sides:
             for k in range(1, width):
-                U_field[:, -1 - k] = (1 - w(k)) * U_field[:, -1 - k] + w(k) * U_field[:, -1]
+                U_field[:, -1 - k] = (1 - w(k)) * U_field[:, -1 - k] + w(k) * U_field[
+                    :, -1
+                ]
         if "south" in bc_sides:
             for k in range(1, width):
                 V_field[k, :] = (1 - w(k)) * V_field[k, :] + w(k) * V_field[0, :]
         if "north" in bc_sides:
             for k in range(1, width):
-                V_field[-1 - k, :] = (1 - w(k)) * V_field[-1 - k, :] + w(k) * V_field[-1, :]
+                V_field[-1 - k, :] = (1 - w(k)) * V_field[-1 - k, :] + w(k) * V_field[
+                    -1, :
+                ]
 
 
 def apply_tracer_bc_per_side(

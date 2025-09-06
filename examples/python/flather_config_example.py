@@ -5,7 +5,12 @@ def build_flather_east_config(ny: int, nx: int, eta_east_value: float = 0.1):
     eta_ext = np.zeros((ny, nx))
     eta_ext[:, -1] = eta_east_value
     return {
-        "boundary_conditions": {"west": "closed", "east": "flather", "south": "closed", "north": "closed"},
+        "boundary_conditions": {
+            "west": "closed",
+            "east": "flather",
+            "south": "closed",
+            "north": "closed",
+        },
         "boundary_eta_ext": {"east": eta_ext},
         # Apply after continuity (default); set to "pre" to impose before the step
         "eta_bc_stage": "post",

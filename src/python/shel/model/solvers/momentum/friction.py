@@ -4,6 +4,7 @@ Implements dU/dt = -r * U and dV/dt = -r * V, where r is a scalar drag
 coefficient. Shapes are preserved and NaNs (e.g., at boundaries) are propagated
 by multiplication.
 """
+
 from __future__ import annotations
 
 import numpy as np

@@ -10,6 +10,7 @@ All arrays are float64. Derivatives use centered differences mapped to the
 appropriate staggered locations. Boundaries for T->U and T->V derivatives
 that require a neighbor outside the domain are filled with NaN.
 """
+
 from __future__ import annotations
 
 import numpy as np
@@ -96,6 +97,6 @@ def div_uv_to_t(U: Array, V: Array, dx: float, dy: float) -> Array:
     div_T = dU/dx + dV/dy mapped onto T centers using face differences.
     Result shape: (ny, nx).
     """
-    dUdx = (U[:, 1:] - U[:, :-1]) / dx
-    dVdy = (V[1:, :] - V[:-1, :]) / dy
-    return dUdx + dVdy
+    d_udx = (U[:, 1:] - U[:, :-1]) / dx
+    d_vdy = (V[1:, :] - V[:-1, :]) / dy
+    return d_udx + d_vdy

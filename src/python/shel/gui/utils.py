@@ -1,8 +1,9 @@
 """
 Utility functions and classes for the GUI.
 """
+
 import logging
-from typing import Dict, Any
+from typing import Any, Dict
 
 import zmq
 from PyQt5.QtCore import QThread, pyqtSignal

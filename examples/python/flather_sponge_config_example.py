@@ -39,7 +39,9 @@ def build_flather_east_with_sponge_config(
         "sponge": {
             "enabled": True,
             "width": int(sponge_width),  # number of interior cells to blend
-            "alpha": float(sponge_alpha),  # blend strength (0..1), conservative ~0.1-0.3
+            "alpha": float(
+                sponge_alpha
+            ),  # blend strength (0..1), conservative ~0.1-0.3
             "taper": "cosine",  # cosine taper by default
             "apply_to": "both",  # blend eta and momentum
         },

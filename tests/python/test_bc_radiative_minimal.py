@@ -15,7 +15,7 @@ def test_radiative_east_boundary_minimal_outflow():
     x = np.arange(nx)
     X = np.tile(x, (ny, 1))
     # Small right-going slope in eta near the right side
-    eta = 0.02 * np.exp(-((X - (nx * 0.7)) ** 2) / (2.0 * 3.0 ** 2))
+    eta = 0.02 * np.exp(-((X - (nx * 0.7)) ** 2) / (2.0 * 3.0**2))
 
     U = np.zeros((ny, nx + 1))
     V = np.zeros((ny + 1, nx))

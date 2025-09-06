@@ -5,18 +5,20 @@ Depends on:
 - explicit_step: assembles tendencies and applies momentum/eta updates for one Euler step
 - asselin_filter: Robert–Asselin filter applied to the middle time level
 """
+
 from __future__ import annotations
 
-import numpy as np
 from typing import Any, Mapping
+
+import numpy as np
 
 from ..common.ministep import explicit_step
 from ..common.stepper import (
-    resolve_bc_type_from_config,
-    resolve_bc_sides_from_config,
     apply_eta_bc_per_side,
     apply_momentum_bc_per_side,
     apply_sponge_layer,
+    resolve_bc_sides_from_config,
+    resolve_bc_type_from_config,
 )
 from .asselin import asselin_filter
 

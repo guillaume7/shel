@@ -1,11 +1,15 @@
 from __future__ import annotations
+
 import numpy as np
+
 from shel.model.grid import Grid
 from shel.model.initial_conditions.factory import build_initial_state
+
 
 def make_grid(nx=20, ny=16):
     cfg = {"grid": {"nx": nx, "ny": ny, "dx": 1000.0, "dy": 1000.0}}
     return Grid(cfg)
+
 
 def test_build_initial_state_minimal():
     g = make_grid()
@@ -15,9 +19,9 @@ def test_build_initial_state_minimal():
         "velocity": {"name": "geostrophic"},
         "tracers": [
             {"name": "gaussian", "key": "tracer_main", "params": {"c0": 2.0}},
-            {"name": "uniform", "params": {"value": 0.5}}
+            {"name": "uniform", "params": {"value": 0.5}},
         ],
-        "coriolis": {"type": "constant", "value": 1e-4}
+        "coriolis": {"type": "constant", "value": 1e-4},
     }
     state = build_initial_state(cfg, g)
     # Shape checks
@@ -38,6 +42,7 @@ def test_build_initial_state_minimal():
     # Basic mass integral > 0
     mass = state["H"].sum() * g.dx * g.dy
     assert mass > 0
+
 
 def test_build_initial_state_defaults():
     g = make_grid()

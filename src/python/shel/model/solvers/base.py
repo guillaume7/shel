@@ -6,7 +6,7 @@ This module provides the base class for numerical solvers.
 
 import logging
 from abc import ABC, abstractmethod
-from typing import Dict, Any
+from typing import Any, Dict
 
 from shel.model.state import ModelState
 

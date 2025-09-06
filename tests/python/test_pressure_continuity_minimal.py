@@ -28,6 +28,7 @@ def test_pressure_gradient_linear_eta():
 
 ess = 1e-12
 
+
 def test_continuity_conserves_volume_closed_box():
     ny, nx = 12, 14
     dx, dy = 1.0, 1.0

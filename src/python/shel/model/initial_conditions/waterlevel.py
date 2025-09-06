@@ -7,7 +7,7 @@ different types of initial water elevation conditions.
 
 import logging
 import math
-from typing import Dict, Any
+from typing import Any, Dict
 
 import numpy as np
 from numpy.typing import NDArray

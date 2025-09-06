@@ -19,15 +19,32 @@ def test_dirichlet_eta_east_smoke():
     eta_ext[:, -1] = 0.1
 
     cfg = {
-        "boundary_conditions": {"west": "closed", "east": "dirichlet", "south": "closed", "north": "closed"},
+        "boundary_conditions": {
+            "west": "closed",
+            "east": "dirichlet",
+            "south": "closed",
+            "north": "closed",
+        },
         "boundary_eta_ext": {"east": eta_ext},
         "boundary_eta_relax": 0.5,
     }
 
     for _ in range(5):
         eta, U, V = explicit_step_with_config(
-            eta, H, U, V, dt=dt, dx=dx, dy=dy, g=g, r=0.0, nu=0.0,
-            enable_advection=False, f=None, enable_coriolis=False, config=cfg,
+            eta,
+            H,
+            U,
+            V,
+            dt=dt,
+            dx=dx,
+            dy=dy,
+            g=g,
+            r=0.0,
+            nu=0.0,
+            enable_advection=False,
+            f=None,
+            enable_coriolis=False,
+            config=cfg,
         )
         assert np.isfinite(eta).all()
         assert np.isfinite(U).all()

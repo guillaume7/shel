@@ -11,14 +11,21 @@ Coriolis parameter on T cells and H the total depth.
 Numerical fidelity: mirrors logic in IntegratedDiagnostics._vorticity_t
 to avoid duplication and ensure identical discretization of ζ_T.
 """
+
 from __future__ import annotations
+
 from typing import Dict
+
 import numpy as np
 from numpy.typing import NDArray
-from .integrated import IntegratedDiagnostics
-from ..grid import Grid  # type: ignore
 
-def potential_vorticity(u: NDArray, v: NDArray, H: NDArray, f: NDArray, grid: Grid) -> NDArray:
+from ..grid import Grid  # type: ignore
+from .integrated import IntegratedDiagnostics
+
+
+def potential_vorticity(
+    u: NDArray, v: NDArray, H: NDArray, f: NDArray, grid: Grid
+) -> NDArray:
     """Compute Ertel-like barotropic potential vorticity q on T cells.
 
     Parameters
@@ -40,7 +47,11 @@ def potential_vorticity(u: NDArray, v: NDArray, H: NDArray, f: NDArray, grid: Gr
     zeta_t = IntegratedDiagnostics._vorticity_t(u, v, grid)
     return (zeta_t + f) / H
 
-def as_dict(u: NDArray, v: NDArray, H: NDArray, f: NDArray, grid: Grid) -> Dict[str, NDArray]:
+
+def as_dict(
+    u: NDArray, v: NDArray, H: NDArray, f: NDArray, grid: Grid
+) -> Dict[str, NDArray]:
     return {"potential_vorticity": potential_vorticity(u, v, H, f, grid)}
+
 
 __all__ = ["potential_vorticity", "as_dict"]

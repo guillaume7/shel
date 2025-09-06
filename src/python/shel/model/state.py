@@ -6,6 +6,7 @@ continue to work while new subpackage structure is introduced.
 In later phases this file may host only façade helpers or be removed
 after a deprecation window.
 """
+
 from .state.model_state import ModelState  # type: ignore  # noqa: F401
 
 __all__ = ["ModelState"]

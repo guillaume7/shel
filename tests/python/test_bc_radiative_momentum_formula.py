@@ -55,7 +55,9 @@ def test_sommerfeld_momentum_formula_south_north():
     bc = m_cls()
 
     # SOUTH
-    bc.apply_side(U, V, "south", U_old=U_old, V_old=V_old, H=H, g=g, dt=dt, dx=dx, dy=dy)
+    bc.apply_side(
+        U, V, "south", U_old=U_old, V_old=V_old, H=H, g=g, dt=dt, dx=dx, dy=dy
+    )
     c = np.sqrt(g * H[0, :].mean())
     r = c * dt / dy
     expected_south = V_old[0, :] - r * (V_old[1, :] - V_old[0, :])
@@ -63,6 +65,8 @@ def test_sommerfeld_momentum_formula_south_north():
 
     # NORTH
     V.fill(0.0)
-    bc.apply_side(U, V, "north", U_old=U_old, V_old=V_old, H=H, g=g, dt=dt, dx=dx, dy=dy)
+    bc.apply_side(
+        U, V, "north", U_old=U_old, V_old=V_old, H=H, g=g, dt=dt, dx=dx, dy=dy
+    )
     expected_north = V_old[-1, :] - r * (V_old[-1, :] - V_old[-2, :])
     np.testing.assert_allclose(V[-1, :], expected_north, rtol=0, atol=1e-12)

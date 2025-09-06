@@ -47,5 +47,9 @@ def test_radiative_eta_and_momentum_side_do_not_crash():
     # Sanity: side application runs
     m_cls, e_cls = get_bc("radiative")
     assert m_cls is not None and e_cls is not None
-    m_cls().apply_side(U, V, "east", U_old=U.copy(), V_old=V.copy(), H=H, g=g, dt=dt, dx=dx, dy=dy)
-    e_cls().apply_side_eta(eta, "east", eta_old=eta.copy(), H=H, g=g, dt=dt, dx=dx, dy=dy)
+    m_cls().apply_side(
+        U, V, "east", U_old=U.copy(), V_old=V.copy(), H=H, g=g, dt=dt, dx=dx, dy=dy
+    )
+    e_cls().apply_side_eta(
+        eta, "east", eta_old=eta.copy(), H=H, g=g, dt=dt, dx=dx, dy=dy
+    )

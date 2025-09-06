@@ -1,14 +1,19 @@
 """Core grid implementation (relocated from grid.py in Phase 1)."""
+
 from __future__ import annotations
+
 import logging
-from typing import Dict, Any, Tuple
+from typing import Any, Dict, Tuple
+
 import numpy as np
 from numpy.typing import NDArray
 
 logger = logging.getLogger(__name__)
 
+
 class Grid:
     """Arakawa C-grid implementation for shallow water equations (unchanged)."""
+
     def __init__(self, config: Dict[str, Any]):
         self.nx = config["grid"]["nx"]
         self.ny = config["grid"]["ny"]
@@ -72,5 +77,6 @@ class Grid:
         y_ref = self.y_origin + self.ny * self.dy / 2
         y_rel = self.y_t - y_ref
         return f0 + beta * y_rel
+
 
 __all__ = ["Grid"]

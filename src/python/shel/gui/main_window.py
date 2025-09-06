@@ -7,44 +7,43 @@ to interact with the model, visualize results, and set parameters.
 """
 import logging
 import sys
-from typing import Dict, Any, Optional, List, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 import zmq
-from PyQt5.QtWidgets import (
-    QApplication,
-    QMainWindow,
-    QWidget,
-    QDockWidget,
-    QAction,
-    QVBoxLayout,
-    QHBoxLayout,
-    QLabel,
-    QPushButton,
-    QComboBox,
-    QTabWidget,
-    QSpinBox,
-    QDoubleSpinBox,
-    QGroupBox,
-    QFormLayout,
-    QLineEdit,
-    QFileDialog,
-    QMessageBox,
-    QCheckBox,
-    QSlider,
-    QProgressBar,
-)
-from PyQt5.QtCore import Qt, QTimer, QSettings, pyqtSignal, QThread
-from PyQt5.QtGui import QIcon, QFont
-
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
+from PyQt5.QtCore import QSettings, Qt, QThread, QTimer, pyqtSignal
+from PyQt5.QtGui import QFont, QIcon
+from PyQt5.QtWidgets import (
+    QAction,
+    QApplication,
+    QCheckBox,
+    QComboBox,
+    QDockWidget,
+    QDoubleSpinBox,
+    QFileDialog,
+    QFormLayout,
+    QGroupBox,
+    QHBoxLayout,
+    QLabel,
+    QLineEdit,
+    QMainWindow,
+    QMessageBox,
+    QProgressBar,
+    QPushButton,
+    QSlider,
+    QSpinBox,
+    QTabWidget,
+    QVBoxLayout,
+    QWidget,
+)
 
-from shel.gui.visualization import PlotManager
-from shel.gui.parameters import ParameterPanel
 from shel.gui.model_control import ModelControlPanel
+from shel.gui.parameters import ParameterPanel
 from shel.gui.utils import MessageSubscriber
+from shel.gui.visualization import PlotManager
 
 logger = logging.getLogger(__name__)
 

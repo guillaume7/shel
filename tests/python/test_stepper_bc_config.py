@@ -1,20 +1,44 @@
 import numpy as np
 
-from shel.model.solvers.common.stepper import resolve_bc_type_from_config, explicit_step_with_config
+from shel.model.solvers.common.stepper import (
+    explicit_step_with_config,
+    resolve_bc_type_from_config,
+)
 
 
 def test_resolve_bc_type_from_config_uniform_closed():
-    cfg = {"boundary_conditions": {"west": "closed", "east": "closed", "south": "closed", "north": "closed"}}
+    cfg = {
+        "boundary_conditions": {
+            "west": "closed",
+            "east": "closed",
+            "south": "closed",
+            "north": "closed",
+        }
+    }
     assert resolve_bc_type_from_config(cfg) == "closed"
 
 
 def test_resolve_bc_type_from_config_uniform_freeslip():
-    cfg = {"boundary_conditions": {"west": "freeslip", "east": "freeslip", "south": "freeslip", "north": "freeslip"}}
+    cfg = {
+        "boundary_conditions": {
+            "west": "freeslip",
+            "east": "freeslip",
+            "south": "freeslip",
+            "north": "freeslip",
+        }
+    }
     assert resolve_bc_type_from_config(cfg) == "freeslip"
 
 
 def test_resolve_bc_type_from_config_mixed_defaults_to_closed():
-    cfg = {"boundary_conditions": {"west": "closed", "east": "freeslip", "south": "closed", "north": "closed"}}
+    cfg = {
+        "boundary_conditions": {
+            "west": "closed",
+            "east": "freeslip",
+            "south": "closed",
+            "north": "closed",
+        }
+    }
     assert resolve_bc_type_from_config(cfg) == "closed"
 
 
@@ -30,7 +54,14 @@ def test_explicit_step_with_config_applies_bc():
     V = -0.1 * np.ones((ny + 1, nx))
 
     # Freeslip config: should zero normal components at edges
-    cfg_fs = {"boundary_conditions": {"west": "freeslip", "east": "freeslip", "south": "freeslip", "north": "freeslip"}}
+    cfg_fs = {
+        "boundary_conditions": {
+            "west": "freeslip",
+            "east": "freeslip",
+            "south": "freeslip",
+            "north": "freeslip",
+        }
+    }
     eta1, U1, V1 = explicit_step_with_config(
         eta,
         H,
@@ -51,7 +82,14 @@ def test_explicit_step_with_config_applies_bc():
     assert np.allclose(V1[0, :], 0.0) and np.allclose(V1[-1, :], 0.0)
 
     # Mixed config: falls back to closed -> same edge zeroing
-    cfg_mixed = {"boundary_conditions": {"west": "closed", "east": "freeslip", "south": "closed", "north": "closed"}}
+    cfg_mixed = {
+        "boundary_conditions": {
+            "west": "closed",
+            "east": "freeslip",
+            "south": "closed",
+            "north": "closed",
+        }
+    }
     eta2, U2, V2 = explicit_step_with_config(
         eta,
         H,

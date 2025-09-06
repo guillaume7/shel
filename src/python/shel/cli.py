@@ -6,7 +6,7 @@ import argparse
 import logging
 import os
 import sys
-from typing import Dict, Any, Optional
+from typing import Any, Dict, Optional
 
 import yaml
 

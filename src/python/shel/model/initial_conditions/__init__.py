@@ -13,12 +13,17 @@ creation calls are made.
 """
 
 # Bathymetry ICs
-from .bathymetry import bump, step, island, cylinder  # noqa: F401
+from .bathymetry import bump, cylinder, island, step  # noqa: F401
+
 # Elevation ICs
-from .elevation import gaussian as elevation_gaussian, flat  # noqa: F401
-# Velocity ICs
-from .velocity import geostrophic, solid_body, shear  # noqa: F401
+from .elevation import flat
+from .elevation import gaussian as elevation_gaussian  # noqa: F401
+
 # Tracer ICs
-from .tracer import gaussian as tracer_gaussian, uniform  # noqa: F401
+from .tracer import gaussian as tracer_gaussian  # noqa: F401
+from .tracer import uniform
+
+# Velocity ICs
+from .velocity import geostrophic, shear, solid_body  # noqa: F401
 
 __all__ = []  # Registries & factories are exposed via factory.py

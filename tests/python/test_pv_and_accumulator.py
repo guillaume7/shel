@@ -1,8 +1,14 @@
 from __future__ import annotations
+
 import numpy as np
+
+from shel.model.diagnostics import (
+    GlobalAccumulator,
+    IntegratedDiagnostics,
+    potential_vorticity,
+)
 from shel.model.grid import Grid
 from shel.model.initial_conditions.factory import build_initial_state
-from shel.model.diagnostics import potential_vorticity, GlobalAccumulator, IntegratedDiagnostics
 
 
 def make_grid(nx=20, ny=16):
@@ -32,10 +38,18 @@ def test_global_accumulator_appends_and_matches_integrated():
     acc = GlobalAccumulator()
     for step in range(3):
         t = step * 10.0
-        acc.update(t, state["u"], state["v"], state["eta"], state["H"], state["coriolis"], g)
+        acc.update(
+            t, state["u"], state["v"], state["eta"], state["H"], state["coriolis"], g
+        )
     d = acc.as_dict()
     assert d["time"] == [0.0, 10.0, 20.0]
     # Cross-check last entry with direct IntegratedDiagnostics call
-    di = IntegratedDiagnostics.as_dict(state["u"], state["v"], state["eta"], state["H"], g, 9.81, state["coriolis"])
-    assert np.isclose(d["total_energy"][-1], di["total_energy"])  # unchanged static state
-    assert np.isclose(d["volume"][0], d["volume"][1]) and np.isclose(d["volume"][1], d["volume"][2])
+    di = IntegratedDiagnostics.as_dict(
+        state["u"], state["v"], state["eta"], state["H"], g, 9.81, state["coriolis"]
+    )
+    assert np.isclose(
+        d["total_energy"][-1], di["total_energy"]
+    )  # unchanged static state
+    assert np.isclose(d["volume"][0], d["volume"][1]) and np.isclose(
+        d["volume"][1], d["volume"][2]
+    )

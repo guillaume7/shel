@@ -2,8 +2,7 @@ from __future__ import annotations
 
 from typing import Dict, Type
 
-from .base import MomentumBC, EtaBC, TracerBC
-
+from .base import EtaBC, MomentumBC, TracerBC
 
 _MOMENTUM: Dict[str, Type[MomentumBC]] = {}
 _ETA: Dict[str, Type[EtaBC]] = {}
@@ -34,8 +33,10 @@ def get_bc(name: str):
 def list_bcs() -> dict:
     return {"momentum": sorted(_MOMENTUM.keys()), "eta": sorted(_ETA.keys())}
 
+
 def get_tracer_bc(name: str) -> Type[TracerBC] | None:
     return _TRACER.get(name.lower())
+
 
 def list_tracer_bcs() -> list[str]:
     return sorted(_TRACER.keys())

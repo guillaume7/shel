@@ -1,8 +1,14 @@
 from __future__ import annotations
+
 import numpy as np
+
+from shel.model.diagnostics import (
+    FieldDiagnostics,
+    IntegratedDiagnostics,
+    potential_vorticity,
+)
 from shel.model.grid import Grid
 from shel.model.initial_conditions.factory import build_initial_state
-from shel.model.diagnostics import IntegratedDiagnostics, FieldDiagnostics, potential_vorticity
 
 
 def make_grid():
@@ -11,9 +17,19 @@ def make_grid():
 
 def test_repeated_diagnostics_idempotent():
     g = make_grid()
-    cfg = {"bathymetry": {"name": "step"}, "elevation": {"name": "flat"}, "velocity": {"name": "solid_body"}}
+    cfg = {
+        "bathymetry": {"name": "step"},
+        "elevation": {"name": "flat"},
+        "velocity": {"name": "solid_body"},
+    }
     state = build_initial_state(cfg, g)
-    u, v, eta, H, f = state["u"], state["v"], state["eta"], state["H"], state["coriolis"]
+    u, v, eta, H, f = (
+        state["u"],
+        state["v"],
+        state["eta"],
+        state["H"],
+        state["coriolis"],
+    )
     diag1 = IntegratedDiagnostics.as_dict(u, v, eta, H, g, 9.81, f)
     diag2 = IntegratedDiagnostics.as_dict(u, v, eta, H, g, 9.81, f)
     for k in diag1:

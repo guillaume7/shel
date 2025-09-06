@@ -1,8 +1,8 @@
 import numpy as np
 
-from shel.model.solvers.common.ministep import explicit_step
 from shel.model.diagnostics import IntegratedDiagnostics
 from shel.model.grid import Grid
+from shel.model.solvers.common.ministep import explicit_step
 
 
 def total_energy(u, v, eta, H, grid, g, f):
@@ -23,7 +23,7 @@ def test_ministep_closed_box_volume_conservation_over_10_steps():
     x = np.arange(nx)
     y = np.arange(ny)
     X, Y = np.meshgrid(x, y)
-    eta = 0.05 * np.exp(-(((X - nx / 2) ** 2 + (Y - ny / 2) ** 2) / (2.0 * 5.0 ** 2)))
+    eta = 0.05 * np.exp(-(((X - nx / 2) ** 2 + (Y - ny / 2) ** 2) / (2.0 * 5.0**2)))
     U = np.zeros((ny, nx + 1))
     V = np.zeros((ny + 1, nx))
     f = np.zeros_like(H)
@@ -64,7 +64,7 @@ def test_ministep_energy_not_increasing_from_pe_bump_with_damping():
     x = np.arange(nx)
     y = np.arange(ny)
     X, Y = np.meshgrid(x, y)
-    eta = 0.05 * np.exp(-(((X - nx / 2) ** 2 + (Y - ny / 2) ** 2) / (2.0 * 4.0 ** 2)))
+    eta = 0.05 * np.exp(-(((X - nx / 2) ** 2 + (Y - ny / 2) ** 2) / (2.0 * 4.0**2)))
     U = np.zeros((ny, nx + 1))
     V = np.zeros((ny + 1, nx))
     f = np.zeros_like(H)

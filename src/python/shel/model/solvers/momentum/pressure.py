@@ -8,6 +8,7 @@ pressure gradient acceleration at U and V faces:
 
 Derivatives use centered differences mapped T→U/V. Boundary faces are NaN.
 """
+
 from __future__ import annotations
 
 import numpy as np
@@ -17,7 +18,9 @@ from ..common import d_dx_t_to_u, d_dy_t_to_v
 Array = np.ndarray
 
 
-def pressure_gradient(eta: Array, g: float, dx: float, dy: float) -> tuple[Array, Array]:
+def pressure_gradient(
+    eta: Array, g: float, dx: float, dy: float
+) -> tuple[Array, Array]:
     """Compute pressure gradient accelerations at faces from eta on centers.
 
     Parameters

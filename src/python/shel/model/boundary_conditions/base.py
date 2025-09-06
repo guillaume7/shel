@@ -5,6 +5,7 @@ These operate directly on staggered arrays used by the ministep path
 and avoid coupling to ModelState. They complement the legacy OO API
 in `boundary.py` that works with ModelState and the orchestrated solver.
 """
+
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
@@ -43,9 +44,9 @@ class MomentumBC(BoundaryCondition, ABC):
         dt: float | None = None,
         dx: float | None = None,
         dy: float | None = None,
-    eta_old: Array | None = None,
-    eta_ext: Array | None = None,
-    relax: float | None = None,
+        eta_old: Array | None = None,
+        eta_ext: Array | None = None,
+        relax: float | None = None,
     ) -> None:
         """Apply to a single side in-place. Extra args optional per strategy."""
 
@@ -60,13 +61,13 @@ class EtaBC(BoundaryCondition, ABC):
         side: str,
         *,
         eta_old: Array | None = None,
-    eta_ext: Array | None = None,
+        eta_ext: Array | None = None,
         H: Array | None = None,
         g: float | None = None,
         dt: float | None = None,
         dx: float | None = None,
         dy: float | None = None,
-    relax: float | None = None,
+        relax: float | None = None,
     ) -> None:
         """Apply to a single side in-place. Extra args optional per strategy."""
 

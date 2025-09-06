@@ -10,9 +10,10 @@ sys.path.insert(
     0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../src/python"))
 )
 
+import numpy as np
+
 # Import common fixtures here
 import pytest
-import numpy as np
 
 
 @pytest.fixture

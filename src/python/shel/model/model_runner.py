@@ -9,18 +9,18 @@ and communication with the GUI.
 import logging
 import os
 import time
-from typing import Dict, Any, List, Union
+from typing import Any, Dict, List, Union
 
 import numpy as np
 import zmq
 from numpy.typing import NDArray
 
-from shel.model.state import ModelState
-from shel.model.solvers.factory import SolverFactory
-from shel.model.boundary_conditions import get_bc
-from shel.model.initial_conditions.waterlevel import WaterlevelInitialCondition
-from shel.model.initial_conditions.bottom import BathymetryInitialCondition
 from shel.io import netcdf_reader, parquet_reader
+from shel.model.boundary_conditions import get_bc
+from shel.model.initial_conditions.bottom import BathymetryInitialCondition
+from shel.model.initial_conditions.waterlevel import WaterlevelInitialCondition
+from shel.model.solvers.factory import SolverFactory
+from shel.model.state import ModelState
 
 logger = logging.getLogger(__name__)
 
@@ -182,8 +182,15 @@ class ModelRunner:
 
     @staticmethod
     def _resolve_bc_sides_from_config(config: Dict[str, Any]) -> Dict[str, str]:
-        sides = {"west": "closed", "east": "closed", "south": "closed", "north": "closed"}
-        bc_cfg = config.get("boundary_conditions", {}) if isinstance(config, dict) else {}
+        sides = {
+            "west": "closed",
+            "east": "closed",
+            "south": "closed",
+            "north": "closed",
+        }
+        bc_cfg = (
+            config.get("boundary_conditions", {}) if isinstance(config, dict) else {}
+        )
         if not isinstance(bc_cfg, dict):
             return sides
         for k in sides.keys():

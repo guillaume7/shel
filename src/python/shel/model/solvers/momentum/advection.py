@@ -8,6 +8,7 @@ Computes nonlinear advection terms using centered differences:
 where ṽ is V interpolated to U locations and ũ is U interpolated to V.
 Boundaries are left as zero (no contribution) to match closed-box prototypes.
 """
+
 from __future__ import annotations
 
 import numpy as np
@@ -25,7 +26,10 @@ def _interp_v_to_u(V: Array) -> Array:
     ny = ny_p1 - 1
     out = np.zeros((ny, nx + 1))
     out[:, 1:nx] = 0.25 * (
-        V[0:ny, 0:nx-1] + V[1:ny+1, 0:nx-1] + V[0:ny, 1:nx] + V[1:ny+1, 1:nx]
+        V[0:ny, 0 : nx - 1]
+        + V[1 : ny + 1, 0 : nx - 1]
+        + V[0:ny, 1:nx]
+        + V[1 : ny + 1, 1:nx]
     )
     return out
 
@@ -39,9 +43,9 @@ def _interp_u_to_v(U: Array) -> Array:
     ny, nx_p1 = U.shape
     out = np.zeros((ny + 1, nx_p1 - 1))
     out[1:ny, :] = 0.25 * (
-        U[0:ny-1, 0:nx_p1-1]
-        + U[0:ny-1, 1:nx_p1]
-        + U[1:ny, 0:nx_p1-1]
+        U[0 : ny - 1, 0 : nx_p1 - 1]
+        + U[0 : ny - 1, 1:nx_p1]
+        + U[1:ny, 0 : nx_p1 - 1]
         + U[1:ny, 1:nx_p1]
     )
     return out
@@ -61,17 +65,17 @@ def advect_momentum(U: Array, V: Array, dx: float, dy: float) -> tuple[Array, Ar
 
     # ∂u/∂x on U grid (central)
     dudx = np.zeros_like(U)
-    dudx[:, 1:nxp1-1] = (U[:, 2:] - U[:, 0:nxp1-2]) / (2.0 * dx)
+    dudx[:, 1 : nxp1 - 1] = (U[:, 2:] - U[:, 0 : nxp1 - 2]) / (2.0 * dx)
     # ∂u/∂y on U grid (central)
     dudy = np.zeros_like(U)
-    dudy[1:ny-1, :] = (U[2:, :] - U[0:ny-2, :]) / (2.0 * dy)
+    dudy[1 : ny - 1, :] = (U[2:, :] - U[0 : ny - 2, :]) / (2.0 * dy)
 
     # ∂v/∂x on V grid (central)
     dvdx = np.zeros_like(V)
-    dvdx[:, 1:nx-1] = (V[:, 2:] - V[:, 0:nx-2]) / (2.0 * dx)
+    dvdx[:, 1 : nx - 1] = (V[:, 2:] - V[:, 0 : nx - 2]) / (2.0 * dx)
     # ∂v/∂y on V grid (central)
     dvdy = np.zeros_like(V)
-    dvdy[1:nyp1-1, :] = (V[2:, :] - V[0:nyp1-2, :]) / (2.0 * dy)
+    dvdy[1 : nyp1 - 1, :] = (V[2:, :] - V[0 : nyp1 - 2, :]) / (2.0 * dy)
 
     # Nonlinear terms (interiors effectively)
     Au = -(U * dudx + v_at_u * dudy)

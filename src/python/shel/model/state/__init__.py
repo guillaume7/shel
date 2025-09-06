@@ -8,6 +8,7 @@ This subpackage will be split into:
 Currently re-exports existing ModelState to avoid breaking imports.
 Refactor in Phase 5 will migrate logic.
 """
+
 from .model_state import ModelState  # type: ignore  # noqa: F401
 
 __all__ = ["ModelState"]

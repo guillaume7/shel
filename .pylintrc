@@ -5,6 +5,9 @@ jobs=4
 # Add files or directories to the blacklist
 ignore=CVS
 
+# Ensure local package resolution (src/python on sys.path)
+init-hook='import sys, os; sys.path.insert(0, os.path.join(os.getcwd(), "src/python"))'
+
 # Enable type checking extension
 load-plugins=pylint.extensions.typing
 
@@ -12,7 +15,7 @@ load-plugins=pylint.extensions.typing
 max-line-length=88
 
 # Good variable names which should always be accepted
-good-names=i,j,k,ex,Run,_,x,y,z,t,u,v,h,f,dt
+good-names=i,j,k,ex,Run,_,x,y,z,t,u,v,h,f,dt,U,V,H,X,Y,PG_u,PG_v,EN,VN,U0,V0,U1,V1,U2,V2,X2,Y2,Au,Av,Hm
 
 [MESSAGES CONTROL]
 # Enable specific messages that are disabled by default
@@ -34,7 +37,11 @@ disable=
     line-too-long,
     consider-alternative-union-syntax,
     deprecated-typing-alias,
-    useless-option-value
+    useless-option-value,
+    invalid-name,
+    missing-module-docstring,
+    missing-class-docstring,
+    missing-function-docstring,
 
 [TYPECHECK]
 # List of members which are set dynamically and missed by pylint inference system
@@ -67,3 +74,12 @@ max-attributes=15
 
 # Maximum number of statements in function / method body
 max-statements=50
+
+[BASIC]
+# Accept common SWE/Matlab-style short names and time indices
+good-names-rgxs=
+    ^[A-Z]$,                 # U,V,H,T,X,Y,C
+    ^[A-Z][0-9]+$,           # U0,V1,X2
+    ^[A-Z]_(?:n|nm1|np1|n_f)$,  # U_n, U_nm1, U_np1, U_n_f
+    ^[A-Z]_(?:u|v)$,         # PG_u, H_v
+    ^[A-Z][a-z]$             # Hu,Hv

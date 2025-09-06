@@ -6,7 +6,7 @@ the Arakawa C-grid approach commonly used in ocean modeling.
 """
 
 import logging
-from typing import Dict, Any, Tuple
+from typing import Any, Dict, Tuple
 
 import numpy as np
 from numpy.typing import NDArray
