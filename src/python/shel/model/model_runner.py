@@ -89,7 +89,7 @@ class ModelRunner:
         self.zmq_publisher = self.zmq_context.socket(zmq.PUB)
         self.zmq_publisher.bind(f"tcp://*:{port}")
 
-        logger.info(f"ZeroMQ publisher started on port {port}")
+        logger.info("ZeroMQ publisher started on port %s", port)
 
     def initialize(self) -> None:
         """Initialize the model state with initial conditions."""
@@ -127,7 +127,7 @@ class ModelRunner:
         last_output_time = start_time
 
         # Run time steps
-        logger.info(f"Starting model run: {num_steps} steps")
+        logger.info("Starting model run: %s steps", num_steps)
         for step in range(num_steps):
             # Advance the model by one time step
             self.solver.step(self.state)
@@ -157,10 +157,13 @@ class ModelRunner:
                 remaining = estimated_total - elapsed
 
                 logger.info(
-                    f"Step {step+1}/{num_steps} ({(step+1)/num_steps*100:.1f}%) "
-                    f"- {steps_per_second:.1f} steps/s "
-                    f"- Elapsed: {elapsed:.1f}s "
-                    f"- Remaining: {remaining:.1f}s"
+                    "Step %s/%s (%.1f%%) - %.1f steps/s - Elapsed: %.1fs - Remaining: %.1fs",
+                    step + 1,
+                    num_steps,
+                    (step + 1) / num_steps * 100,
+                    steps_per_second,
+                    elapsed,
+                    remaining,
                 )
 
         # Final output
@@ -176,8 +179,10 @@ class ModelRunner:
         # Log completion
         total_time = time.time() - start_time
         logger.info(
-            f"Model run completed: {num_steps} steps in {total_time:.1f}s "
-            f"({num_steps/total_time:.1f} steps/s)"
+            "Model run completed: %s steps in %.1fs (%.1f steps/s)",
+            num_steps,
+            total_time,
+            num_steps / total_time,
         )
 
     @staticmethod
@@ -271,7 +276,7 @@ class ModelRunner:
         }
         parquet_reader.append_timeseries(timeseries_data, timeseries_file)
 
-        logger.debug(f"Output written for step {step}")
+        logger.debug("Output written for step %s", step)
 
     def _publish_state_update(self, step: int) -> None:
         """

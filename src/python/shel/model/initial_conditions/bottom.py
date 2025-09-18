@@ -106,11 +106,13 @@ class BathymetryInitialCondition:
                 y_norm = (Y - y_origin) / (ny * dy)
                 d = depth_min + (depth_max - depth_min) * y_norm
             else:
-                raise ValueError(f"Unsupported slope direction: {direction}")
+                raise ValueError("Unsupported slope direction: %s", direction)
 
         logger.info(
-            f"Created sloping bathymetry: depth_min={depth_min}, "
-            f"depth_max={depth_max}, direction={direction}"
+            "Created sloping bathymetry: depth_min=%s, depth_max=%s, direction=%s",
+            depth_min,
+            depth_max,
+            direction,
         )
         return d
 
@@ -155,8 +157,10 @@ class BathymetryInitialCondition:
         d = np.maximum(d, 1.0)  # Minimum depth of 1 meter
 
         logger.info(
-            f"Created Gaussian bump in bathymetry: depth={depth}, "
-            f"amplitude={amplitude}, sigma={sigma}"
+            "Created Gaussian bump in bathymetry: depth=%s, amplitude=%s, sigma=%s",
+            depth,
+            amplitude,
+            sigma,
         )
         return d
 
@@ -198,8 +202,10 @@ class BathymetryInitialCondition:
         d = depth + amplitude * np.exp(-distance_squared / (2 * sigma**2))
 
         logger.info(
-            f"Created Gaussian depression in bathymetry: depth={depth}, "
-            f"amplitude={amplitude}, sigma={sigma}"
+            "Created Gaussian depression in bathymetry: depth=%s, amplitude=%s, sigma=%s",
+            depth,
+            amplitude,
+            sigma,
         )
         return d
 
@@ -250,11 +256,14 @@ class BathymetryInitialCondition:
                 distance = np.abs(X - center)
                 d = np.where(distance < width / 2, depth_deep, depth_shallow)
             else:
-                raise ValueError(f"Unsupported channel direction: {direction}")
+                raise ValueError("Unsupported channel direction: %s", direction)
 
         logger.info(
-            f"Created channel bathymetry: depth_shallow={depth_shallow}, "
-            f"depth_deep={depth_deep}, width={width}, direction={direction}"
+            "Created channel bathymetry: depth_shallow=%s, depth_deep=%s, width=%s, direction=%s",
+            depth_shallow,
+            depth_deep,
+            width,
+            direction,
         )
         return d
 
@@ -284,7 +293,7 @@ class BathymetryInitialCondition:
             raise ValueError("No file_path specified for bathymetry")
 
         if not os.path.exists(file_path):
-            raise FileNotFoundError(f"Bathymetry file not found: {file_path}")
+            raise FileNotFoundError("Bathymetry file not found: %s" % file_path)
 
         # Determine file type from extension
         _, ext = os.path.splitext(file_path)
@@ -294,12 +303,15 @@ class BathymetryInitialCondition:
             variable_name = params.get("bathymetry", {}).get("variable_name", "depth")
             d = netcdf_reader.read_variable(file_path, variable_name)
         else:
-            raise ValueError(f"Unsupported bathymetry file format: {ext}")
+            raise ValueError("Unsupported bathymetry file format: %s" % ext)
 
         # Check dimensions
         if d.shape != (ny, nx):
             logger.warning(
-                f"Bathymetry dimensions {d.shape} don't match grid dimensions ({ny}, {nx})"
+                "Bathymetry dimensions %s don't match grid dimensions (%s, %s)",
+                d.shape,
+                ny,
+                nx,
             )
             # Resize if necessary
             from scipy.interpolate import griddata
@@ -321,8 +333,8 @@ class BathymetryInitialCondition:
             # Interpolate to target grid
             d_resized = griddata(points, values, (X_target, Y_target), method="linear")
 
-            logger.info(f"Resized bathymetry from {d.shape} to {d_resized.shape}")
+            logger.info("Resized bathymetry from %s to %s", d.shape, d_resized.shape)
             d = d_resized
 
-        logger.info(f"Loaded bathymetry from file: {file_path}")
+        logger.info("Loaded bathymetry from file: %s", file_path)
         return d

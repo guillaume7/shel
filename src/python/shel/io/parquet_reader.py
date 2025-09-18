@@ -34,7 +34,7 @@ def write_timeseries(timeseries_data: Dict[str, Any], file_path: str) -> None:
     # Write to Parquet file
     pq.write_table(table, file_path)
 
-    logger.info(f"Wrote timeseries data to {file_path}")
+    logger.info("Wrote timeseries data to %s", file_path)
 
 
 def append_timeseries(new_data: Dict[str, Any], file_path: str) -> None:
@@ -62,7 +62,7 @@ def append_timeseries(new_data: Dict[str, Any], file_path: str) -> None:
     # Write back to file
     df.to_parquet(file_path)
 
-    logger.info(f"Appended timeseries data to {file_path}")
+    logger.info("Appended timeseries data to %s", file_path)
 
 
 def read_timeseries(file_path: str) -> pd.DataFrame:
@@ -85,7 +85,10 @@ def read_timeseries(file_path: str) -> pd.DataFrame:
     df = pd.read_parquet(file_path)
 
     logger.info(
-        f"Read timeseries data from {file_path}: {len(df)} rows, {len(df.columns)} columns"
+        "Read timeseries data from %s: %d rows, %d columns",
+        file_path,
+        len(df),
+        len(df.columns),
     )
     return df
 
@@ -113,7 +116,7 @@ def get_timeseries_variables(file_path: str) -> List[str]:
     # Get column names from schema
     variables = [schema.names[i] for i in range(schema.num_fields)]
 
-    logger.info(f"Found {len(variables)} variables in {file_path}")
+    logger.info("Found %s variables in %s", len(variables), file_path)
     return variables
 
 
@@ -145,5 +148,11 @@ def get_timeseries_range(file_path: str, variable: str) -> Dict[str, float]:
     min_val = df[variable].min()
     max_val = df[variable].max()
 
-    logger.info(f"Variable '{variable}' range in {file_path}: {min_val} to {max_val}")
+    logger.info(
+        "Variable '%s' range in %s: %s to %s",
+        variable,
+        file_path,
+        min_val,
+        max_val,
+    )
     return {"min": min_val, "max": max_val}

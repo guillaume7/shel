@@ -77,6 +77,9 @@ The codebase is organized as follows:
 
 Key policy: keep time integration algorithms under `shel/model/solvers/time/` and reuse utilities (e.g., Asselin filter) instead of duplicating code elsewhere. Prefer strategy/registry patterns for interchangeable components.
 
+## Logging policy
+- Use lazy logging formatting for all logger calls. Do not use f-strings or %-format in logger.*(...) calls. Instead use the logging library's lazy formatting: logger.info("Message: %s", value) or logger.debug("a=%s b=%s", a, b). This avoids unnecessary work when the log level is disabled and satisfies linters such as pylint's logging-not-lazy.
+
 ## Key Features
 1. **Multiple Numerical Schemes**: Implements the shallow water equations using an Arakawa C-grid with a leapfrog and central differences scheme, and provides extensibility for other schemes.
 

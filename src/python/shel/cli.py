@@ -114,7 +114,7 @@ def main() -> int:
     try:
         config = config_loader.load_config(args.config)
     except Exception as e:
-        logger.error(f"Failed to load configuration: {e}")
+        logger.error("Failed to load configuration: %s", e)
         return 1
 
     # Add CLI arguments to config
@@ -131,7 +131,7 @@ def main() -> int:
     try:
         model_runner.run(config)
     except Exception as e:
-        logger.error(f"Model run failed: {e}")
+        logger.error("Model run failed: %s", e)
         if args.verbose >= 2:
             logger.exception("Stack trace:")
         return 2

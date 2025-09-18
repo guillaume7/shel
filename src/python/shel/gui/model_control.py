@@ -142,7 +142,7 @@ class ModelControlPanel(QWidget):
                 self.process.finished.connect(self.handle_finished)
 
             # Start the process
-            logger.info(f"Starting model with command: {' '.join(cmd)}")
+            logger.info("Starting model with command: %s", " ".join(cmd))
             if self.process is not None:
                 self.process.start(cmd[0], cmd[1:])
 
@@ -157,7 +157,7 @@ class ModelControlPanel(QWidget):
             self.progress_bar.setValue(0)
 
         except Exception as e:
-            logger.error(f"Failed to start model: {e}")
+            logger.error("Failed to start model: %s", e)
             QMessageBox.critical(self, "Error", f"Failed to start model: {str(e)}")
 
             # Clean up
@@ -191,7 +191,7 @@ class ModelControlPanel(QWidget):
         """Handle standard output from the model process."""
         if self.process:
             output: str = self.process.readAllStandardOutput().data().decode()
-            logger.debug(f"Model output: {output}")
+            logger.debug("Model output: %s", output)
 
             # Look for progress information
             for line in output.splitlines():
@@ -207,13 +207,13 @@ class ModelControlPanel(QWidget):
                         progress: int = min(100, int(current_step / total_steps * 100))
                         self.progress_bar.setValue(progress)
                     except Exception as e:
-                        logger.error(f"Failed to parse progress: {e}")
+                        logger.error("Failed to parse progress: %s", e)
 
     def handle_stderr(self) -> None:
         """Handle standard error from the model process."""
         if self.process:
             error: str = self.process.readAllStandardError().data().decode()
-            logger.error(f"Model error: {error}")
+            logger.error("Model error: %s", error)
 
     def handle_finished(self, exit_code: int, exit_status: QProcess.ExitStatus) -> None:
         """
@@ -223,7 +223,7 @@ class ModelControlPanel(QWidget):
             exit_code: Exit code of the process
             exit_status: Exit status of the process
         """
-        logger.info(f"Model process finished with exit code {exit_code}")
+        logger.info("Model process finished with exit code %s", exit_code)
 
         # Update UI
         self.run_button.setEnabled(True)

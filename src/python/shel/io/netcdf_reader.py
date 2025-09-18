@@ -39,7 +39,7 @@ def read_variable(file_path: str, variable_name: str) -> NDArray:
 
         data = ds[variable_name].values
 
-    logger.info(f"Read variable '{variable_name}' from {file_path}")
+    logger.info("Read variable '%s' from %s", variable_name, file_path)
     return data
 
 
@@ -90,7 +90,7 @@ def read_grid(file_path: str) -> Tuple[NDArray, NDArray, Dict[str, Any]]:
         }
 
     logger.info(
-        f"Read grid from {file_path}: {grid_attrs['nx']}x{grid_attrs['ny']} cells"
+        "Read grid from %s: %sx%s cells", file_path, grid_attrs["nx"], grid_attrs["ny"]
     )
     return x, y, grid_attrs
 
@@ -135,7 +135,7 @@ def read_bathymetry(file_path: str, variable_name: Optional[str] = None) -> NDAr
 
         bathy: NDArray = ds[variable_name].values
 
-    logger.info(f"Read bathymetry from {file_path} using variable '{variable_name}'")
+    logger.info("Read bathymetry from %s using variable '%s'", file_path, variable_name)
     return bathy
 
 
@@ -191,7 +191,7 @@ def write_model_state(state: Dict[str, Any], file_path: str) -> None:
 
     # Save to file
     ds.to_netcdf(file_path)
-    logger.info(f"Wrote model state to {file_path}")
+    logger.info("Wrote model state to %s", file_path)
 
 
 def append_timeseries(timeseries_data: Dict[str, Any], file_path: str) -> None:
@@ -234,4 +234,4 @@ def append_timeseries(timeseries_data: Dict[str, Any], file_path: str) -> None:
         )
         ds.to_netcdf(file_path)
 
-    logger.info(f"Appended timeseries data to {file_path}")
+    logger.info("Appended timeseries data to %s", file_path)

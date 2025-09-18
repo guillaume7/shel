@@ -28,7 +28,7 @@ def load_config(config_path: str) -> Dict[str, Any]:
     if not os.path.exists(config_path):
         raise FileNotFoundError(f"Configuration file not found: {config_path}")
 
-    logger.info(f"Loading configuration from {config_path}")
+    logger.info("Loading configuration from %s", config_path)
 
     with open(config_path, "r") as f:
         config = yaml.safe_load(f)
@@ -131,4 +131,4 @@ def save_config(config: Dict[str, Any], config_path: str) -> None:
     with open(config_path, "w") as f:
         yaml.dump(config, f, default_flow_style=False, sort_keys=False)
 
-    logger.info(f"Configuration saved to {config_path}")
+    logger.info("Configuration saved to %s", config_path)

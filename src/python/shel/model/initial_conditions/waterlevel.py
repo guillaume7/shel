@@ -100,7 +100,7 @@ class WaterlevelInitialCondition:
         # Create Gaussian bump
         eta = amplitude * np.exp(-distance_squared / (2 * sigma**2))
 
-        logger.info(f"Created Gaussian bump: amplitude={amplitude}, sigma={sigma}")
+        logger.info("Created Gaussian bump: amplitude=%s, sigma=%s", amplitude, sigma)
         return eta
 
     @staticmethod
@@ -156,7 +156,10 @@ class WaterlevelInitialCondition:
         eta = amplitude * np.sin(k_x * X) * np.sin(k_y * Y)
 
         logger.info(
-            f"Created sinusoidal elevation: amplitude={amplitude}, "
-            f"wavelength_x={wavelength_x}, wavelength_y={wavelength_y}"
+            "Created sinusoidal elevation: amplitude=%s, "
+            "wavelength_x=%s, wavelength_y=%s",
+            amplitude,
+            wavelength_x,
+            wavelength_y,
         )
         return eta

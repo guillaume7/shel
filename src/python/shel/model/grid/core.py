@@ -24,7 +24,11 @@ class Grid:
         self._initialize_coordinates()
         self.mask = np.zeros((self.ny, self.nx), dtype=int)
         logger.info(
-            f"Grid initialized: {self.nx}x{self.ny} cells, {self.dx}x{self.dy} m resolution"
+            "Grid initialized: %sx%s cells, %sx%s m resolution",
+            self.nx,
+            self.ny,
+            self.dx,
+            self.dy,
         )
 
     def _initialize_coordinates(self) -> None:
@@ -63,7 +67,7 @@ class Grid:
                 f"Mask shape {mask.shape} doesn't match grid dimensions ({self.ny}, {self.nx})"
             )
         self.mask = mask.astype(int)
-        logger.info(f"Land mask set: {np.sum(self.mask)} land cells")
+        logger.info("Land mask set: %s land cells", np.sum(self.mask))
 
     def compute_areas(self):
         area_t = np.ones((self.ny, self.nx)) * self.dx * self.dy

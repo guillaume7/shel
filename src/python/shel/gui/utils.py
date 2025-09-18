@@ -41,7 +41,7 @@ class MessageSubscriber(QThread):
         self.context = None
         self.socket = None
 
-        logger.info(f"MessageSubscriber initialized with port {port}")
+        logger.info("MessageSubscriber initialized with port %s", port)
 
     def run(self):
         """Run the subscriber thread."""
@@ -53,7 +53,7 @@ class MessageSubscriber(QThread):
         self.socket.connect(f"tcp://localhost:{self.port}")
         self.socket.setsockopt_string(zmq.SUBSCRIBE, "")
 
-        logger.info(f"Connected to ZeroMQ publisher on port {self.port}")
+        logger.info("Connected to ZeroMQ publisher on port %s", self.port)
 
         # Set up polling to allow for thread termination
         poller = zmq.Poller()
@@ -68,9 +68,9 @@ class MessageSubscriber(QThread):
                 try:
                     message = self.socket.recv_json()
                     self.message_received.emit(message)
-                    logger.debug(f"Received message: {message.get('step')}")
+                    logger.debug("Received message: %s", message)
                 except Exception as e:
-                    logger.error(f"Error receiving message: {e}")
+                    logger.error("Error receiving message: %s", e)
 
         # Clean up
         self.socket.close()
