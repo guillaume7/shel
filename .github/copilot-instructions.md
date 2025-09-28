@@ -142,6 +142,7 @@ Important concepts to understand when working with this code:
 - GUI is implemented using MATLAB's GUI development environment (GUIDE)
 - The model implements various numerical filters for stability
 - Performance optimizations include vectorized operations where possible
+- After each task, the copilot agent MUST update the prompt state table of tasks !
 
 ## Future Development Direction
 - The primary development goal is to port the model to Python
@@ -162,3 +163,21 @@ This implementation follows scientific approaches documented in:
 - Arakawa (1966)
 - Gill (1982)
 - Other standard references in physical oceanography
+
+## Solver Documentation
+The solver implements the shallow water equations using an Arakawa C-grid, supporting leapfrog and central difference schemes. Key features:
+- Modular operator partition: pressure, advection, diffusion, friction, continuity, boundary conditions.
+- Strategy/factory pattern for interchangeable numerical schemes and boundary conditions.
+- Conservation diagnostics: volume, energy, enstrophy, potential enstrophy.
+- Regression tests for numerical fidelity and conservation properties.
+- Time integration algorithms centralized under `shel/model/solvers/time/` (Asselin filter, leapfrog stepper).
+- All operators and diagnostics are tested for shape, conservation, and parity with MATLAB.
+
+## IO Documentation
+The IO subsystem supports structured output and serialization:
+- NetCDF writers for grid, state, and diagnostics snapshots (`model/outputs/writers/netcdf.py`).
+- Parquet writers for time-series diagnostics (`model/outputs/writers/parquet.py`).
+- JSON writer for deterministic serialization and regression testing (`model/outputs/writers/json_writer.py`).
+- OutputManager schedules and manages output hooks for snapshots and time series.
+- All writers validated for non-uniform H and round-trip integrity.
+- YAML configuration for reproducible runs; deterministic ordering and dtype normalization.

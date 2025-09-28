@@ -8,44 +8,29 @@ to interact with the model, visualize results, and set parameters.
 import logging
 import sys
 from functools import partial
-from typing import Any, Dict, List, Optional, Tuple, cast
-
-import numpy as np
-import zmq
+from typing import Optional, cast
 
 # Matplotlib widgets are handled within PlotManager; no direct imports needed here
-from PyQt5.QtCore import QSettings, Qt, QThread, QTimer, pyqtSignal
-from PyQt5.QtGui import QCloseEvent, QFont, QIcon
+from PyQt5.QtCore import QSettings, QTimer
+from PyQt5.QtGui import QCloseEvent
 from PyQt5.QtWidgets import (
     QAction,
     QApplication,
-    QCheckBox,
-    QComboBox,
-    QDockWidget,
-    QDoubleSpinBox,
     QFileDialog,
-    QFormLayout,
-    QGroupBox,
     QHBoxLayout,
-    QLabel,
-    QLineEdit,
     QMainWindow,
     QMenu,
     QMenuBar,
     QMessageBox,
-    QProgressBar,
-    QPushButton,
-    QSlider,
-    QSpinBox,
     QStatusBar,
-    QTabWidget,
     QVBoxLayout,
     QWidget,
 )
 
+from shel.gui.model_control import ModelControlPanel
 from shel.gui.parameters import ParameterPanel
-from shel.gui.utils import MessageSubscriber
 from shel.gui.visualization import PlotManager
+from shel.io.pubsub import SHELSubscriber
 
 logger = logging.getLogger(__name__)
 
@@ -98,11 +83,6 @@ class MainWindow(QMainWindow):
         self.parameter_panel = ParameterPanel(self)
         control_layout.addWidget(self.parameter_panel)
 
-        # Add model control panel (local import to avoid cyclic import during analysis)
-        from shel.gui.model_control import (
-            ModelControlPanel,  # pylint: disable=import-outside-toplevel
-        )
-
         self.model_control = ModelControlPanel(self)
         control_layout.addWidget(self.model_control)
 
@@ -111,8 +91,8 @@ class MainWindow(QMainWindow):
         self.status_bar.showMessage("Ready")
 
         # Set up ZeroMQ subscriber for model updates
-        self.message_subscriber = None
-        self.setup_zmq_subscriber()
+        self.subscriber = SHELSubscriber(port=5556)
+        self._start_subscriber_timer()
 
         # Create menus
         self.create_menus()
@@ -217,46 +197,48 @@ class MainWindow(QMainWindow):
         about_action.triggered.connect(self.show_about)
         help_menu.addAction(about_action)
 
-    def setup_zmq_subscriber(self, port=5556):
-        """
-        Set up ZeroMQ subscriber for model updates.
+    def _start_subscriber_timer(self):
+        # Poll for messages every 100ms
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self._poll_pubsub)
+        self.timer.start(100)
 
+    def _poll_pubsub(self):
+        """Poll for pubsub messages."""
+        if self.subscriber:
+            try:
+                topic, payload = self.subscriber.recv()
+                if topic and payload:
+                    self.handle_model_update(topic, payload)
+            except Exception as e:
+                logger.error(f"Error receiving pubsub message: {e}")
+
+    def handle_model_update(self, topic, payload):
+        """
+        Handle model update message from ZeroMQ pubsub.
         Args:
-            port: Port to subscribe to
+            topic: Topic string
+            payload: Decoded message dict
         """
-        # Create subscriber thread
-        self.message_subscriber = MessageSubscriber(port)
+        logger.debug(f"Received topic: {topic}, payload keys: {list(payload.keys())}")
 
-        # Connect signals
-        self.message_subscriber.message_received.connect(self.handle_model_update)
-
-        # Start the thread
-        self.message_subscriber.start()
-
-    def handle_model_update(self, message):
-        """
-        Handle model update message from ZeroMQ.
-
-        Args:
-            message: Message from the model runner
-        """
-        # Update plots
-        self.plot_manager.update_plots(message)
-
-        # Update status bar
-        time_str = f"{message.get('time', 0):.2f}"
-        step_str = f"{message.get('step', 0)}"
-        energy_str = f"{message.get('total_energy', 0):.6e}"
-        volume_str = f"{message.get('volume', 0):.6e}"
-
-        status = f"Time: {time_str}s | Step: {step_str} | Energy: {energy_str} | Volume: {volume_str}"
-        self.status_bar.showMessage(status)
-
-        # Update model control panel
-        self.model_control.update_status(message)
+        if topic.startswith("state."):
+            # Update plots with state data
+            self.plot_manager.update_plots(payload)
+        elif topic == "diag.global":
+            # Update diagnostics display (TODO: implement diagnostics panel)
+            logger.info(f"Global diagnostics: {payload}")
+        elif topic.startswith("diag.field."):
+            # Update field diagnostics (TODO: implement field diagnostics)
+            logger.debug(f"Field diagnostics: {topic} - {payload}")
+        elif topic == "event.progress":
+            # Update progress and status
+            self.model_control.update_status(payload)
+        else:
+            logger.warning(f"Unknown topic: {topic}")
 
         # If model is complete, handle completion
-        if message.get("status") == "complete":
+        if payload.get("status") == "complete":
             self.handle_model_completion()
 
     def handle_model_completion(self):
@@ -354,13 +336,17 @@ class MainWindow(QMainWindow):
         )
 
         if file_path:
-            # Show dialog for animation options
-            # (frame rate, duration, etc.)
-
-            # Export animation
-            # self.plot_manager.export_animation(file_path, options)
-
-            self.status_bar.showMessage(f"Exported animation to {file_path}")
+            try:
+                # Export animation with default settings (10 fps)
+                self.plot_manager.export_animation(file_path, fps=10)
+                self.status_bar.showMessage(f"Exported animation to {file_path}")
+            except Exception as e:
+                QMessageBox.warning(
+                    self,
+                    "Export Failed",
+                    f"Failed to export animation: {str(e)}\n\n"
+                    "Make sure you have ffmpeg installed for MP4 export.",
+                )
 
     def check_save_current(self):
         """
@@ -396,6 +382,8 @@ class MainWindow(QMainWindow):
             <h1>SHEL - SHallow-water numerical modEL</h1>
             <p>Version 1.0.0</p>
             <p>A finite volume, free-surface, variable bottom, shallow-waters equations numerical solver.</p>
+            <p><b>Author:</b> Guillaume Riflet</p>
+            <p><b>AI Assistant:</b> GitHub Copilot</p>
             <p>Copyright © 2025 SHEL Developers</p>
             <p>This program is free software: you can redistribute it and/or modify
             it under the terms of the GNU General Public License as published by
@@ -449,10 +437,9 @@ class MainWindow(QMainWindow):
         # Save settings
         self.save_settings()
 
-        # Stop ZMQ subscriber thread
-        if self.message_subscriber:
-            self.message_subscriber.stop()
-            self.message_subscriber.wait()
+        # Stop polling timer
+        if hasattr(self, "timer"):
+            self.timer.stop()
 
         # Accept the event
         a0.accept()
@@ -461,12 +448,10 @@ class MainWindow(QMainWindow):
 def main():
     """
     Main entry point for the GUI.
-
     Returns:
         Exit code
     """
     app = QApplication(sys.argv)
-
     # Set application properties
     app.setApplicationName("SHEL")
     app.setOrganizationName("SHEL")

@@ -12,14 +12,12 @@ import time
 from typing import Any, Dict, List, Union
 
 import numpy as np
-import zmq
-from numpy.typing import NDArray
 
 from shel.io import netcdf_reader, parquet_reader
 from shel.model.boundary_conditions import get_bc
 from shel.model.initial_conditions.bottom import BathymetryInitialCondition
 from shel.model.initial_conditions.waterlevel import WaterlevelInitialCondition
-from shel.model.solvers.factory import SolverFactory
+from shel.model.solvers.time.leapfrog import leapfrog_step_with_config
 from shel.model.state import ModelState
 
 logger = logging.getLogger(__name__)
@@ -57,9 +55,12 @@ class ModelRunner:
         # Initialize the model state
         self.state = ModelState(config)
 
-        # Set up the solver
-        solver_type = config["model"].get("solver", "leapfrog")
-        self.solver = SolverFactory.create(solver_type, config)
+        # Store solver parameters
+        self.dt = config["model"]["timestep"]
+        self.g = config["model"].get("gravity", 9.81)
+        self.nu_visc = config["model"].get("viscosity", 0.0)
+        self.r = config["model"].get("bottom_drag_coef", 0.0)
+        self.f_param = config["model"].get("coriolis_parameter", 0.0)
 
         # Prepare boundary condition strategies per side using the new registry
         self.bc_sides = self._resolve_bc_sides_from_config(config)
@@ -73,21 +74,24 @@ class ModelRunner:
             if e_cls is not None:
                 self._bc_eta_by_type[bct] = e_cls()
 
-        # Set up ZeroMQ for real-time updates
-        self.zmq_context = None
-        self.zmq_publisher = None
+        # Set up ZeroMQ for real-time updates using SHEL protocol
+        self._publisher = None
         if config.get("communication", {}).get("enable_zmq", True):
             self._setup_zmq()
 
         logger.info("Model runner initialized")
 
     def _setup_zmq(self) -> None:
-        """Set up ZeroMQ publisher socket for real-time updates."""
-        port = self.config.get("communication", {}).get("zmq_pub_port", 5556)
+        """Set up ZeroMQ publisher using SHEL protocol."""
+        from shel.io.pubsub import SHELPublisher
 
-        self.zmq_context = zmq.Context()
-        self.zmq_publisher = self.zmq_context.socket(zmq.PUB)
-        self.zmq_publisher.bind(f"tcp://*:{port}")
+        port = self.config.get("communication", {}).get("zmq_pub_port", 5556)
+        try:
+            self._publisher = SHELPublisher(port=port)
+            logger.info(f"ZeroMQ publisher started on port {port}")
+        except Exception as e:
+            logger.error("Failed to setup ZeroMQ publisher: %s", e)
+            self._publisher = None
 
         logger.info("ZeroMQ publisher started on port %s", port)
 
@@ -112,6 +116,36 @@ class ModelRunner:
 
         logger.info("Model initialized with initial conditions")
 
+    def _advance_timestep(self):
+        """Advance the model state by one time step using leapfrog integration."""
+        # Call leapfrog step with current state arrays and parameters
+        eta_np1, U_np1, V_np1, eta_n_f, U_n_f, V_n_f = leapfrog_step_with_config(
+            eta_nm1=self.state.eta_old,
+            eta_n=self.state.eta,
+            U_nm1=self.state.u_old,
+            U_n=self.state.u,
+            V_nm1=self.state.v_old,
+            V_n=self.state.v,
+            H=self.state.H,
+            dx=self.state.grid.dx,
+            dy=self.state.grid.dy,
+            dt=self.dt,
+            g=self.g,
+            nu_visc=self.nu_visc,
+            r=self.r,
+            f=self.state.coriolis if hasattr(self.state, "coriolis") else None,
+            enable_coriolis=(self.f_param != 0.0),
+            config=self.config,
+        )
+
+        # Update state with new values (and cycle time levels)
+        self.state.eta_old = self.state.eta.copy()
+        self.state.u_old = self.state.u.copy()
+        self.state.v_old = self.state.v.copy()
+        self.state.eta = eta_np1
+        self.state.u = U_np1
+        self.state.v = V_np1
+
     def run(self) -> None:
         """Run the model for the specified number of time steps."""
         # Get configuration parameters
@@ -129,22 +163,21 @@ class ModelRunner:
         # Run time steps
         logger.info("Starting model run: %s steps", num_steps)
         for step in range(num_steps):
-            # Advance the model by one time step
-            self.solver.step(self.state)
+            # Advance the model by one time step using leapfrog
+            self._advance_timestep()
 
-            # Apply boundary conditions per side using strategy layer
-            self._apply_boundary_conditions_strategies()
+            # Update model time and step
+            self.state.time += self.dt
+            self.state.step = step
 
             # Output at specified intervals
             if step % output_interval == 0:
-                step_start_time = time.time()
-
                 # Write output files
                 if self.config.get("output", {}).get("enabled", True):
                     self._write_output(step, output_dir)
 
                 # Publish state update via ZeroMQ
-                if self.zmq_publisher is not None:
+                if self._publisher is not None:
                     self._publish_state_update(step)
 
                 # Log progress
@@ -170,11 +203,9 @@ class ModelRunner:
         if self.config.get("output", {}).get("enabled", True):
             self._write_output(num_steps, output_dir, is_final=True)
 
-        # Clean up ZeroMQ
-        if self.zmq_publisher is not None and self.zmq_context is not None:
+        # Send final progress update
+        if self._publisher is not None:
             self._publish_final_update(num_steps)
-            self.zmq_publisher.close()
-            self.zmq_context.term()
 
         # Log completion
         total_time = time.time() - start_time
@@ -280,37 +311,40 @@ class ModelRunner:
 
     def _publish_state_update(self, step: int) -> None:
         """
-        Publish a state update via ZeroMQ.
+        Publish a state update via ZeroMQ using proper SHEL protocol.
 
         Args:
             step: Current step number
         """
-        # Create a subset of the state to publish
-        # Only send the most important fields to reduce message size
-        message = {
-            "time": self.state.time,
-            "step": step,
-            "status": "running",
-            "max_elevation": float(np.max(self.state.eta)),
-            "min_elevation": float(np.min(self.state.eta)),
-            "max_velocity": float(
-                max(np.max(np.abs(self.state.u)), np.max(np.abs(self.state.v)))
-            ),
-            "kinetic_energy": float(self.state.compute_kinetic_energy()),
-            "potential_energy": float(self.state.compute_potential_energy()),
-            "total_energy": float(self.state.compute_total_energy()),
-            "volume": float(self.state.compute_volume()),
-            # Send downsampled fields for visualization
-            "fields": self._downsample_fields_for_message(),
-        }
-
-        if self.zmq_publisher is None:
-            logging.warning(
-                "ZeroMQ publisher is not set up. Cannot publish state update."
-            )
+        if not hasattr(self, "_publisher") or self._publisher is None:
             return
 
-        self.zmq_publisher.send_json(message)
+        try:
+            # Send state data
+            self._publisher.send_eta(self.state.time, self.state.eta)
+            self._publisher.send_velocity(self.state.time, self.state.u, self.state.v)
+
+            # Send global diagnostics
+            self._publisher.send_diag_global(
+                self.state.time,
+                float(self.state.compute_total_energy()),
+                (
+                    float(self.state.compute_enstrophy())
+                    if hasattr(self.state, "compute_enstrophy")
+                    else 0.0
+                ),
+                float(self.state.compute_volume()),
+            )
+
+            # Send progress event
+            num_steps = self.config["model"]["num_steps"]
+            percent = (step / num_steps) * 100 if num_steps > 0 else 0
+            self._publisher.send_progress(
+                step, self.state.time, f"Step {step}/{num_steps}", percent
+            )
+
+        except Exception as e:
+            logger.warning("Failed to publish state update: %s", e)
 
     def _publish_final_update(self, num_steps: int) -> None:
         """
@@ -319,29 +353,16 @@ class ModelRunner:
         Args:
             num_steps: Total number of steps
         """
-        message = {
-            "time": self.state.time,
-            "step": num_steps,
-            "status": "complete",
-            "max_elevation": float(np.max(self.state.eta)),
-            "min_elevation": float(np.min(self.state.eta)),
-            "max_velocity": float(
-                max(np.max(np.abs(self.state.u)), np.max(np.abs(self.state.v)))
-            ),
-            "kinetic_energy": float(self.state.compute_kinetic_energy()),
-            "potential_energy": float(self.state.compute_potential_energy()),
-            "total_energy": float(self.state.compute_total_energy()),
-            "volume": float(self.state.compute_volume()),
-            "fields": self._downsample_fields_for_message(),
-        }
-
-        if self.zmq_publisher is None:
-            logging.warning(
-                "ZeroMQ publisher is not set up. Cannot publish final update."
-            )
+        if self._publisher is None:
             return
 
-        self.zmq_publisher.send_json(message)
+        try:
+            # Send final progress event
+            self._publisher.send_progress(
+                num_steps, self.state.time, f"Completed: {num_steps} steps", 100.0
+            )
+        except Exception as e:
+            logger.warning("Failed to publish final update: %s", e)
 
     def _downsample_fields_for_message(self) -> Dict[str, Union[List[float], int]]:
         """

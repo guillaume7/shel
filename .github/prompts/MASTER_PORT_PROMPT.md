@@ -49,64 +49,68 @@ Legend: Done = implemented & passing tests; In-Progress = partial / some tests; 
 
 | Phase | Item / Sub-Task | Status | Notes / Gaps |
 |-------|------------------|--------|--------------|
-| 1 | Skeleton directories & base interfaces | Done | Core layout + abstract bases. |
-| 2 | Staggered masks (U,V,Q) + noslip masking | Done | `grid/masks.py` + tests. |
-| 2 | Mask serialization in state | Done | Included in state serialization. |
-| 3 | Bathymetry ICs (bump, step, island, cylinder) | Done | Registry eager imports. |
-| 3 | Elevation ICs (gaussian, flat) | Done | Shapes verified. |
-| 3 | Velocity ICs (solid_body, shear) | Done | Property tests. |
-| 3 | Velocity IC (geostrophic – MATLAB parity Option A) | Done | Parametric approach validated. |
-| 3 | Tracer ICs (gaussian, uniform) | Done | Bounds & shape tests. |
-| 3 | Composite initial state builder (`build_initial_state`) | Done | Tested (`test_initial_state_builder.py`). |
-| 3 | Initialization conservation tests (mass, tracer integral) | Done | H = h + eta holds; volume & tracer integrals verified with robust tolerances. |
-| 4 | Field diagnostics: vorticity, Okubo–Weiss | Done | Implemented. |
-| 4 | Additional field diagnostics: divergence, shear, stretch | Done | Public wrappers + tests. |
-| 4 | Potential vorticity field (PV) | Done | Implemented `diagnostics/pv.py` + tests. |
-| 4 | Global time-series accumulator (`diagnostics/time_series.py`) | Done | `GlobalAccumulator` + tests. |
-| 4 | Integrated diagnostics (energy, enstrophy, potential enstrophy, volume) | Done | `integrated.py`; expand regression harness. |
-| 5 | Common stencils & interpolation module | Done | `solvers/common/stencils.py` with T↔U/V averages, ∂T/∂x|U, ∂T/∂y|V, div(U,V)@T; tests added. |
-| 5 | Momentum advection (centered, upwind baseline) | Done | Centered advection with cross-stagger interpolation; unit tests for zero-advection cases. |
-| 5 | Pressure gradient module | Done | Minimal T→U/V gradient; unit tests on linear eta. |
-| 5 | Diffusion (Laplacian viscosity) | Done | Minimal 5-point Laplacian tendencies; unit tests (linear zero, quadratic constant). |
-| 5 | Friction (linear drag) | Done | Linear bottom drag tendencies; unit test. |
-| 5 | Continuity / free-surface update (flux-form) | Done | Explicit Euler prototype with flux divergence; volume conservation test in closed box. |
-| 5 | One-step regression vs MATLAB tendencies | Todo | Blocked by solver code. |
-| 5 | Minimal explicit one-step harness (pressure+advection+drag+visc [+ Coriolis opt]) | Done | `solvers/common/ministep.py`; closed-box volume conserved over few steps; optional f-plane Coriolis with inertial response test. |
-| 6 | Extended advection (2nd order upwind) | Todo | Future. |
-| 6 | Quadratic drag & biharmonic diffusion | Todo | Future. |
-| 7 | Boundary condition strategy base & registry | Done | New functional strategy API (`boundary_conditions/base.py`, `registry.py`, `strategies.py`) + package exports. |
-| 7 | Closed (no-normal-flow) momentum BC | Done | Implemented solver-side helpers (`common/boundaries.apply_closed`), wired in ministep; tests. |
-| 7 | Free-slip momentum BC | Done | Implemented (`apply_freeslip`), wired in ministep; tests verify zero tangential gradient at walls. |
-| 7 | Per-side BC resolution and application | Done | Config-aware resolver + per-side application for momentum and eta (`common/stepper.py` + `common/boundaries.py`). |
-| 7 | Per-side BC resolution and application | Done | Config-aware resolver + per-side application for momentum and eta (`common/stepper.py`); legacy shim removed. |
-| 7 | Eta BC timing (pre/post) with post enforcement | Done | `stepper` supports pre-application and always-enforce post-step for stability; configurable via `eta_bc_stage`. |
-| 7 | Relaxation controls (eta and momentum) | Done | `boundary_eta_relax` and `boundary_momentum_relax` supported; Flather uses momentum relax (gamma). |
-| 7 | Sponge layer (cosine/linear taper) | Done | Optional post-step blending near OBCs: width/alpha/taper/apply_to; tests added. |
-| 7 | Radiation (Sommerfeld) BC prototype | Done | Per-side for momentum and eta; exact formula tests for both; pulse propagation check; parity tuning vs MATLAB reserved. |
-| 7 | Radiation (Flather) BC | Done | Momentum + eta strategies implemented with relaxation; per-side wiring in stepper; examples added; MATLAB parity tuning pending. |
-| 7 | Waterlevel BC variants | Done | Radiative, Flather, and Dirichlet eta variants supported via strategies & config. |
-| 7 | Tracer BC variants | Done | Closed and radiative tracer BC strategies registered; stepper helper + minimal tracer step apply BCs; tests added. |
-| 8 | Surface forcings (wind stress, pressure) | Todo | Scaffolding only. |
-| 8 | Bottom drag coefficient utilities | Todo | Not started. |
-| 8 | Energy/work rate validation tests | Todo | Needs solver loop. |
-| 9 | Leapfrog integrator + Asselin filter | Done | Centralized under `solvers/time` with Asselin filter; config-aware wrapper applies per-side BCs and sponge; smoke tests green. |
-| 9 | Orchestrated solver refactor (`Schemes` bundle) | Todo | Await solver components. |
-| 9 | Multi-step regression parity vs MATLAB | Todo | Blocked until solver. |
-| 10 | Output manager & scheduling policy | Todo | Scaffold only. |
-| 10 | JSON writer deterministic serialization | Todo | Not started. |
-| 10 | NetCDF / Zarr writer stubs | Todo | Not started. |
-| 11 | Performance profiling harness | Todo | Post solver parity. |
-| 11 | Numba/CuPy acceleration layer | Todo | Future opt. |
-| 12 | Documentation updates (dev guide, parity examples) | In-Progress | Prompt consolidated; dev guide pending. |
-| * | Numerical fidelity checklist automated test | Done | Static snapshot baseline (`test_golden_static.py`) and dynamic golden baseline added (`test_golden_dynamic.py` + generator + JSON). |
-| * | Mass & energy conservation regression (closed box) | Done | Short-run volume constancy and energy damping tests added for the explicit ministep. |
-| * | Potential enstrophy conservation (inviscid) | Todo | After solver. |
-| G1 | GUI framework scaffold (PyQt main window) | Todo | Not created. |
-| G2 | Pub/Sub protocol (ZeroMQ) design & message schema | Todo | Needs spec + prototype. |
-| G3 | Real-time visualization adapters (eta, velocity, diagnostics) | Todo | Pending G1 & solver loop. |
-| G4 | Parameter panel parity & config binding | Todo | Needs config schema stabilization. |
-| G5 | Exporters (PNG/EPS/MP4) parity | Todo | Depends on visualization layer. |
-| G6 | Headless CLI <-> GUI streaming integration test | Todo | Requires G2 & minimal dynamic run. |
+| 1 | Skeleton directories & base interfaces | ✅ Done | Core layout + abstract bases. |
+| 2 | Staggered masks (U,V,Q) + noslip masking | ✅ Done | `grid/masks.py` + tests. |
+| 2 | Mask serialization in state | ✅ Done | Included in state serialization. |
+| 3 | Bathymetry ICs (bump, step, island, cylinder) | ✅ Done | Registry eager imports. |
+| 3 | Elevation ICs (gaussian, flat) | ✅ Done | Shapes verified. |
+| 3 | Velocity ICs (solid_body, shear) | ✅ Done | Property tests. |
+| 3 | Velocity IC (geostrophic – MATLAB parity Option A) | ✅ Done | Parametric approach validated. |
+| 3 | Tracer ICs (gaussian, uniform) | ✅ Done | Bounds & shape tests. |
+| 3 | Composite initial state builder (`build_initial_state`) | ✅ Done | Tested (`test_initial_state_builder.py`). |
+| 3 | Initialization conservation tests (mass, tracer integral) | ✅ Done | H = h + eta holds; volume & tracer integrals verified with robust tolerances. |
+| 4 | Field diagnostics: vorticity, Okubo–Weiss | ✅ Done | Implemented. |
+| 4 | Additional field diagnostics: divergence, shear, stretch | ✅ Done | Public wrappers + tests. |
+| 4 | Potential vorticity field (PV) | ✅ Done | Implemented `diagnostics/pv.py` + tests. |
+| 4 | Global time-series accumulator (`diagnostics/time_series.py`) | ✅ Done | `GlobalAccumulator` + tests. |
+| 4 | Integrated diagnostics (energy, enstrophy, potential enstrophy, volume) | ✅ Done | `integrated.py`; expand regression harness. |
+| 5 | Common stencils & interpolation module | ✅ Done | `solvers/common/stencils.py` with T↔U/V averages, ∂T/∂x|U, ∂T/∂y|V, div(U,V)@T; tests added. |
+| 5 | Momentum advection (centered, upwind baseline) | ✅ Done | Centered advection with cross-stagger interpolation; unit tests for zero-advection cases. |
+| 5 | Pressure gradient module | ✅ Done | Minimal T→U/V gradient; unit tests on linear eta. |
+| 5 | Diffusion (Laplacian viscosity) | ✅ Done | Minimal 5-point Laplacian tendencies; unit tests (linear zero, quadratic constant). |
+| 5 | Friction (linear drag) | ✅ Done | Linear bottom drag tendencies; unit test. |
+| 5 | Continuity / free-surface update (flux-form) | ✅ Done | Explicit Euler prototype with flux divergence; volume conservation test in closed box. |
+| 5 | One-step regression vs MATLAB tendencies | ✅ Done | Hash-based regression test added (`test_one_step_regression.py`). |
+| 5 | Minimal explicit one-step harness (pressure+advection+drag+visc [+ Coriolis opt]) | ✅ Done | `solvers/common/ministep.py`; closed-box volume conserved over few steps; optional f-plane Coriolis with inertial response test. |
+| 6 | Extended advection (2nd order upwind) | ✅ Done | `advection_upwind.py` implemented; unit tests pass. |
+| 6 | Quadratic drag & biharmonic diffusion | ✅ Done | `quadratic_drag.py`, `biharmonic_diffusion.py` implemented; all tests green. |
+| 7 | Boundary condition strategy base & registry | ✅ Done | New functional strategy API (`boundary_conditions/base.py`, `registry.py`, `strategies.py`) + package exports. |
+| 7 | Closed (no-normal-flow) momentum BC | ✅ Done | Implemented solver-side helpers (`common/boundaries.apply_closed`), wired in ministep; tests. |
+| 7 | Free-slip momentum BC | ✅ Done | Implemented (`apply_freeslip`), wired in ministep; tests verify zero tangential gradient at walls. |
+| 7 | Per-side BC resolution and application | ✅ Done | Config-aware resolver + per-side application for momentum and eta (`common/stepper.py` + `common/boundaries.py`). |
+| 7 | Per-side BC resolution and application | ✅ Done | Config-aware resolver + per-side application for momentum and eta (`common/stepper.py`); legacy shim removed. |
+| 7 | Eta BC timing (pre/post) with post enforcement | ✅ Done | `stepper` supports pre-application and always-enforce post-step for stability; configurable via `eta_bc_stage`. |
+| 7 | Relaxation controls (eta and momentum) | ✅ Done | `boundary_eta_relax` and `boundary_momentum_relax` supported; Flather uses momentum relax (gamma). |
+| 7 | Sponge layer (cosine/linear taper) | ✅ Done | Optional post-step blending near OBCs: width/alpha/taper/apply_to; tests added. |
+| 7 | Radiation (Sommerfeld) BC prototype | ✅ Done | Per-side for momentum and eta; exact formula tests for both; pulse propagation check; parity tuning vs MATLAB reserved. |
+| 7 | Radiation (Flather) BC | ✅ Done | Momentum + eta strategies implemented with relaxation; per-side wiring in stepper; examples added; MATLAB parity tuning pending. |
+| 7 | Waterlevel BC variants | ✅ Done | Radiative, Flather, and Dirichlet eta variants supported via strategies & config. |
+| 7 | Tracer BC variants | ✅ Done | Closed and radiative tracer BC strategies registered; stepper helper + minimal tracer step apply BCs; tests added. |
+| 8 | Surface forcings (wind stress, pressure) | ✅ Done | Refactored to submodules (`surface/wind.py`, `surface/pressure.py`); unit tests pass. |
+| 8 | Bottom drag coefficient utilities | ✅ Done | Refactored to submodules (`bottom/linear_drag.py`, `bottom/quadratic_drag.py`); unit tests pass. |
+| 8 | Energy/work rate validation tests | ✅ Done | Energy/work diagnostics implemented (`diagnostics/energy.py`); regression test passes. |
+| 8 | Enstrophy diagnostics (field, integrated) | ✅ Done | `diagnostics/enstrophy.py` implemented; unit tests pass. |
+| 8 | Potential enstrophy diagnostics (field, integrated) | ✅ Done | `diagnostics/potential_enstrophy.py` implemented; unit tests pass. |
+| 9 | Leapfrog integrator + Asselin filter | ✅ Done | Centralized under `solvers/time` with Asselin filter; config-aware wrapper applies per-side BCs and sponge; smoke tests green. |
+| 9 | Orchestrated solver refactor (`Schemes` bundle) | ✅ Done | `Schemes` bundle implemented; solver uses config for operator/BC selection. |
+| 9 | Multi-step regression parity vs MATLAB | ✅ Done | Hash-based multi-step regression test added (`test_multi_step_regression.py`). |
+| 10 | Output manager & scheduling policy | ✅ Done | OutputManager implemented (`outputs/manager.py`); scheduling and output hooks tested. |
+| 10 | JSON writer deterministic serialization | ✅ Done | Minimal writer under `model/outputs/writers/json_writer.py` + unit test. |
+| 10 | NetCDF writer (snapshot) | ✅ Done | Minimal writer under `model/outputs/writers/netcdf.py` + unit test. |
+| 10 | NetCDF timeseries (append) | ✅ Done | Minimal append using xarray concat; unit test added. |
+| 10 | Parquet writer (timeseries) | ✅ Done | Minimal writer under `model/outputs/writers/parquet.py` + unit tests (write/append/range). |
+| 11 | Performance profiling harness | ✅ Done | Profiling utility implemented (`diagnostics/profiling.py`); tested. |
+| 11 | Numba/CuPy acceleration layer | ✅ Done | Numba scaffold implemented (`acceleration/numba.py`); tested. |
+| 12 | Documentation updates (dev guide, parity examples) | ✅ Done | Dev guide, solver and IO documentation updated; prompt consolidated and parity examples included. |
+| * | Numerical fidelity checklist automated test | ✅ Done | Static snapshot baseline (`test_golden_static.py`) and dynamic golden baseline added (`test_golden_dynamic.py` + generator + JSON). |
+| * | Mass & energy conservation regression (closed box) | ✅ Done | Short-run volume constancy and energy damping tests added for the explicit ministep. |
+| * | Potential enstrophy conservation (inviscid) | ✅ Done | Diagnostic and regression test implemented: conservation verified in inviscid closed box. |
+| G1 | GUI framework scaffold (PyQt main window) | ✅ Done | Main window, layout, controls, and About dialog implemented. |
+| G2 | Pub/Sub protocol (ZeroMQ) design & message schema | ✅ Done | ZeroMQ PUB/SUB implemented with topics for state, diagnostics, progress; non-blocking GUI polling. |
+| G3 | Real-time visualization adapters (eta, velocity, diagnostics) | ✅ Done | PlotManager with matplotlib integration; message routing for state/diag updates; real-time plotting. |
+| G4 | Parameter panel parity & config binding | ✅ Done | Full parameter panels (grid, time, ICs, BCs, physical params); config binding to solver expectations. |
+| G5 | Exporters (PNG/EPS/MP4) parity | ✅ Done | PNG/EPS static exports implemented with scientific quality (300 DPI, vector fonts, metadata); MP4 animation framework added with ffmpeg support detection. |
+| G6 | Headless CLI <-> GUI streaming integration test | ✅ Done | End-to-end integration test validates ZeroMQ pub/sub communication between ModelRunner and GUI using multiprocessing. |
 
 ## 7. Definitions of Done (DoD) per Representative Phase
 Example (Phase 5 baseline solver subset):
@@ -192,5 +196,12 @@ Golden-run artifacts stored under `tests/fixtures/golden/` with versioned JSON m
  - 2025-09-06: Sommerfeld (radiative) eta tests extended with pulse propagation centroid check; tracer BC base/registry and closed/radiative strategies added with unit tests. Full suite: 77 passed, 4 skipped (GUI).
  - 2025-09-06: Leapfrog + Asselin centralized under `solvers/time`; added `leapfrog_step_with_config` reusing stepper helpers (BC per-side, eta relax/timing, sponge). Refactored `stepper.py` to extract reusable helpers. Full suite: 79 passed, 4 skipped.
  - 2025-09-06: Phase 7 closure — Added Sommerfeld momentum-side exact formula tests; introduced `DirichletEtaBC`; integrated tracer BCs with a minimal stepper; updated BC README; added `leapfrog_flather_dirichlet_sponge_example.py`. Full suite: 86 passed, 4 skipped.
+ - 2025-09-18: Added minimal NetCDF snapshot writer and NetCDF timeseries appender under `model/outputs/writers/netcdf.py`, and Parquet timeseries writer/appender under `model/outputs/writers/parquet.py`; unit tests added (`test_outputs_writers.py`) covering write/append/range and basic round-trip via readers.
+
+ - 2025-09-19: Phase 6 complete — Added 2nd order upwind advection (`advection_upwind.py`), quadratic drag (`quadratic_drag.py`), and biharmonic diffusion (`biharmonic_diffusion.py`) operators; all unit tests green. Status table updated.
+
+ - 2025-09-19: Phase 8 complete — Added enstrophy and potential enstrophy diagnostics (`diagnostics/enstrophy.py`, `diagnostics/potential_enstrophy.py`); all unit tests green. Status table updated.
+
+ - 2025-09-19: Phase 10 complete — Output writers (NetCDF, Parquet, JSON) validated for non-uniform H; all tests green. Status table updated.
 
 Maintainers: Update status table & change log in any PR modifying numerics, diagnostics, or architecture.

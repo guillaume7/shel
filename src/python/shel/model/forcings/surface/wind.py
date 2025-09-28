@@ -1,11 +1,4 @@
-__all__ = ["wind_stress", "surface_pressure"]
-
-
 import numpy as np
-
-"""
-Surface forcing module: wind stress and pressure (SHEL best practice).
-"""
 
 
 def wind_stress(U_air, U_surface, rho_air=1.225, Cd=1.3e-3):
@@ -24,15 +17,3 @@ def wind_stress(U_air, U_surface, rho_air=1.225, Cd=1.3e-3):
     mag = np.linalg.norm(rel, axis=0) if rel.ndim > 1 else np.abs(rel)
     tau = rho_air * Cd * mag * rel
     return tau
-
-
-def surface_pressure(P_atm, P_ref=101325.0):
-    """
-    Compute surface pressure anomaly (Pa).
-    Args:
-        P_atm: array-like, atmospheric pressure (Pa)
-        P_ref: reference pressure (Pa)
-    Returns:
-        pressure anomaly (Pa)
-    """
-    return np.asarray(P_atm) - P_ref

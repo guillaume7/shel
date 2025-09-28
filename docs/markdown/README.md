@@ -47,3 +47,45 @@ This documentation is split into multiple parts for better readability:
 5. **Conclusions and Bibliography** contains the overall conclusions of the study and all references cited throughout the documentation.
 
 All equations are rendered using standard Markdown equation syntax compatible with both GitHub and VS Code viewers.
+
+# SHEL Python Port
+
+SHEL (SHallow-water numerical modEL) is a finite volume, free-surface, variable bottom, shallow-water equations solver. This Python port preserves the MATLAB model's numerical fidelity and extends it with modular architecture and modern tooling.
+
+## Features
+- Arakawa C-grid staggered mesh
+- Leapfrog and central difference schemes
+- Multiple boundary condition strategies
+- Conservation diagnostics (volume, energy, enstrophy, potential enstrophy)
+- Modular solver and IO subsystems
+- Built-in regression and conservation tests
+- Extensible for new schemes and diagnostics
+
+## Solver Documentation
+- Operators: pressure, advection, diffusion, friction, continuity
+- Time integration: leapfrog, Asselin filter (see `src/python/shel/model/solvers/time/`)
+- Boundary conditions: strategy/registry pattern
+- Diagnostics: field and integrated metrics
+
+## IO Documentation
+- NetCDF: grid, state, diagnostics snapshots (`model/outputs/writers/netcdf.py`)
+- Parquet: time-series diagnostics (`model/outputs/writers/parquet.py`)
+- JSON: deterministic serialization for regression (`model/outputs/writers/json_writer.py`)
+- OutputManager: schedules output hooks
+- YAML: configuration for reproducible runs
+
+## Developer Guide
+See `DEV_GUIDE.md` for best practices, workflow, and contribution checklist.
+
+## Getting Started
+1. Clone the repository
+2. Install dependencies: `pip install -r requirements.txt`
+3. Run tests: `pytest`
+4. Explore examples in `examples/python/`
+
+## Documentation
+- Full API docs and guides in `docs/markdown/`
+- Status table in `.github/prompts/MASTER_PORT_PROMPT.md`
+
+---
+For scientific background and implementation notes, see `.github/copilot-instructions.md`.

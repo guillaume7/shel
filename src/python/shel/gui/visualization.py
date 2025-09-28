@@ -6,14 +6,12 @@ including 2D plots of model variables and time series plots.
 """
 
 import logging
-from typing import Any, Dict, List, Optional, Tuple
 
 import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
+from matplotlib.backends.backend_qt import NavigationToolbar2QT as NavigationToolbar
+from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
-from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QComboBox, QHBoxLayout, QLabel, QVBoxLayout, QWidget
 
 logger = logging.getLogger(__name__)
@@ -350,14 +348,212 @@ class PlotManager(QWidget):
                         ymax = max(volume_data) * 1.01
                         self.ax.set_ylim(ymin, ymax)
 
+        # Store frame for potential animation export
+        self.store_frame_for_animation(message)
+
         # Update the canvas
         self.canvas.draw()
 
     def export_current_plot(self, file_path):
         """
-        Export the current plot to a file.
+        Export the current plot to a file with scientific publication quality.
 
         Args:
             file_path: Path to save the plot to
         """
-        self.figure.savefig(file_path, dpi=300, bbox_inches="tight")
+        import matplotlib.pyplot as plt
+
+        # Determine format from file extension
+        file_ext = file_path.lower().split(".")[-1]
+
+        # Set format-specific options for publication quality
+        if file_ext == "png":
+            # High-resolution raster for digital publications
+            dpi = 300
+            format_options = {
+                "facecolor": "white",
+                "edgecolor": "none",
+                "bbox_inches": "tight",
+                "pad_inches": 0.1,
+                "metadata": {
+                    "Title": f"SHEL {self.current_plot_type}",
+                    "Author": "SHEL Model",
+                    "Description": f"Shallow water model {self.current_plot_type.lower()} visualization",
+                },
+            }
+        elif file_ext == "eps":
+            # Vector format for print publications
+            dpi = 300  # EPS can handle high DPI
+            format_options = {
+                "facecolor": "white",
+                "edgecolor": "none",
+                "bbox_inches": "tight",
+                "pad_inches": 0.1,
+                "format": "eps",
+            }
+            # Ensure fonts are embedded for vector output
+            plt.rcParams["ps.useafm"] = True
+            plt.rcParams["pdf.use14corefonts"] = True
+        elif file_ext == "pdf":
+            # Vector format alternative
+            dpi = 300
+            format_options = {
+                "facecolor": "white",
+                "edgecolor": "none",
+                "bbox_inches": "tight",
+                "pad_inches": 0.1,
+                "metadata": {
+                    "Title": f"SHEL {self.current_plot_type}",
+                    "Author": "SHEL Model",
+                    "Subject": f"Shallow water model {self.current_plot_type.lower()} visualization",
+                },
+            }
+        else:
+            # Default high-quality settings
+            dpi = 300
+            format_options = {
+                "facecolor": "white",
+                "edgecolor": "none",
+                "bbox_inches": "tight",
+                "pad_inches": 0.1,
+            }
+
+            # Save with publication-quality settings
+        self.figure.savefig(file_path, dpi=dpi, **format_options)
+
+        # Reset matplotlib rcParams if we changed them
+        if file_ext == "eps":
+            plt.rcParams["ps.useafm"] = False
+            plt.rcParams["pdf.use14corefonts"] = False
+
+    def export_animation(self, file_path, frame_data=None, fps=10):
+        """
+        Export an animation of the time series data to MP4.
+
+        Args:
+            file_path: Path to save the animation to (should end with .mp4)
+            frame_data: List of message dictionaries for each frame, or None to use stored data
+            fps: Frames per second for the animation
+        """
+        import matplotlib.animation as animation
+
+        if not frame_data and not hasattr(self, "_animation_frames"):
+            logger.warning("No frame data available for animation export")
+            return
+
+        # Use provided frame data or stored frames
+        frames = frame_data or getattr(self, "_animation_frames", [])
+
+        if not frames:
+            logger.warning("No frames to animate")
+            return
+
+        # Create a temporary figure for animation
+        temp_fig = Figure(figsize=(8, 6), dpi=150)
+
+        def animate_frame(frame_idx):
+            """Animation function for each frame."""
+            temp_fig.clear()
+            ax = temp_fig.add_subplot(111)
+
+            message = frames[frame_idx]
+            fields = message.get("fields", {})
+
+            if self.current_plot_type == "Water Elevation":
+                eta = np.array(fields.get("eta", []))
+                if eta.size > 0:
+                    im = ax.imshow(
+                        eta,
+                        cmap="coolwarm",
+                        interpolation="bilinear",
+                        origin="lower",
+                        aspect="equal",
+                    )
+                    ax.set_title(
+                        f"Water Elevation (t = {message.get('time', 0):.2f} s)"
+                    )
+                    ax.set_xlabel("X")
+                    ax.set_ylabel("Y")
+                    plt.colorbar(im, ax=ax, label="Elevation (m)")
+
+            elif self.current_plot_type == "Velocity Field":
+                u = np.array(fields.get("u", []))
+                v = np.array(fields.get("v", []))
+                if u.size > 0 and v.size > 0:
+                    ny, nx = u.shape
+                    X, Y = np.meshgrid(np.arange(nx), np.arange(ny))
+                    ax.quiver(X, Y, u, v, scale=0.2)
+                    ax.set_aspect("equal")
+                    ax.set_title(f"Velocity Field (t = {message.get('time', 0):.2f} s)")
+                    ax.set_xlabel("X")
+                    ax.set_ylabel("Y")
+
+            elif self.current_plot_type == "Vorticity":
+                # Compute vorticity from u and v
+                u = np.array(fields.get("u", []))
+                v = np.array(fields.get("v", []))
+                if u.size > 0 and v.size > 0:
+                    # Simple central difference vorticity
+                    dv_dx = np.gradient(v, axis=1)
+                    du_dy = np.gradient(u, axis=0)
+                    vorticity = dv_dx - du_dy
+
+                    im = ax.imshow(
+                        vorticity,
+                        cmap="RdBu_r",
+                        interpolation="bilinear",
+                        origin="lower",
+                        aspect="equal",
+                    )
+                    ax.set_title(f"Vorticity (t = {message.get('time', 0):.2f} s)")
+                    ax.set_xlabel("X")
+                    ax.set_ylabel("Y")
+                    plt.colorbar(im, ax=ax, label="Vorticity (s⁻¹)")
+
+            return (ax,)
+
+        # Create animation
+        anim = animation.FuncAnimation(
+            temp_fig, animate_frame, frames=len(frames), interval=1000 / fps, blit=False
+        )
+
+        # Save animation with high quality settings
+        writer = animation.FFMpegWriter(
+            fps=fps,
+            metadata={
+                "title": f"SHEL {self.current_plot_type} Animation",
+                "artist": "SHEL Model",
+                "comment": f"Shallow water model {self.current_plot_type.lower()} time series",
+            },
+            bitrate=1800,  # High bitrate for quality
+            extra_args=["-vcodec", "libx264", "-preset", "slow", "-crf", "22"],
+        )
+
+        try:
+            anim.save(file_path, writer=writer, dpi=150)
+            logger.info(f"Animation saved to {file_path}")
+        except Exception as e:
+            logger.error(f"Failed to save animation: {e}")
+            # Try alternative writer if FFMpeg fails
+            try:
+                writer_alt = animation.FFMpegWriter(fps=fps, bitrate=1800)
+                anim.save(file_path, writer=writer_alt, dpi=150)
+            except Exception as e2:
+                logger.error(f"Alternative animation save also failed: {e2}")
+                raise
+
+    def store_frame_for_animation(self, message):
+        """
+        Store a frame for potential animation export.
+
+        Args:
+            message: Message containing model state
+        """
+        if not hasattr(self, "_animation_frames"):
+            self._animation_frames = []
+
+        # Limit stored frames to prevent memory issues (keep last 1000 frames)
+        if len(self._animation_frames) >= 1000:
+            self._animation_frames.pop(0)
+
+        self._animation_frames.append(message.copy())

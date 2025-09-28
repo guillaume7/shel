@@ -6,10 +6,9 @@ to set model parameters, initial conditions, and boundary conditions.
 """
 
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict
 
 import yaml
-from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (
     QCheckBox,
     QComboBox,
@@ -18,7 +17,6 @@ from PyQt5.QtWidgets import (
     QFormLayout,
     QGroupBox,
     QHBoxLayout,
-    QLabel,
     QLineEdit,
     QMessageBox,
     QPushButton,
@@ -301,7 +299,7 @@ class ParameterPanel(QWidget):
         layout = QFormLayout(tab)
 
         # Boundary condition types
-        bc_types = ["closed", "free_slip", "radiative"]
+        bc_types = ["closed", "freeslip", "radiative", "flather", "dirichlet"]
 
         # North boundary
         self.north_bc_combo = QComboBox()
@@ -418,10 +416,14 @@ class ParameterPanel(QWidget):
         return {
             "grid": {"nx": 100, "ny": 100, "dx": 100.0, "dy": 100.0},
             "model": {
-                "dt": 1.0,
+                "timestep": 1.0,
                 "num_steps": 1000,
                 "output_interval": 10,
                 "solver": "leapfrog",
+                "viscosity": 1.0,
+                "bottom_drag_coef": 0.002,
+                "coriolis_parameter": 0.0,
+                "gravity": 9.81,
             },
             "initial_conditions": {
                 "type": "gaussian",
@@ -447,16 +449,10 @@ class ParameterPanel(QWidget):
                 "custom": {"file": ""},
             },
             "boundary_conditions": {
-                "north": "radiative",
-                "south": "radiative",
+                "north": "closed",
+                "south": "closed",
                 "east": "radiative",
                 "west": "radiative",
-            },
-            "physical_parameters": {
-                "viscosity": 1.0,
-                "bottom_friction": 0.002,
-                "coriolis": 0.0,
-                "gravity": 9.81,
             },
             "output": {"directory": "./output", "enabled": True},
             "communication": {"zmq_pub_port": 5556, "enable_zmq": True},
@@ -492,7 +488,7 @@ class ParameterPanel(QWidget):
         self.dy_spinbox.setValue(self.config["grid"]["dy"])
 
         # Time tab
-        self.dt_spinbox.setValue(self.config["model"]["dt"])
+        self.dt_spinbox.setValue(self.config["model"]["timestep"])
         self.num_steps_spinbox.setValue(self.config["model"]["num_steps"])
         self.output_interval_spinbox.setValue(self.config["model"]["output_interval"])
         self.solver_combo.setCurrentText(self.config["model"]["solver"])
@@ -550,12 +546,10 @@ class ParameterPanel(QWidget):
         self.west_bc_combo.setCurrentText(self.config["boundary_conditions"]["west"])
 
         # Physical parameters tab
-        self.viscosity_spinbox.setValue(self.config["physical_parameters"]["viscosity"])
-        self.bottom_friction_spinbox.setValue(
-            self.config["physical_parameters"]["bottom_friction"]
-        )
-        self.coriolis_spinbox.setValue(self.config["physical_parameters"]["coriolis"])
-        self.gravity_spinbox.setValue(self.config["physical_parameters"]["gravity"])
+        self.viscosity_spinbox.setValue(self.config["model"]["viscosity"])
+        self.bottom_friction_spinbox.setValue(self.config["model"]["bottom_drag_coef"])
+        self.coriolis_spinbox.setValue(self.config["model"]["coriolis_parameter"])
+        self.gravity_spinbox.setValue(self.config["model"]["gravity"])
 
         # Output tab
         self.output_dir_edit.setText(self.config["output"]["directory"])
@@ -572,7 +566,7 @@ class ParameterPanel(QWidget):
         self.config["grid"]["dy"] = self.dy_spinbox.value()
 
         # Time tab
-        self.config["model"]["dt"] = self.dt_spinbox.value()
+        self.config["model"]["timestep"] = self.dt_spinbox.value()
         self.config["model"]["num_steps"] = self.num_steps_spinbox.value()
         self.config["model"]["output_interval"] = self.output_interval_spinbox.value()
         self.config["model"]["solver"] = self.solver_combo.currentText()
@@ -627,12 +621,10 @@ class ParameterPanel(QWidget):
         }
 
         # Physical parameters tab
-        self.config["physical_parameters"] = {
-            "viscosity": self.viscosity_spinbox.value(),
-            "bottom_friction": self.bottom_friction_spinbox.value(),
-            "coriolis": self.coriolis_spinbox.value(),
-            "gravity": self.gravity_spinbox.value(),
-        }
+        self.config["model"]["viscosity"] = self.viscosity_spinbox.value()
+        self.config["model"]["bottom_drag_coef"] = self.bottom_friction_spinbox.value()
+        self.config["model"]["coriolis_parameter"] = self.coriolis_spinbox.value()
+        self.config["model"]["gravity"] = self.gravity_spinbox.value()
 
         # Output tab
         self.config["output"] = {
