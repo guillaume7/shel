@@ -120,8 +120,8 @@ The Python port of SHEL includes a state-of-the-art Web UI for real-time monitor
 - **Physical Diagnostics**: Continuous tracking of Energy (TE/KE/PE), Volume conservation, and Enstrophy.
 
 <div align="center">
-  <img src="docs/markdown/figs/web_dashboard.png" alt="SHEL Web Dashboard" width="800"/>
-  <p><em>The SHEL Web Dashboard providing real-time numerical diagnostics and field visualizations</em></p>
+  <img src="docs/markdown/figs/web_dashboard.png" alt="SHEL Web Dashboard in Action" width="800"/>
+  <p><em>The SHEL Web Dashboard in action: real-time 200x200 field visualizations and numerical diagnostics</em></p>
 </div>
 
 ### Running the Web App
