@@ -117,7 +117,27 @@ class ModelRunner:
         logger.info("Model initialized with initial conditions")
 
     def _advance_timestep(self):
-        """Advance the model state by one time step using leapfrog integration."""
+        """Advance the model state by one time step using leapfrog integration.
+
+        Matches MATLAB ``ComputeLeapfrog`` in ``model_handles.m``:
+
+        1. Compute spatial RHS at level *n*.
+        2. Leapfrog: advance from *n-1* with 2·dt.
+        3. Apply Asselin filter to level *n* (middle).
+        4. Cycle time levels:
+           - old  ← filtered *n*  (eta, u, v)
+           - curr ← new *n+1*    (eta, u, v)
+           - H_old ← **unfiltered** H at level *n*  (MATLAB: ``H_old = H``)
+           - H     ← H at new level *n+1*
+        """
+        # Read Asselin coefficient from config (MATLAB default: gama = 0.1)
+        asselin_nu = self.config.get("model", {}).get("asselin_coefficient", 0.1)
+
+        # Keep a reference to the *unfiltered* H at level n before it is
+        # overwritten.  MATLAB never recomputes H from the filtered eta;
+        # it simply does ``H_old = H``.
+        H_n = self.state.H
+
         # Call leapfrog step with current state arrays and parameters
         eta_np1, U_np1, V_np1, eta_n_f, U_n_f, V_n_f = leapfrog_step_with_config(
             eta_nm1=self.state.eta_old,
@@ -136,15 +156,29 @@ class ModelRunner:
             f=self.state.coriolis if hasattr(self.state, "coriolis") else None,
             enable_coriolis=(self.f_param != 0.0),
             config=self.config,
+            d=self.state.d,
+            H_old=self.state.H_old,
+            asselin_nu=asselin_nu,
         )
 
-        # Update state with new values (and cycle time levels)
-        self.state.eta_old = self.state.eta.copy()
-        self.state.u_old = self.state.u.copy()
-        self.state.v_old = self.state.v.copy()
+        # Cycle time levels using Asselin-filtered middle state.
+        # The leapfrog scheme returns filtered values (eta_n_f, U_n_f, V_n_f)
+        # that suppress the computational mode; these must become the "old"
+        # level for the next step, otherwise the filter has no effect.
+        self.state.eta_old = eta_n_f
+        self.state.u_old = U_n_f
+        self.state.v_old = V_n_f
+
+        # Advance to the new time level
         self.state.eta = eta_np1
         self.state.u = U_np1
         self.state.v = V_np1
+
+        # Cycle water-column heights — MATLAB pattern:
+        #   H_old = H          (unfiltered H at level n)
+        #   H     = H_new      (eta_new + d, i.e. level n+1)
+        self.state.H_old = H_n
+        self.state.H = eta_np1 + self.state.d
 
     def run(self) -> None:
         """Run the model for the specified number of time steps."""
@@ -290,22 +324,40 @@ class ModelRunner:
         nc_file = os.path.join(output_dir, f"state_{step:06d}.nc")
         netcdf_reader.write_model_state(state_dict, nc_file)
 
-        # Write timeseries data to Parquet file
+        import logging
+
+        logger = logging.getLogger(__name__)
         timeseries_file = os.path.join(output_dir, "timeseries.parquet")
-        timeseries_data = {
-            "time": self.state.time,
-            "step": step,
-            "kinetic_energy": self.state.compute_kinetic_energy(),
-            "potential_energy": self.state.compute_potential_energy(),
-            "total_energy": self.state.compute_total_energy(),
-            "volume": self.state.compute_volume(),
-            "max_elevation": float(np.max(self.state.eta)),
-            "min_elevation": float(np.min(self.state.eta)),
-            "max_velocity": float(
+        logger.debug("Computing diagnostics for output...")
+        try:
+            ke = self.state.compute_kinetic_energy()
+            logger.debug("Kinetic energy: %s", ke)
+            pe = self.state.compute_potential_energy()
+            logger.debug("Potential energy: %s", pe)
+            te = self.state.compute_total_energy()
+            logger.debug("Total energy: %s", te)
+            vol = self.state.compute_volume()
+            logger.debug("Volume: %s", vol)
+            max_eta = float(np.max(self.state.eta))
+            min_eta = float(np.min(self.state.eta))
+            max_vel = float(
                 max(np.max(np.abs(self.state.u)), np.max(np.abs(self.state.v)))
-            ),
-        }
-        parquet_reader.append_timeseries(timeseries_data, timeseries_file)
+            )
+            timeseries_data = {
+                "time": self.state.time,
+                "step": step,
+                "kinetic_energy": ke,
+                "potential_energy": pe,
+                "total_energy": te,
+                "volume": vol,
+                "max_elevation": max_eta,
+                "min_elevation": min_eta,
+                "max_velocity": max_vel,
+            }
+            parquet_reader.append_timeseries(timeseries_data, timeseries_file)
+        except Exception as e:
+            logger.error("Error in diagnostics output: %s", e)
+            raise
 
         logger.debug("Output written for step %s", step)
 

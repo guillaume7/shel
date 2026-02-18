@@ -30,7 +30,7 @@ def test_potential_enstrophy_conservation_inviscid_closed_box():
     penst0 = integrated_potential_enstrophy(pv0, dx, dy)
 
     for _ in range(10):
-        eta, U, V = explicit_step(
+        eta, U, V, _ = explicit_step(
             eta,
             H,
             U,

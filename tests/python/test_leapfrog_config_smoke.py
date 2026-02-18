@@ -38,12 +38,12 @@ def build_flather_east_with_sponge_config(
 
 def test_leapfrog_with_config_flather_east_and_sponge_smoke():
     ny, nx = 40, 60
-    dx = dy = 1.0
-    dt = 0.05
+    dx = dy = 1000.0
+    dt = 5.0
     g = 9.81
 
     # Constant depth, no rotation, no viscosity/drag/advection
-    H = np.ones((ny, nx)) * 10.0
+    H = np.ones((ny, nx)) * 100.0
 
     eta0 = np.zeros((ny, nx))
     U0 = np.zeros((ny, nx + 1))
@@ -60,8 +60,10 @@ def test_leapfrog_with_config_flather_east_and_sponge_smoke():
     )
 
     # Startup: duplicate initial to emulate n-1 and n states
+    d = H - eta0  # constant bottom depth
     eta_nm1, U_nm1, V_nm1 = eta0.copy(), U0.copy(), V0.copy()
     eta_n, U_n, V_n = eta0.copy(), U0.copy(), V0.copy()
+    H_n = eta_n + d
 
     # Run a handful of steps; boundary/sponge will impose east-side eta
     steps = 60
@@ -69,7 +71,7 @@ def test_leapfrog_with_config_flather_east_and_sponge_smoke():
         eta_np1, U_np1, V_np1, eta_n_f, U_n_f, V_n_f = leapfrog_step_with_config(
             eta_nm1,
             eta_n,
-            H,
+            H_n,
             U_nm1,
             U_n,
             V_nm1,
@@ -85,10 +87,12 @@ def test_leapfrog_with_config_flather_east_and_sponge_smoke():
             enable_coriolis=False,
             config=cfg,
             asselin_nu=0.02,
+            d=d,
         )
-        # advance time levels
-        eta_nm1, U_nm1, V_nm1 = eta_n, U_n, V_n
+        # advance time levels (use Asselin-filtered middle level)
+        eta_nm1, U_nm1, V_nm1 = eta_n_f, U_n_f, V_n_f
         eta_n, U_n, V_n = eta_np1, U_np1, V_np1
+        H_n = eta_n + d
 
     # Sanity: no NaNs and east column influenced by boundary > interior average
     assert np.isfinite(eta_n).all()

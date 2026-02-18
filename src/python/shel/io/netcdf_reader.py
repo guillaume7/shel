@@ -6,7 +6,7 @@ This module provides functions for reading and writing NetCDF files.
 
 import logging
 import os
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, Optional, Tuple
 
 import numpy as np
 import xarray as xr
@@ -160,6 +160,31 @@ def write_model_state(state: Dict[str, Any], file_path: str) -> None:
     x_u = x_origin + np.arange(nx + 1) * dx
     y_v = y_origin + np.arange(ny + 1) * dy
 
+    # Diagnostics may be nested under state["diagnostics"]["integrated"]
+    diagnostics = state.get("diagnostics", {})
+    integ = diagnostics.get("integrated", diagnostics)
+
+    # Base attributes always present
+    base_attrs = {
+        "title": "SHEL model output",
+        "time": state["time"],
+        "step": state["step"],
+        "gravity": state["parameters"]["gravity"],
+        "viscosity": state["parameters"]["viscosity"],
+        "bottom_drag_coef": state["parameters"]["bottom_drag_coef"],
+    }
+
+    # Optional diagnostic attributes (only include if available)
+    opt_names = [
+        "kinetic_energy",
+        "potential_energy",
+        "total_energy",
+        "volume",
+        "enstrophy",
+        "potential_enstrophy",
+    ]
+    diag_attrs = {name: integ[name] for name in opt_names if name in integ}
+
     # Create dataset
     ds = xr.Dataset(
         data_vars={
@@ -175,18 +200,7 @@ def write_model_state(state: Dict[str, Any], file_path: str) -> None:
             "x_u": ("x_u", x_u),
             "y_v": ("y_v", y_v),
         },
-        attrs={
-            "title": "SHEL model output",
-            "time": state["time"],
-            "step": state["step"],
-            "gravity": state["parameters"]["gravity"],
-            "viscosity": state["parameters"]["viscosity"],
-            "bottom_drag_coef": state["parameters"]["bottom_drag_coef"],
-            "kinetic_energy": state["diagnostics"]["kinetic_energy"],
-            "potential_energy": state["diagnostics"]["potential_energy"],
-            "total_energy": state["diagnostics"]["total_energy"],
-            "volume": state["diagnostics"]["volume"],
-        },
+        attrs={**base_attrs, **diag_attrs},
     )
 
     # Save to file

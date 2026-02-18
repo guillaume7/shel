@@ -1,9 +1,14 @@
 """
-Leapfrog + Asselin filter integrator built on existing tendencies.
+Leapfrog + Asselin filter integrator (conservative form).
+
+Matches MATLAB ``ComputeLeapfrog``:
+    1. Compute RHS at time level n from (eta_n, U_n, V_n)
+    2. Advance from n-1 using 2*dt (centered leapfrog)
+    3. Apply Asselin filter to middle level n
 
 Depends on:
-- explicit_step: assembles tendencies and applies momentum/eta updates for one Euler step
-- asselin_filter: Robert–Asselin filter applied to the middle time level
+- explicit_step: conservative flux-form step (accepts eta_old, U_old, etc.)
+- asselin_filter: Robert–Asselin filter
 """
 
 from __future__ import annotations
@@ -44,18 +49,37 @@ def leapfrog_stepper(
     f: Array | None = None,
     enable_coriolis: bool = False,
     bc_type: str = "closed",
-    asselin_nu: float = 0.02,
+    asselin_nu: float = 0.1,
+    d: Array | None = None,
+    H_old: Array | None = None,
 ):
-    """Advance one leapfrog step using centered time staggering and Asselin filter.
+    """Advance one leapfrog step: centered in time (2*dt) with Asselin filter.
 
-    Returns (eta_np1, U_np1, V_np1, eta_n_f, U_n_f, V_n_f).
+    Parameters
+    ----------
+    eta_nm1, U_nm1, V_nm1 : arrays at time level n-1
+    eta_n, U_n, V_n       : arrays at time level n (used for RHS evaluation)
+    H                     : water-column height at level n
+    dt                    : physical time step (the step internally uses 2*dt)
+    d                     : bathymetry depth (constant); inferred from H-eta if None
+    H_old                 : water-column height at level n-1; inferred from eta_nm1+d if None
+
+    Returns
+    -------
+    (eta_np1, U_np1, V_np1, eta_n_f, U_n_f, V_n_f)
     """
-    eta_np1, U_np1, V_np1 = explicit_step(
-        eta_n,
-        H,
+    if d is None:
+        d = H - eta_n
+    if H_old is None:
+        H_old = eta_nm1 + d
+
+    # Conservative step: RHS evaluated at n, advance from n-1 with 2*dt
+    eta_np1, U_np1, V_np1, H_np1 = explicit_step(
+        eta_n,  # current level (for RHS evaluation)
+        H,  # current H
         U_n,
         V_n,
-        dt=dt,
+        dt=2.0 * dt,  # leapfrog: advance over 2*dt
         dx=dx,
         dy=dy,
         g=g,
@@ -65,6 +89,11 @@ def leapfrog_stepper(
         f=f,
         enable_coriolis=enable_coriolis,
         bc_type=bc_type,
+        d=d,
+        eta_old=eta_nm1,
+        H_old=H_old,
+        U_old=U_nm1,
+        V_old=V_nm1,
     )
     # Apply Robert–Asselin filter to middle state (n)
     eta_n_f = asselin_filter(eta_nm1, eta_n, eta_np1, asselin_nu)
@@ -95,17 +124,24 @@ def leapfrog_step_with_config(
     f: Array | None = None,
     enable_coriolis: bool = False,
     config: Mapping[str, Any] | None = None,
-    asselin_nu: float = 0.02,
+    asselin_nu: float = 0.1,
+    d: Array | None = None,
+    H_old: Array | None = None,
 ):
-    """Leapfrog stepper with config-aware BC and sponge application (DRY with stepper.py)."""
-    # Use base step to get n+1
+    """Leapfrog stepper with config-aware BC and sponge (DRY with stepper.py)."""
     bc_type = resolve_bc_type_from_config(config)
-    eta_np1, U_np1, V_np1 = explicit_step(
+    if d is None:
+        d = H - eta_n
+    if H_old is None:
+        H_old = eta_nm1 + d
+
+    # Conservative step with 2*dt
+    eta_np1, U_np1, V_np1, H_np1 = explicit_step(
         eta_n,
         H,
         U_n,
         V_n,
-        dt=dt,
+        dt=2.0 * dt,
         dx=dx,
         dy=dy,
         g=g,
@@ -115,6 +151,11 @@ def leapfrog_step_with_config(
         f=f,
         enable_coriolis=enable_coriolis,
         bc_type=bc_type,
+        d=d,
+        eta_old=eta_nm1,
+        H_old=H_old,
+        U_old=U_nm1,
+        V_old=V_nm1,
     )
 
     # Apply per-side BCs (momentum then eta, post enforcement)

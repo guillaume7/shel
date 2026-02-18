@@ -1,0 +1,25 @@
+{
+  "name": "shel",
+  "version": "1.0.0",
+  "description": "<div align=\"center\">   <img src=\"docs/markdown/figs/bump-4.svg\" alt=\"Water level simulation\" width=\"600\"/>   <p><em>Simulation of water elevation propagation in a shallow water domain</em></p> </div>",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "example": "examples",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/guillaume7/shel.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/guillaume7/shel/issues"
+  },
+  "homepage": "https://github.com/guillaume7/shel#readme"
+}

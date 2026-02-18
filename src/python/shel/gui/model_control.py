@@ -113,7 +113,9 @@ class ModelControlPanel(QWidget):
             cmd = [
                 sys.executable,  # Python executable
                 os.path.join(
-                    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                    os.path.dirname(
+                        os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+                    ),
                     "run.py",
                 ),
                 "--config",
@@ -137,6 +139,8 @@ class ModelControlPanel(QWidget):
             # Create QProcess if not already created
             if self.process is None:
                 self.process = QProcess()
+                # Merge stdout and stderr so all logs are captured uniformly
+                self.process.setProcessChannelMode(cast(Any, QProcess).MergedChannels)
                 self.process.readyReadStandardOutput.connect(self.handle_stdout)
                 self.process.readyReadStandardError.connect(self.handle_stderr)
                 self.process.finished.connect(self.handle_finished)
@@ -191,10 +195,12 @@ class ModelControlPanel(QWidget):
         """Handle standard output from the model process."""
         if self.process:
             output: str = self.process.readAllStandardOutput().data().decode()
-            logger.debug("Model output: %s", output)
-
-            # Look for progress information
+            # Emit each CLI line at INFO so it shows up by default
             for line in output.splitlines():
+                if line.strip():
+                    logger.info("CLI: %s", line)
+
+                # Look for progress information
                 if "Step" in line and "/" in line:
                     try:
                         parts: List[str] = line.split("/")

@@ -30,7 +30,7 @@ def test_dirichlet_eta_east_smoke():
     }
 
     for _ in range(5):
-        eta, U, V = explicit_step_with_config(
+        eta, U, V, _ = explicit_step_with_config(
             eta,
             H,
             U,

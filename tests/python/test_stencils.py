@@ -58,8 +58,10 @@ def test_t_u_v_averaging_round_trip_centering():
     T_from_v = avg_y_v_to_t(Tv)
 
     # For a linear field, averaging to faces and back should reproduce T exactly
-    assert np.allclose(T_from_u, T)
-    assert np.allclose(T_from_v, T)
+    # in the interior. Boundary cells use nearest-cell copy (not extrapolation),
+    # so the round-trip is only exact for interior columns/rows.
+    assert np.allclose(T_from_u[:, 1:-1], T[:, 1:-1])
+    assert np.allclose(T_from_v[1:-1, :], T[1:-1, :])
 
 
 def test_divergence_zero_for_solid_body():

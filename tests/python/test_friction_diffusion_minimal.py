@@ -29,7 +29,8 @@ def test_viscous_tendency_linear_field_zero():
     X2, Y2 = np.meshgrid(x2, y2)
     V = -0.5 * X2 + 0.25 * Y2
 
-    dU, dV = viscous_tendency(U, V, nu, dx, dy)
+    H = np.ones((ny, nx))
+    dU, dV = viscous_tendency(U, V, H, nu, dx, dy)
 
     # Interior should be exactly zero; boundaries left at zero by implementation
     assert np.allclose(dU[1:-1, 1:-1], 0.0)
@@ -53,7 +54,8 @@ def test_viscous_tendency_quadratic_field_constant():
     X2, Y2 = np.meshgrid(x2, y2)
     V = a * X2**2 + b * Y2**2
 
-    dU, dV = viscous_tendency(U, V, nu, dx, dy)
+    H = np.ones((ny, nx))
+    dU, dV = viscous_tendency(U, V, H, nu, dx, dy)
 
     expected = nu * (2 * a / (dx * dx) + 2 * b / (dy * dy))
     assert np.allclose(dU[2:-2, 2:-2], expected)

@@ -31,7 +31,7 @@ def test_radiative_east_boundary_minimal_outflow():
 
     # Step a few times; ensure no explosion and normal east face remains finite
     for _ in range(10):
-        eta, U, V = explicit_step_with_config(
+        eta, U, V, _ = explicit_step_with_config(
             eta,
             H,
             U,

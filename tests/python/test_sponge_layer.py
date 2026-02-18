@@ -32,7 +32,7 @@ def test_sponge_eta_blending_west_linear():
         },
     }
 
-    eta1, U1, V1 = explicit_step_with_config(
+    eta1, U1, V1, _ = explicit_step_with_config(
         eta, H, U, V, dt=0.1, dx=1.0, dy=1.0, config=cfg
     )
 
@@ -70,7 +70,7 @@ def test_sponge_momentum_relaxes_toward_boundary_u_east():
         },
     }
 
-    eta1, U1, V1 = explicit_step_with_config(
+    eta1, U1, V1, _ = explicit_step_with_config(
         eta, H, U, V, dt=0.1, dx=1.0, dy=1.0, config=cfg
     )
 

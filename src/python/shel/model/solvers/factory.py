@@ -22,6 +22,8 @@ class SolverStepWrapper:
     def step(self, state):
         # For leapfrog, call with previous/current arrays and config
         if self.step_func is leapfrog_step_with_config:
+            d = getattr(state, "d", state.H - state.eta)
+            H_old = getattr(state, "H_old", state.eta_old + d)
             eta_np1, U_np1, V_np1, *_ = self.step_func(
                 eta_nm1=state.eta_old,
                 eta_n=state.eta,
@@ -39,15 +41,20 @@ class SolverStepWrapper:
                 f=getattr(state, "coriolis", None),
                 enable_coriolis=(getattr(state, "coriolis", 0.0) != 0.0),
                 config=self.config,
+                d=d,
+                H_old=H_old,
             )
             state.eta_old = state.eta.copy()
             state.u_old = state.u.copy()
             state.v_old = state.v.copy()
+            state.H_old = state.H.copy()
             state.eta = eta_np1
             state.u = U_np1
             state.v = V_np1
+            state.H = state.eta + d
         elif self.step_func is explicit_step:
-            eta_np1, U_np1, V_np1 = self.step_func(
+            d = getattr(state, "d", state.H - state.eta)
+            eta_np1, U_np1, V_np1, H_np1 = self.step_func(
                 eta=state.eta,
                 H=state.H,
                 U=state.u,
@@ -63,10 +70,12 @@ class SolverStepWrapper:
                 bc_type=self.config.get("boundary_conditions", {}).get(
                     "type", "closed"
                 ),
+                d=d,
             )
             state.eta = eta_np1
             state.u = U_np1
             state.v = V_np1
+            state.H = H_np1
         else:
             raise NotImplementedError("Unknown step function")
 

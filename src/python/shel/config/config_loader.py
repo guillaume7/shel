@@ -33,8 +33,9 @@ def load_config(config_path: str) -> Dict[str, Any]:
     with open(config_path, "r") as f:
         config = yaml.safe_load(f)
 
-    # Validate the configuration
+    # Validate and normalize configuration
     validate_config(config)
+    config = normalize_config(config)
 
     return config
 
@@ -77,6 +78,109 @@ def validate_config(config: Dict[str, Any]) -> None:
     for boundary in required_boundaries:
         if boundary not in config["boundary_conditions"]:
             raise ValueError(f"Missing {boundary} boundary condition")
+
+
+def normalize_config(config: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Normalize configuration values and structures.
+
+    This bridges differences between the GUI-emitted schema and the
+    model's back-end expectations.
+
+    - initial_conditions.type: map 'gaussian' -> 'gaussian_bump'
+      and flatten nested gaussian params into top-level keys expected by
+      WaterlevelInitialCondition (amplitude, sigma, x_center, y_center).
+      If 'custom' is requested (not yet supported), fallback to 'flat' with a warning.
+
+    - bathymetry.type: map aliases 'linear_slope' -> 'sloping',
+      'bump' -> 'gaussian_bump', 'custom' -> 'from_file'. Also flatten
+      nested parameter blocks into the keys expected by BathymetryInitialCondition.
+
+    Args:
+        config: Raw configuration dictionary
+
+    Returns:
+        Normalized configuration dictionary (same object mutated for convenience)
+    """
+    logger = logging.getLogger(__name__)
+
+    # --- Initial conditions (water elevation) ---
+    ic = config.get("initial_conditions", {})
+    ic_type = str(ic.get("type", "flat")).lower()
+    if ic_type == "gaussian":
+        ic_type = "gaussian_bump"
+        logger.info("Normalizing initial_conditions.type: gaussian -> gaussian_bump")
+    elif ic_type == "custom":
+        # Not supported yet in water elevation path; fallback to flat to avoid crash
+        logger.warning(
+            "initial_conditions.type 'custom' not supported; falling back to 'flat'"
+        )
+        ic_type = "flat"
+    ic["type"] = ic_type
+
+    # Flatten gaussian parameters if provided under a nested block from GUI
+    gauss_block = ic.get("gaussian")
+    if gauss_block and ic_type == "gaussian_bump":
+        # Map GUI keys (x0,y0) to model keys (x_center,y_center)
+        ic.setdefault("amplitude", gauss_block.get("amplitude"))
+        ic.setdefault("sigma", gauss_block.get("sigma"))
+        if "x_center" not in ic and "x0" in gauss_block:
+            ic["x_center"] = gauss_block.get("x0")
+        if "y_center" not in ic and "y0" in gauss_block:
+            ic["y_center"] = gauss_block.get("y0")
+
+    config["initial_conditions"] = ic
+
+    # --- Bathymetry ---
+    bathy = config.get("bathymetry", {})
+    btype = str(bathy.get("type", "flat")).lower()
+    alias_map = {
+        "linear_slope": "sloping",
+        "bump": "gaussian_bump",
+        "custom": "from_file",
+    }
+    if btype in alias_map:
+        logger.info("Normalizing bathymetry.type: %s -> %s", btype, alias_map[btype])
+        btype = alias_map[btype]
+    bathy["type"] = btype
+
+    # Flatten nested parameter blocks into expected keys
+    # Flat depth
+    if "flat" in bathy and isinstance(bathy["flat"], dict):
+        if "depth" in bathy["flat"] and "depth" not in bathy:
+            bathy["depth"] = bathy["flat"]["depth"]
+
+    # Linear slope params
+    if "linear_slope" in bathy and isinstance(bathy["linear_slope"], dict):
+        ls = bathy["linear_slope"]
+        if "min_depth" in ls and "depth_min" not in bathy:
+            bathy["depth_min"] = ls["min_depth"]
+        if "max_depth" in ls and "depth_max" not in bathy:
+            bathy["depth_max"] = ls["max_depth"]
+
+    # Bump params
+    if "bump" in bathy and isinstance(bathy["bump"], dict):
+        bb = bathy["bump"]
+        if "amplitude" in bb and "amplitude" not in bathy:
+            bathy["amplitude"] = bb["amplitude"]
+        if "sigma" in bb and "sigma" not in bathy:
+            bathy["sigma"] = bb["sigma"]
+        if "x0" in bb and "x_center" not in bathy:
+            bathy["x_center"] = bb["x0"]
+        if "y0" in bb and "y_center" not in bathy:
+            bathy["y_center"] = bb["y0"]
+        if "base_depth" in bb and "depth" not in bathy:
+            bathy["depth"] = bb["base_depth"]
+
+    # Custom bathy file
+    if "custom" in bathy and isinstance(bathy["custom"], dict):
+        cb = bathy["custom"]
+        if "file" in cb and "file_path" not in bathy:
+            bathy["file_path"] = cb["file"]
+
+    config["bathymetry"] = bathy
+
+    return config
 
 
 def create_default_config() -> Dict[str, Any]:

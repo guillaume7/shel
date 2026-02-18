@@ -20,7 +20,7 @@ def asselin_filter(
     old, current, new : arrays at t-1, t, t+1
     alpha : filter coefficient (0..1)
     """
-    return current + 0.5 * alpha * (new - 2 * current + old)
+    return current + alpha * (old - 2 * current + new)
 
 
 __all__ = ["asselin_filter"]

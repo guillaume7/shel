@@ -254,6 +254,11 @@ def explicit_step_with_config(
     f: Array | None = None,
     enable_coriolis: bool = False,
     config: Mapping[str, Any] | None = None,
+    d: Array | None = None,
+    eta_old: Array | None = None,
+    H_old: Array | None = None,
+    U_old: Array | None = None,
+    V_old: Array | None = None,
 ):
     bc_type = resolve_bc_type_from_config(config)
     eta_ext_map, eta_bc_stage, eta_relax = _get_eta_bc_params(config)
@@ -282,7 +287,7 @@ def explicit_step_with_config(
             eta_relax=eta_relax,
         )
         eta_input = eta_work
-    eta_next, U_next, V_next = explicit_step(
+    eta_next, U_next, V_next, H_next = explicit_step(
         eta_input,
         H,
         U,
@@ -297,6 +302,11 @@ def explicit_step_with_config(
         f=f,
         enable_coriolis=enable_coriolis,
         bc_type=bc_type,
+        d=d,
+        eta_old=eta_old,
+        H_old=H_old,
+        U_old=U_old,
+        V_old=V_old,
     )
     # Apply per-side overrides if present (e.g., radiative or flather on one boundary)
     bc_sides = resolve_bc_sides_from_config(config)
@@ -337,7 +347,7 @@ def explicit_step_with_config(
         eta_ext_map=eta_ext_map if isinstance(eta_ext_map, dict) else None,
         config=config,
     )
-    return eta_next, U_next, V_next
+    return eta_next, U_next, V_next, H_next
 
 
 __all__ = [

@@ -1,0 +1,33 @@
+grid:
+  nx: 10
+  ny: 10
+  dx: 100.0
+  dy: 100.0
+
+model:
+  timestep: 0.1
+  num_steps: 5
+  output_interval: 1
+  gravity: 9.81
+  viscosity: 0.0
+  bottom_drag_coef: 0.0
+  coriolis_parameter: 0.0
+
+initial_conditions:
+  type: "flat"
+  elevation: 0.0
+
+bathymetry:
+  type: "flat"
+  flat:
+    depth: 10.0
+
+boundary_conditions:
+  north: "closed"
+  south: "closed"
+  east: "closed"
+  west: "closed"
+
+communication:
+  enable_zmq: true
+  zmq_pub_port: 5556

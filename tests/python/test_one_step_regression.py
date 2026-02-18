@@ -27,7 +27,7 @@ def test_one_step_regression():
     U0 = state["u"]
     V0 = state["v"]
     # Run one explicit step
-    eta1, U1, V1 = explicit_step(
+    eta1, U1, V1, _ = explicit_step(
         eta0,
         H,
         U0,

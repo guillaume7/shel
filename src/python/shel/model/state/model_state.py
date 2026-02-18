@@ -124,8 +124,17 @@ class ModelState:
         return FieldDiagnostics.vorticity(self.u, self.v, self.grid)
 
     def compute_kinetic_energy(self) -> float:
+        import logging
+
+        logger = logging.getLogger(__name__)
         u, v = self._masked_uv()
-        return IntegratedDiagnostics.kinetic_energy(u, v, self.H, self.grid)
+        try:
+            ke = IntegratedDiagnostics.kinetic_energy(u, v, self.H, self.grid)
+            logger.debug("Kinetic energy computed: %s", ke)
+            return ke
+        except Exception as e:
+            logger.error("Error in compute_kinetic_energy: %s", e)
+            raise
 
     def compute_potential_energy(self) -> float:
         return IntegratedDiagnostics.potential_energy(self.eta, self.grid, self.gravity)

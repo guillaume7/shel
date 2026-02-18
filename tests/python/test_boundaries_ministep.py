@@ -24,7 +24,7 @@ def test_closed_bc_zeroes_normal_faces_in_ministep():
     V[0, :] = 0.2
     V[-1, :] = -0.2
 
-    eta1, U1, V1 = explicit_step(
+    eta1, U1, V1, _ = explicit_step(
         eta,
         H,
         U,

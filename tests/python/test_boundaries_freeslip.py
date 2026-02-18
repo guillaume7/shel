@@ -24,7 +24,7 @@ def test_freeslip_bc_zero_normal_and_zero_tangential_gradient():
     V[0, :] = 0.07
     V[-1, :] = -0.04
 
-    eta1, U1, V1 = explicit_step(
+    eta1, U1, V1, _ = explicit_step(
         eta,
         H,
         U,

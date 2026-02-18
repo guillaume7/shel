@@ -27,13 +27,13 @@ def test_ministep_closed_box_volume_conservation_over_few_steps():
     U = np.zeros((ny, nx + 1))
     V = np.zeros((ny + 1, nx))
 
-    vol0 = domain_volume(eta + H, dx, dy)
+    vol0 = domain_volume(H, dx, dy)
 
     steps = 5
     for _ in range(steps):
-        eta, U, V = explicit_step(eta, H, U, V, dt=dt, dx=dx, dy=dy, g=g, r=r, nu=nu)
+        eta, U, V, H = explicit_step(eta, H, U, V, dt=dt, dx=dx, dy=dy, g=g, r=r, nu=nu)
 
-    volN = domain_volume(eta + H, dx, dy)
+    volN = domain_volume(H, dx, dy)
 
     assert np.isclose(vol0, volN, rtol=1e-12, atol=1e-10)
 
@@ -51,7 +51,7 @@ def test_ministep_stability_small_dt():
     U = 0.01 * rng.standard_normal((ny, nx + 1))
     V = 0.01 * rng.standard_normal((ny + 1, nx))
 
-    eta1, U1, V1 = explicit_step(
+    eta1, U1, V1, _ = explicit_step(
         eta, H, U, V, dt=dt, dx=dx, dy=dy, g=9.81, r=0.0, nu=0.0
     )
 

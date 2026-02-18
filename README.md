@@ -9,7 +9,7 @@
 
 The SHEL (SHallow-waters numerical modEL) is a finite volume, free-surface, variable bottom, shallow-waters equations numerical solver.
 
-SHEL has an original MATLAB implementation (with a GUI) and an ongoing Python port engineered for modularity, testability, and open execution (no MATLAB license required).
+SHEL has an original MATLAB implementation (with a GUI) and a modern Python port engineered for modularity, high-performance visualization, and open execution (no MATLAB license required).
 
 <div align="center">
   <img src="docs/markdown/figs/arakawaCgrid.svg" alt="Arakawa C-grid" width="400"/>
@@ -109,6 +109,38 @@ Run an example:
 ```bash
 python examples/python/leapfrog_flather_dirichlet_sponge_example.py
 ```
+
+## Modern Web Interface (Python Port)
+
+The Python port of SHEL includes a state-of-the-art Web UI for real-time monitoring and control, replacing the legacy desktop GUIs with a responsive, high-performance dashboard.
+
+- **Interactive Control**: Adjust grid resolution, time steps, and physical parameters (viscosity, gravity) on the fly.
+- **Real-time Field Visualization**: Dynamic heatmaps for water elevation ($\eta$) and velocity magnitude ($|U|$).
+- **Vector Flow Fields**: Real-time Quiver plots showing direction and magnitude of currents.
+- **Physical Diagnostics**: Continuous tracking of Energy (TE/KE/PE), Volume conservation, and Enstrophy.
+
+<div align="center">
+  <img src="docs/markdown/figs/web_dashboard.png" alt="SHEL Web Dashboard" width="800"/>
+  <p><em>The SHEL Web Dashboard providing real-time numerical diagnostics and field visualizations</em></p>
+</div>
+
+### Running the Web App
+
+1. **Start the Backend Server**:
+   ```bash
+   cd src/python
+   PYTHONPATH=. python3 -m shel.web.run_server
+   ```
+
+2. **Start the Frontend (Development Mode)**:
+   ```bash
+   cd src/web
+   npm install
+   npm run dev
+   ```
+
+3. **Access the Dashboard**:
+   Open your browser at `http://localhost:3000`.
 
 ## Documentation
 

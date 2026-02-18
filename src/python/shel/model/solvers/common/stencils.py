@@ -53,9 +53,9 @@ def avg_x_t_to_u(T: Array) -> Array:
     out = np.empty((ny, nx + 1), dtype=T.dtype)
     # interior arithmetic mean
     out[:, 1:nx] = 0.5 * (T[:, 1:] + T[:, :-1])
-    # boundary linear extrapolation to ensure perfect reconstruction of linear fields
-    out[:, 0] = 1.5 * T[:, 0] - 0.5 * T[:, 1]
-    out[:, -1] = 1.5 * T[:, -1] - 0.5 * T[:, -2]
+    # boundary: nearest-cell copy (matches MATLAB; avoids negative H from extrapolation)
+    out[:, 0] = T[:, 0]
+    out[:, -1] = T[:, -1]
     return out
 
 
@@ -68,8 +68,9 @@ def avg_y_t_to_v(T: Array) -> Array:
     ny, nx = T.shape
     out = np.empty((ny + 1, nx), dtype=T.dtype)
     out[1:ny, :] = 0.5 * (T[1:, :] + T[:-1, :])
-    out[0, :] = 1.5 * T[0, :] - 0.5 * T[1, :]
-    out[-1, :] = 1.5 * T[-1, :] - 0.5 * T[-2, :]
+    # boundary: nearest-cell copy (matches MATLAB; avoids negative H from extrapolation)
+    out[0, :] = T[0, :]
+    out[-1, :] = T[-1, :]
     return out
 
 

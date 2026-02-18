@@ -62,7 +62,7 @@ def test_explicit_step_with_config_applies_bc():
             "north": "freeslip",
         }
     }
-    eta1, U1, V1 = explicit_step_with_config(
+    eta1, U1, V1, _ = explicit_step_with_config(
         eta,
         H,
         U,
@@ -90,7 +90,7 @@ def test_explicit_step_with_config_applies_bc():
             "north": "closed",
         }
     }
-    eta2, U2, V2 = explicit_step_with_config(
+    eta2, U2, V2, _ = explicit_step_with_config(
         eta,
         H,
         U,

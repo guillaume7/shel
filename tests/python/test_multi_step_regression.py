@@ -38,7 +38,7 @@ def test_multi_step_regression():
     dt = 2.0
     steps = 5
     for _ in range(steps):
-        eta, U, V = explicit_step(
+        eta, U, V, _ = explicit_step(
             eta,
             H,
             U,

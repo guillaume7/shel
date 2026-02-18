@@ -14,8 +14,9 @@ def test_pressure_gradient_linear_eta():
     y = np.arange(ny)
     X, Y = np.meshgrid(x, y)
     eta = ax * X + ay * Y
+    H = np.ones((ny, nx))
 
-    PG_u, PG_v = pressure_gradient(eta, g, dx, dy)
+    PG_u, PG_v = pressure_gradient(eta, H, g, dx, dy)
 
     # Interior faces should be constant equal to -g * gradient components / spacing
     assert np.allclose(PG_u[:, 1:nx], -(g * ax) / dx)

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SHEL - Shallow Water Model</title>
+</head>
+
+<body>
+  <div id="app">
+    <header>
+      <h1>SHEL - Shallow Water Model</h1>
+      <div id="status-bar">
+        <span id="connection-status">Disconnected</span>
+        <span id="sim-time">t = 0.0 s</span>
+        <span id="step-count">Step: 0</span>
+      </div>
+    </header>
+
+    <div class="main-container">
+      <aside id="control-panel">
+        <section class="control-section">
+          <h2>Controls</h2>
+          <div class="button-group">
+            <button id="btn-start" class="btn btn-primary">Start</button>
+            <button id="btn-stop" class="btn btn-danger" disabled>Stop</button>
+            <button id="btn-reset" class="btn btn-warning">Reset</button>
+          </div>
+        </section>
+
+        <section class="control-section">
+          <h2>Parameters</h2>
+          <div class="param-group">
+            <label>
+              Grid NX:
+              <input type="number" id="param-nx" value="100" min="10" max="500" />
+            </label>
+            <label>
+              Grid NY:
+              <input type="number" id="param-ny" value="100" min="10" max="500" />
+            </label>
+            <label>
+              Time Step (s):
+              <input type="number" id="param-dt" value="0.5" min="0.01" max="10" step="0.01" />
+            </label>
+            <label>
+              Viscosity (m²/s):
+              <input type="number" id="param-nu" value="0" min="0" max="10000" step="10" />
+            </label>
+          </div>
+        </section>
+
+        <section class="control-section">
+          <h2>Diagnostics</h2>
+          <div id="diag-values">
+            <div class="diag-item">
+              <span class="diag-label">Volume (m³):</span>
+              <span id="diag-volume">-</span>
+            </div>
+            <div class="diag-item">
+              <span class="diag-label">Total Energy (J):</span>
+              <span id="diag-energy">-</span>
+            </div>
+            <div class="diag-item">
+              <span class="diag-label">Kinetic Energy (J):</span>
+              <span id="diag-ke">-</span>
+            </div>
+            <div class="diag-item">
+              <span class="diag-label">Potential Energy (J):</span>
+              <span id="diag-pe">-</span>
+            </div>
+            <div class="diag-item">
+              <span class="diag-label">Enstrophy (s⁻²):</span>
+              <span id="diag-enstrophy">-</span>
+            </div>
+          </div>
+        </section>
+      </aside>
+
+      <main id="plot-area">
+        <div class="plot-grid">
+          <div class="plot-container">
+            <div id="plot-eta" class="plot"></div>
+          </div>
+          <div class="plot-container">
+            <div id="plot-velocity" class="plot"></div>
+          </div>
+          <div class="plot-container">
+            <div id="plot-quiver" class="plot"></div>
+          </div>
+          <div class="plot-container">
+            <div id="plot-diagnostics" class="plot"></div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <footer>
+      <div id="progress-container">
+        <div id="progress-bar" style="width: 0%"></div>
+      </div>
+      <p id="progress-message">Ready</p>
+    </footer>
+  </div>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+
+</html>

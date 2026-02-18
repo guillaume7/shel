@@ -37,7 +37,7 @@ def run_short_sim():
     f = np.zeros_like(H)
 
     for _ in range(steps):
-        eta, U, V = explicit_step(
+        eta, U, V, _ = explicit_step(
             eta,
             H,
             U,

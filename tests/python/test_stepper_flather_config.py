@@ -27,7 +27,7 @@ def test_stepper_flather_east_post_stage_smoke():
         "boundary_eta_relax": 1.0,
     }
 
-    eta1, U1, V1 = explicit_step_with_config(
+    eta1, U1, V1, _ = explicit_step_with_config(
         eta, H, U, V, dt=dt, dx=dx, dy=dy, config=config
     )
 
@@ -59,7 +59,7 @@ def test_stepper_eta_pre_stage_applies_dirichlet():
         "boundary_eta_relax": 1.0,
     }
 
-    eta1, U1, V1 = explicit_step_with_config(
+    eta1, U1, V1, _ = explicit_step_with_config(
         eta, H, U, V, dt=dt, dx=dx, dy=dy, config=config
     )
 

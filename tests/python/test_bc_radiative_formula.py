@@ -113,7 +113,7 @@ def test_sommerfeld_pulse_propagation_right_going():
     c0 = centroid_x(eta)
     steps = 40
     for _ in range(steps):
-        eta, U, V = explicit_step_with_config(
+        eta, U, V, _ = explicit_step_with_config(
             eta,
             H,
             U,

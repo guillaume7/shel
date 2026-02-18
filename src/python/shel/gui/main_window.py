@@ -90,8 +90,14 @@ class MainWindow(QMainWindow):
         self.status_bar = cast("QStatusBar", self.statusBar())
         self.status_bar.showMessage("Ready")
 
-        # Set up ZeroMQ subscriber for model updates
-        self.subscriber = SHELSubscriber(port=5556)
+        # Set up ZeroMQ subscriber for model updates using the configured port
+        try:
+            cfg_port = self.parameter_panel.get_config()["communication"][
+                "zmq_pub_port"
+            ]
+        except Exception:
+            cfg_port = 5556
+        self.subscriber = SHELSubscriber(port=cfg_port)
         self._start_subscriber_timer()
 
         # Create menus
@@ -223,10 +229,13 @@ class MainWindow(QMainWindow):
         logger.debug(f"Received topic: {topic}, payload keys: {list(payload.keys())}")
 
         if topic.startswith("state."):
-            # Update plots with state data
-            self.plot_manager.update_plots(payload)
+            # Decode and adapt SHEL protocol payload to PlotManager schema
+            converted = self._convert_payload_for_plot(topic, payload)
+            if converted:
+                self.plot_manager.update_plots(converted)
         elif topic == "diag.global":
-            # Update diagnostics display (TODO: implement diagnostics panel)
+            # Forward global diagnostics to time-series updater
+            self.plot_manager.update_timeseries_from_diag(payload)
             logger.info(f"Global diagnostics: {payload}")
         elif topic.startswith("diag.field."):
             # Update field diagnostics (TODO: implement field diagnostics)
@@ -240,6 +249,40 @@ class MainWindow(QMainWindow):
         # If model is complete, handle completion
         if payload.get("status") == "complete":
             self.handle_model_completion()
+
+    def _convert_payload_for_plot(self, topic: str, payload: dict) -> Optional[dict]:
+        """Convert SHEL pub/sub payloads to the PlotManager's expected schema.
+
+        - state.eta: base64-encoded array -> fields.eta numpy array
+        - state.velocity: base64-encoded arrays -> fields.u, fields.v
+        """
+        try:
+            if topic == "state.eta":
+                eta = SHELSubscriber.decode_array(payload)
+                return {
+                    "time": payload.get("t", 0.0),
+                    "fields": {
+                        "eta": eta,
+                        "stride_x": 1,
+                        "stride_y": 1,
+                    },
+                }
+            if topic == "state.velocity":
+                U = SHELSubscriber.decode_array(payload["U"])  # encoded dict
+                V = SHELSubscriber.decode_array(payload["V"])  # encoded dict
+                return {
+                    "time": payload.get("t", 0.0),
+                    "fields": {
+                        "u": U,
+                        "v": V,
+                        "stride_x": 1,
+                        "stride_y": 1,
+                    },
+                }
+        except Exception as e:
+            logger.error(f"Failed to convert payload for plotting: {e}")
+            return None
+        return None
 
     def handle_model_completion(self):
         """Handle model completion."""

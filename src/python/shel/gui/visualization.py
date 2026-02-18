@@ -80,6 +80,23 @@ class PlotManager(QWidget):
         self.current_plot_type = "Water Elevation"
         self.last_message = None
 
+        # Predefine plot object handles and data containers to satisfy linters
+        self.ax = None  # type: ignore[assignment]
+        self.eta_image = None  # set by setup_plot/update
+        self.vort_image = None  # set by setup_plot/update
+        self.quiver_obj = None  # set by update on velocity field
+        self.kinetic_line = None  # type: ignore[assignment]
+        self.potential_line = None  # type: ignore[assignment]
+        self.total_line = None  # type: ignore[assignment]
+        self.volume_line = None  # type: ignore[assignment]
+        self.time_data = []
+        self.kinetic_data = []
+        self.potential_data = []
+        self.total_data = []
+        self.volume_time_data = []
+        self.volume_data = []
+        self._animation_frames = []
+
         # Set up the initial empty plot
         self.setup_plot()
 
@@ -94,27 +111,32 @@ class PlotManager(QWidget):
             self.ax.set_aspect("equal")
 
             if self.current_plot_type == "Water Elevation":
-                self.plot_obj = self.ax.imshow(
+                # Prepare image handle for elevation
+                self.eta_image = self.ax.imshow(
                     np.zeros((10, 10)),
                     cmap="coolwarm",
                     interpolation="bilinear",
                     origin="lower",
                 )
-                self.figure.colorbar(self.plot_obj, ax=self.ax, label="Elevation (m)")
+                self.figure.colorbar(self.eta_image, ax=self.ax, label="Elevation (m)")
                 self.ax.set_title("Water Elevation")
 
             elif self.current_plot_type == "Velocity Field":
                 self.ax.set_title("Velocity Field")
-                self.plot_obj = None  # Will be set in update_plots
+                # Quiver will be created on first update
+                self.quiver_obj = None  # type: ignore[attr-defined]
 
             elif self.current_plot_type == "Vorticity":
-                self.plot_obj = self.ax.imshow(
+                # Prepare image handle for vorticity
+                self.vort_image = self.ax.imshow(
                     np.zeros((10, 10)),
                     cmap="RdBu_r",
                     interpolation="bilinear",
                     origin="lower",
                 )
-                self.figure.colorbar(self.plot_obj, ax=self.ax, label="Vorticity (s⁻¹)")
+                self.figure.colorbar(
+                    self.vort_image, ax=self.ax, label="Vorticity (s⁻¹)"
+                )
                 self.ax.set_title("Vorticity")
 
             self.ax.set_xlabel("X (m)")
@@ -177,12 +199,24 @@ class PlotManager(QWidget):
             return
 
         # Update the current plot
+        ax = self.ax
+        if ax is None:
+            return
         if self.current_plot_type == "Water Elevation":
             # Update water elevation plot
             eta = np.array(fields.get("eta", []))
             if eta.size > 0:
-                self.plot_obj.set_data(eta)
-                self.plot_obj.set_clim(np.min(eta), np.max(eta))
+                # Initialize image if needed (in case plot type switched after init)
+                if not hasattr(self, "eta_image") or self.eta_image is None:
+                    self.eta_image = ax.imshow(
+                        eta,
+                        cmap="coolwarm",
+                        interpolation="bilinear",
+                        origin="lower",
+                    )
+                else:
+                    self.eta_image.set_data(eta)
+                    self.eta_image.set_clim(float(np.min(eta)), float(np.max(eta)))
 
                 # Update axes limits and ticks
                 ny, nx = eta.shape
@@ -190,12 +224,11 @@ class PlotManager(QWidget):
                 stride_x = fields.get("stride_x", 1)
 
                 # Set extent based on grid size
-                self.plot_obj.set_extent([0, nx * stride_x, 0, ny * stride_y])
+                extent = (0.0, float(nx * stride_x), 0.0, float(ny * stride_y))
+                self.eta_image.set_extent(extent)
 
                 # Update title with time
-                self.ax.set_title(
-                    f"Water Elevation (t = {message.get('time', 0):.2f} s)"
-                )
+                ax.set_title(f"Water Elevation (t = {message.get('time', 0):.2f} s)")
 
         elif self.current_plot_type == "Velocity Field":
             # Update velocity field plot
@@ -204,7 +237,7 @@ class PlotManager(QWidget):
 
             if u.size > 0 and v.size > 0:
                 # Clear previous quiver plot
-                self.ax.clear()
+                ax.clear()
 
                 # Get grid dimensions
                 ny, nx = u.shape
@@ -218,20 +251,18 @@ class PlotManager(QWidget):
                 )
 
                 # Create quiver plot
-                self.plot_obj = self.ax.quiver(X, Y, u, v, scale=0.2)
+                self.quiver_obj = ax.quiver(X, Y, u, v, scale=0.2)  # type: ignore[attr-defined]
 
                 # Add colorbar for velocity magnitude
                 vel_mag = np.sqrt(u**2 + v**2)
-                contour = self.ax.contourf(X, Y, vel_mag, cmap="viridis", alpha=0.3)
-                self.figure.colorbar(contour, ax=self.ax, label="Velocity (m/s)")
+                contour = ax.contourf(X, Y, vel_mag, cmap="viridis", alpha=0.3)
+                self.figure.colorbar(contour, ax=ax, label="Velocity (m/s)")
 
                 # Set up axes
-                self.ax.set_aspect("equal")
-                self.ax.set_xlabel("X (m)")
-                self.ax.set_ylabel("Y (m)")
-                self.ax.set_title(
-                    f"Velocity Field (t = {message.get('time', 0):.2f} s)"
-                )
+                ax.set_aspect("equal")
+                ax.set_xlabel("X (m)")
+                ax.set_ylabel("Y (m)")
+                ax.set_title(f"Velocity Field (t = {message.get('time', 0):.2f} s)")
 
         elif self.current_plot_type == "Vorticity":
             # Update vorticity plot
@@ -253,16 +284,26 @@ class PlotManager(QWidget):
                         dudy = (u[j + 1, i] - u[j - 1, i]) / (2 * stride_y)
                         vort[j, i] = dvdx - dudy
 
-                # Update plot
-                self.plot_obj.set_data(vort)
+                # Initialize image if needed
+                if not hasattr(self, "vort_image") or self.vort_image is None:
+                    self.vort_image = ax.imshow(
+                        vort,
+                        cmap="RdBu_r",
+                        interpolation="bilinear",
+                        origin="lower",
+                    )
+                else:
+                    # Update plot
+                    self.vort_image.set_data(vort)
                 vmax = np.max(np.abs(vort))
-                self.plot_obj.set_clim(-vmax, vmax)
+                self.vort_image.set_clim(float(-vmax), float(vmax))
 
                 # Set extent based on grid size
-                self.plot_obj.set_extent([0, nx * stride_x, 0, ny * stride_y])
+                extent = (0.0, float(nx * stride_x), 0.0, float(ny * stride_y))
+                self.vort_image.set_extent(extent)
 
                 # Update title with time
-                self.ax.set_title(f"Vorticity (t = {message.get('time', 0):.2f} s)")
+                ax.set_title(f"Vorticity (t = {message.get('time', 0):.2f} s)")
 
         elif self.current_plot_type == "Energy Time Series":
             # Update energy time series plot
@@ -285,20 +326,25 @@ class PlotManager(QWidget):
             self.total_data = total_data
 
             # Update the lines
-            self.kinetic_line.set_data(time_data, kinetic_data)
-            self.potential_line.set_data(time_data, potential_data)
-            self.total_line.set_data(time_data, total_data)
+            if (
+                self.kinetic_line is not None
+                and self.potential_line is not None
+                and self.total_line is not None
+            ):
+                self.kinetic_line.set_data(time_data, kinetic_data)
+                self.potential_line.set_data(time_data, potential_data)
+                self.total_line.set_data(time_data, total_data)
 
             # Adjust axes limits
             if time_data:
-                self.ax.set_xlim(0, max(time_data) * 1.1)
+                ax.set_xlim(0, max(time_data) * 1.1)
 
                 # Determine y-axis limits
                 all_data = kinetic_data + potential_data + total_data
                 if all_data:
                     ymin = min(all_data) * 0.9
                     ymax = max(all_data) * 1.1
-                    self.ax.set_ylim(ymin, ymax)
+                    ax.set_ylim(ymin, ymax)
 
         elif self.current_plot_type == "Volume Time Series":
             # Update volume time series plot
@@ -315,11 +361,12 @@ class PlotManager(QWidget):
             self.volume_data = volume_data
 
             # Update the line
-            self.volume_line.set_data(time_data, volume_data)
+            if self.volume_line is not None:
+                self.volume_line.set_data(time_data, volume_data)
 
             # Adjust axes limits
             if time_data:
-                self.ax.set_xlim(0, max(time_data) * 1.1)
+                ax.set_xlim(0, max(time_data) * 1.1)
 
                 if volume_data:
                     # Calculate initial volume
@@ -339,20 +386,94 @@ class PlotManager(QWidget):
 
                     if max_rel_change < 1e-10:
                         # If volume is nearly constant, show a narrow range around the initial value
-                        self.ax.set_ylim(
-                            initial_volume * 0.9999, initial_volume * 1.0001
-                        )
+                        ax.set_ylim(initial_volume * 0.9999, initial_volume * 1.0001)
                     else:
                         # Otherwise show the full range of variation
                         ymin = min(volume_data) * 0.99
                         ymax = max(volume_data) * 1.01
-                        self.ax.set_ylim(ymin, ymax)
+                        ax.set_ylim(ymin, ymax)
 
         # Store frame for potential animation export
         self.store_frame_for_animation(message)
 
         # Update the canvas
         self.canvas.draw()
+
+    def update_timeseries_from_diag(self, diag_msg: dict):
+        """Update time-series lines from a diag.global message.
+
+        Expected keys: t (time), energy (total), enstrophy, volume.
+        """
+        ax = self.ax
+        if ax is None:
+            return
+        t = diag_msg.get("t", 0.0)
+        total = diag_msg.get("energy", None)
+        volume = diag_msg.get("volume", None)
+
+        # Energy plot: we only have total energy here; add it if the plot is active
+        if self.current_plot_type == "Energy Time Series" and total is not None:
+            time_data = getattr(self, "time_data", [])
+            kinetic_data = getattr(self, "kinetic_data", [])
+            potential_data = getattr(self, "potential_data", [])
+            total_data = getattr(self, "total_data", [])
+
+            time_data.append(t)
+            # Keep kinetic/potential as previous values or 0 when unknown
+            kinetic_data.append(kinetic_data[-1] if kinetic_data else 0.0)
+            potential_data.append(potential_data[-1] if potential_data else 0.0)
+            total_data.append(total)
+
+            self.time_data = time_data
+            self.kinetic_data = kinetic_data
+            self.potential_data = potential_data
+            self.total_data = total_data
+
+            if self.kinetic_line is not None:
+                self.kinetic_line.set_data(time_data, kinetic_data)
+            if self.potential_line is not None:
+                self.potential_line.set_data(time_data, potential_data)
+            if self.total_line is not None:
+                self.total_line.set_data(time_data, total_data)
+
+            if time_data:
+                ax.set_xlim(0, max(time_data) * 1.1)
+                all_data = kinetic_data + potential_data + total_data
+                if all_data:
+                    ymin = min(all_data) * 0.9
+                    ymax = max(all_data) * 1.1
+                    ax.set_ylim(ymin, ymax)
+            self.canvas.draw()
+
+        # Volume plot
+        if self.current_plot_type == "Volume Time Series" and volume is not None:
+            time_data = getattr(self, "volume_time_data", [])
+            volume_data = getattr(self, "volume_data", [])
+            time_data.append(t)
+            volume_data.append(volume)
+            self.volume_time_data = time_data
+            self.volume_data = volume_data
+            if self.volume_line is not None:
+                self.volume_line.set_data(time_data, volume_data)
+            if time_data:
+                ax.set_xlim(0, max(time_data) * 1.1)
+                if volume_data:
+                    initial_volume = volume_data[0]
+                    rel_change = [
+                        (v - initial_volume) / initial_volume
+                        for v in volume_data
+                        if initial_volume
+                    ]
+                    if (
+                        not rel_change
+                        or max(abs(min(rel_change)), abs(max(rel_change))) < 1e-10
+                    ):
+                        ax.set_ylim(initial_volume * 0.9999, initial_volume * 1.0001)
+                    else:
+                        ymin = min(volume_data) * 0.99
+                        ymax = max(volume_data) * 1.01
+                        ax.set_ylim(ymin, ymax)
+            self.canvas.draw()
 
     def export_current_plot(self, file_path):
         """
@@ -361,7 +482,6 @@ class PlotManager(QWidget):
         Args:
             file_path: Path to save the plot to
         """
-        import matplotlib.pyplot as plt
 
         # Determine format from file extension
         file_ext = file_path.lower().split(".")[-1]
@@ -531,15 +651,15 @@ class PlotManager(QWidget):
 
         try:
             anim.save(file_path, writer=writer, dpi=150)
-            logger.info(f"Animation saved to {file_path}")
+            logger.info("Animation saved to %s", file_path)
         except Exception as e:
-            logger.error(f"Failed to save animation: {e}")
+            logger.error("Failed to save animation: %s", e)
             # Try alternative writer if FFMpeg fails
             try:
                 writer_alt = animation.FFMpegWriter(fps=fps, bitrate=1800)
                 anim.save(file_path, writer=writer_alt, dpi=150)
             except Exception as e2:
-                logger.error(f"Alternative animation save also failed: {e2}")
+                logger.error("Alternative animation save also failed: %s", e2)
                 raise
 
     def store_frame_for_animation(self, message):
