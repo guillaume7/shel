@@ -1,0 +1,12 @@
+{
+    "recommendations": [
+        // Python core
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        // Black formatter (optional; Python extension can also run Black via settings)
+        "ms-python.black-formatter",
+        // Linting helpers
+        "ms-python.isort",
+        "charliermarsh.ruff"
+    ]
+}

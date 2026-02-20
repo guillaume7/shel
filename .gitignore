@@ -1,2 +1,28 @@
 # Ignore LaTeX build files and large EPS files
 docs/latex/
+venv
+
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# VS Code settings (uncomment if you want to ignore)
+# .vscode/
+
+# Environment variables
+.env
+.venv
+env/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+output/

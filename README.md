@@ -9,30 +9,138 @@
 
 The SHEL (SHallow-waters numerical modEL) is a finite volume, free-surface, variable bottom, shallow-waters equations numerical solver.
 
-The SHEL is coded in Matlab with a built-in graphical interface for loading, editing and saving of simulation parameters and forcings and also for running, visualizing and exporting images (eps, png) and movies (avi).
+SHEL has an original MATLAB implementation (with a GUI) and a modern Python port engineered for modularity, high-performance visualization, and open execution (no MATLAB license required).
 
 <div align="center">
   <img src="docs/markdown/figs/arakawaCgrid.svg" alt="Arakawa C-grid" width="400"/>
   <p><em>SHEL uses the Arakawa C-grid staggered mesh system for numerical stability</em></p>
 </div>
 
-The code is compact, efficient and extensible, meaning that developers can easily replace the core solver files with custom numerical schemes and can even contribute to the stack of available numerical schemes.
+The code is compact, efficient and extensible. In the Python port, numerical kernels are decomposed into pure functions with strategy/registry patterns for boundary conditions and interchangeable algorithms.
 
-The SHEL, by default, uses an Arakawa C grid type over a land-mask with a second-order accurate in time and space leapfrog and central differences schemes for the momentum equations and a first-order accurate upwind scheme for the tracer equation. Dirichelet, Neumann and Sommerfeld type conditions were implemented as boundary conditions. It is fairly easy to replace these numerical methods with others.
+SHEL uses an Arakawa C grid type over a land-mask. Time integration includes explicit Euler (for ministeps) and leapfrog + Robert–Asselin filter. Boundary conditions include Closed, Free-slip, Radiative (Sommerfeld), Flather, and Dirichlet (eta). Tracer BCs include Closed and Radiative.
 
 ## Repository Structure
 
 The repository is organized as follows:
 
-- `src/matlab/`: Contains all the Matlab source code
+- `src/matlab/`: MATLAB source code (original, feature-complete)
   - `run.m`: The main entry point for running the model
   - `data/`: Input data and simulation results
   - `gui/`: Graphical user interface components
   - `model/`: Core implementation of the numerical model
+- `src/python/`: Python port (active development)
+  - `shel/model/solvers/time/`: Time drivers (`asselin_filter`, `leapfrog_stepper`, `leapfrog_step_with_config`)
+  - `shel/model/solvers/common/`: Tendencies, ministep, and config-aware step helpers
+  - `shel/model/boundary_conditions/`: Strategy-based BCs (momentum, waterlevel, tracer) + registry
+  - `shel/model/initial_conditions/`, `grid/`, `diagnostics/`, `state/`, `outputs/` (modular domains)
+- `examples/python/`: Minimal runnable Python examples
+- `tests/python/`: Unit/integration tests for the Python port
 - `docs/`: Documentation
   - `latex/`: Original LaTeX documentation and figures
   - `markdown/`: Converted markdown documentation
 - `COPYING`: License information
+
+## Python Quickstart
+
+Requirements: Python 3.10+.
+
+Install (editable):
+
+```bash
+pip install -e .
+```
+
+Run tests:
+
+```bash
+pytest -q
+```
+
+### Pre-commit hooks (auto format + lint)
+
+Enable repository hooks to run isort, black, and pylint on commits:
+
+```bash
+pip install pre-commit  # if not already installed
+pre-commit install
+```
+
+Run on all files manually:
+
+```bash
+pre-commit run --all-files
+```
+
+### Time API (Python)
+
+- Explicit ministep (Euler): `shel.model.solvers.common.ministep.explicit_step(eta, H, U, V, ...)`.
+- Config-aware explicit step: `shel.model.solvers.common.stepper.explicit_step_with_config(eta, H, U, V, config=...)`.
+- Leapfrog + Asselin:
+  - `from shel.model.solvers.time import leapfrog_stepper, leapfrog_step_with_config`
+  - `leapfrog_stepper` advances one step given (n-1, n) states; `leapfrog_step_with_config` also applies per-side BCs and sponge according to a config mapping.
+
+Array staggering (C-grid): `eta: (ny,nx)`, `U: (ny,nx+1)`, `V: (ny+1,nx)`, `H: (ny,nx)`.
+
+### Boundary Conditions (config)
+
+Set per-side types and options under a config dict. Example (Flather east + cosine sponge):
+
+```python
+cfg = {
+  "boundary_conditions": {"west": "closed", "east": "flather", "south": "closed", "north": "closed"},
+  "boundary_eta_ext": {"east": eta_ext},     # external eta along open side
+  "boundary_eta_relax": 0.5,                  # 0..1 blend on eta
+  "boundary_momentum_relax": 0.3,             # 0..1 blend on Flather correction
+  "eta_bc_stage": "post",                     # apply eta BCs post-step (default)
+  "sponge": {"enabled": True, "width": 4, "alpha": 0.2, "taper": "cosine", "apply_to": "both"},
+}
+```
+
+Supported names: `closed`, `freeslip` (momentum); `radiative`, `flather`, `dirichlet` (eta); `closed`, `radiative` (tracer).
+
+### Examples (Python)
+
+- Flather + sponge conservative config: `examples/python/flather_sponge_config_example.py`
+- Leapfrog with Flather (east), Dirichlet (north), sponge: `examples/python/leapfrog_flather_dirichlet_sponge_example.py`
+
+Run an example:
+
+```bash
+python examples/python/leapfrog_flather_dirichlet_sponge_example.py
+```
+
+## Modern Web Interface (Python Port)
+
+The Python port of SHEL includes a state-of-the-art Web UI for real-time monitoring and control, replacing the legacy desktop GUIs with a responsive, high-performance dashboard.
+
+- **Interactive Control**: Adjust grid resolution, time steps, and physical parameters (viscosity, gravity) on the fly.
+- **Real-time Field Visualization**: Dynamic heatmaps for water elevation ($\eta$) and velocity magnitude ($|U|$).
+- **Vector Flow Fields**: Real-time Quiver plots showing direction and magnitude of currents.
+- **Physical Diagnostics**: Continuous tracking of Energy (TE/KE/PE), Volume conservation, and Enstrophy.
+
+<div align="center">
+  <img src="docs/markdown/figs/web_dashboard.png" alt="SHEL Web Dashboard in Action" width="800"/>
+  <p><em>The SHEL Web Dashboard in action: real-time 200x200 field visualizations and numerical diagnostics</em></p>
+</div>
+
+### Running the Web App
+
+1. **Start the Backend Server**:
+   ```bash
+   cd src/python
+   PYTHONPATH=. python3 -m shel.web.run_server
+   ```
+
+2. **Start the Frontend (Development Mode)**:
+   ```bash
+   cd src/web
+   npm install
+   npm run dev
+   ```
+
+3. **Access the Dashboard**:
+   Open your browser at `http://localhost:3000`.
 
 ## Documentation
 
@@ -48,9 +156,9 @@ Comprehensive documentation is available in the [docs/markdown](docs/markdown) d
   <p><em>SHEL tracks energy conservation during simulations, showing kinetic, potential, and total energy</em></p>
 </div>
 
-## How to Use SHEL
+## How to Use (MATLAB)
 
-1. Open Matlab
+1. Open MATLAB
 2. Set the workfolder to the `src/matlab` directory of the SHEL repository
 3. Type `run` and press enter
 
@@ -64,13 +172,15 @@ Model: Scientific Documentation. Instituto Superior Técnico,
 Universidade Técnica de Lisboa.
 ```
 
-## Contact Information
+## Notes & Contact
+
+- The legacy class-based Python solver `shel.model.solvers.leapfrog.LeapfrogSolver` is deprecated; use the time API in `shel.model.solvers.time` instead.
+- Issues and contributions welcome via GitHub.
 
 - Email: guillaume.riflet at gmail.com
-- Website: http://code.google.com/p/shel/
-- Last Updated: 2010-08-19
+- Last Updated: 2025-09-06
 
 <div align="center">
   <img src="docs/markdown/figs/radiate-coriolis-velocity-modulus-sam2p.svg" alt="Velocity field with Coriolis effect" width="600"/>
-  <p><em>Visualization of velocity field modulus depicting the evolution of motion from a guassian waterlevel initial elevation</em></p>
+  <p><em>Visualization of velocity field modulus depicting the evolution of motion from a gaussian elevation as the initial waterlevel</em></p>
 </div>

@@ -1,0 +1,36 @@
+# Pre-commit configuration for SHEL
+# Auto-format and lint Python code consistently before each commit.
+# Tools:
+# - isort: sort & group imports (Black profile)
+# - black: opinionated code formatter (line length 88)
+# - pylint: static analysis using project .pylintrc
+
+repos:
+  - repo: https://github.com/pycqa/isort
+    rev: 5.13.2
+    hooks:
+      - id: isort
+        name: isort (imports)
+        args: ["--profile=black"]
+        stages: [pre-commit]
+
+  - repo: https://github.com/psf/black
+    rev: 24.10.0
+    hooks:
+      - id: black
+        name: black (formatter)
+        args: ["--line-length", "88"]
+        stages: [pre-commit]
+
+  - repo: local
+    hooks:
+      - id: pylint
+        name: pylint (static analysis)
+        entry: pylint
+        language: system
+        types: [python]
+        stages: [pre-commit]
+        pass_filenames: true
+        args: ["-E"] # only error out on errors/fatals; style is handled by black/isort
+        files: ^src/python/shel/model/.*\.py$
+        # Pylint will automatically pick up .pylintrc at repo root

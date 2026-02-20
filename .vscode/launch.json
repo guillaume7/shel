@@ -1,0 +1,40 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python: Current File",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${file}",
+      "console": "integratedTerminal",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}/src/python:${env:PYTHONPATH}"
+      },
+      "justMyCode": false
+    },
+    {
+      "name": "Python: Run SHEL Model",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/python/run.py",
+      "console": "integratedTerminal",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}/src/python:${env:PYTHONPATH}"
+      },
+      "args": [],
+      "justMyCode": false
+    },
+    {
+      "name": "Python: Run SHEL GUI",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/python/gui.py",
+      "console": "integratedTerminal",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}/src/python:${env:PYTHONPATH}"
+      },
+      "args": [],
+      "justMyCode": false
+    }
+  ]
+}
